@@ -1,0 +1,34 @@
+# Short Summary
+
+- **Background and objectives**: The C2C Communications Network aims to interconnect Dallas/Ft. Worth regional traffic management systems using ITS standards, providing a common repository for traffic data and enabling device control and status sharing between centers.
+- **In scope**:  
+  - Roadway network, traffic conditions, incident, and lane closure data interfaces  
+  - Device status and control for DMS, LCS, CCTV, ramp meters, HAR, traffic signals, ESS, HOV, parking lots, school zones, railroad crossings, reversible lanes, and dynamic lanes  
+  - Web-based graphical traffic map and remote control GUI  
+  - Data transmission using TMDD, DATEX/ASN, and TCP/IP  
+- **Out of scope**:  
+  - Tour video switch command for CCTV (Dallas)  
+  - Momentary pan/tilt/zoom/iris/focus commands for CCTV (Ft. Worth)  
+  - Firewall and gateway connectivity for remote GUI  
+  - Transit data link association management  
+  - Non-ITS standard legacy system integration without protocol conversion  
+- **Roles and core use cases**:  
+  - As a Traffic Management Center operator, I want to monitor and control field devices so that regional traffic flow is optimized.  
+  - As a remote user, I want to submit device commands via GUI so that I can manage traffic devices without a formal TMC.  
+  - As a web map user, I want to view real-time traffic conditions and incidents so that I can make informed travel decisions.  
+- **Success metrics**:  
+  - Successful exchange of device control/status between centers  
+  - Accurate display of traffic conditions and incidents on the web map  
+  - Extensible architecture supporting local, regional, and statewide repository linking  
+- **Major constraints**:  
+  - Must use TMDD, DATEX/ASN, and TCP/IP for data transmission  
+  - Must operate on Microsoft Windows NT environment  
+  - Must use ESRI ARC IMS for web mapping  
+  - Implementation in C/C++ programming language  
+  - Support for both normal and test operational modes  
+- **Undecided issues**:  
+  - Specific MPH thresholds for web map speed color coding (TBD)  
+  - Not mentioned  
+  - Not mentioned  
+  - Not mentioned  
+  - Not mentioned

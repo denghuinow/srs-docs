@@ -1,0 +1,35 @@
+# Short Summary
+
+- **Background and objectives**: The Platform-i MSN application is an MHP version of the popular PC MSN Messenger, designed to demonstrate MHP and Platform-i capabilities by enabling instant messaging and presence features on a TV screen.
+- **In scope**:
+  - User login with existing .NET Passport accounts.
+  - Presence status management and buddy list updates.
+  - Real-time text messaging with emoticons and group conversations.
+  - TV program viewing status sharing between buddies.
+  - Hotmail inbox checking and new email notifications.
+- **Out of scope**:
+  - Creating new .NET Passport accounts.
+  - File transfer and webcam support.
+  - Extensive user interface design details.
+  - Non-MSNPv8 protocol communication.
+  - Data storage or database requirements.
+- **Roles and core use cases**:
+  - As an end user, I want to log in with my Passport so that I can access my buddy list and chat.
+  - As an end user, I want to send and receive instant messages so that I can communicate in real time.
+  - As an end user, I want to see my buddies’ TV viewing status so that I can know what they are watching.
+- **Success metrics**:
+  - Successful login and presence status synchronization with MSN service.
+  - Real-time message delivery and history display in chat sessions.
+  - Accurate display of buddy status and nickname updates.
+- **Major constraints**:
+  - Must use MSNPv8 protocol for messenger service communication.
+  - Input limited to remote control and optional wireless keyboard.
+  - Output restricted to TV screen display.
+  - No support for creating new Passport accounts.
+  - Dependent on .NET Messenger service availability.
+- **Undecided issues**:
+  - User interface design details (Not mentioned).
+  - Specific performance and reliability targets (Not mentioned).
+  - Localization and language support (Not mentioned).
+  - Offline message handling (Not mentioned).
+  - Error handling and recovery procedures (Not mentioned).

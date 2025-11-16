@@ -1,0 +1,35 @@
+# Short Summary
+
+- **Background and objectives**: SPRAT addresses misalignment between privacy policies and system requirements by providing a tool for goal and scenario mining, reconciliation, and management to improve policy analysis and compliance.
+- **In scope**:
+  - User access control with four role levels (administrator, project manager, analyst, guest).
+  - Goal and scenario specification, classification, and traceability.
+  - Policy document management with domain assignment.
+  - Access control policy analysis (RACAF module).
+  - Flesch readability scoring for policy documents.
+- **Out of scope**:
+  - Full automation of conflict resolution between requirements and policies.
+  - Complete translation of Ponder policies to Alloy specifications.
+  - Comprehensive statistical analysis for multi-user comparison.
+  - Full implementation of all low-priority functional modules.
+  - Not mentioned.
+- **Roles and core use cases**:
+  - As an administrator, I want to manage user groups and reset passwords so that system access is controlled securely.
+  - As a project manager, I want to assign analysts and manage policy domains so that projects are organized and access-restricted.
+  - As an analyst, I want to classify goals and scenarios so that privacy and security requirements are accurately captured.
+- **Success metrics**:
+  - Traceability maintained between goals and source policies.
+  - Secure user authentication and access logging implemented.
+  - Multi-user analysis comparison supported without bias.
+- **Major constraints**:
+  - Security requirements are high priority and must be satisfied.
+  - Access logs must record all add, delete, and edit actions.
+  - Analyst classification results are hidden from others until completion to prevent bias.
+  - Partial support only for Ponder-to-Alloy translation.
+  - Passwords must be stored securely in the database.
+- **Undecided issues**:
+  - Specific statistical methods for multi-user analysis comparison.
+  - Full conflict identification and resolution mechanisms.
+  - Complete implementation details for low-priority modules.
+  - Not mentioned.
+  - Not mentioned.

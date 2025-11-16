@@ -1,0 +1,35 @@
+# Short Summary
+
+- **Background and objectives**: KeePass Password Safe is an open-source password manager designed to securely store user passwords, usernames, URLs, and notes in an encrypted database protected by a single Master Password, eliminating the need to memorize multiple passwords.
+- **In scope**:
+  - Create, open, save, and search encrypted password databases.
+  - Organize entries into groups and subgroups.
+  - Generate and manage passwords, including one-time TANs.
+  - Auto-type sequences for automated login input.
+  - Import/export data in formats like CSV and XML.
+- **Out of scope**:
+  - Password recovery or backdoor access if Master Password is lost.
+  - Support for non-specified password database formats.
+  - Modifying TAN entry title, username, or URL fields.
+  - Changing the global hotkey (Ctrl+Alt+K).
+  - Multiple database files via command line.
+- **Roles and core use cases**:
+  - As an end user, I want to store and retrieve passwords securely so that I don't have to remember them.
+  - As an advanced user, I want to use auto-type and command-line options so that I can automate logins and workflows.
+  - As a system administrator, I want to manage multiple user accounts securely so that organizational data remains protected.
+- **Success metrics**:
+  - Database remains inaccessible without the correct Master Password or key file.
+  - Copied passwords are cleared from memory after 10 seconds.
+  - Supports defined operating systems and interfaces without feature loss.
+- **Major constraints**:
+  - Runs only on specified Windows versions and WINE.
+  - Uses AES/Rijndael and Twofish encryption algorithms.
+  - No password recovery mechanism exists.
+  - Requires specific file formats for import/export.
+  - Global hotkey is fixed and unchangeable.
+- **Undecided issues**:
+  - Not mentioned.
+  - Not mentioned.
+  - Not mentioned.
+  - Not mentioned.
+  - Not mentioned.

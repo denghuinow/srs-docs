@@ -1,0 +1,35 @@
+# Short Summary
+
+- **Background and objectives**: The Clarus Initiative, sponsored by FHWA, aims to collect, quality control, and share surface transportation weather and road condition observations to enhance safety, mobility, and weather forecasting across North America.
+- **In scope**:
+  - Collect atmospheric, pavement, and hydrologic data from fixed and mobile sensors.
+  - Implement continuous quality control processes with feedback to data providers.
+  - Disseminate quality-controlled environmental data to service providers and stakeholders.
+  - Support data queries by location, time, quality, and source.
+  - Use NTCIP ESS 1204 standards for data definitions and interfaces.
+- **Out of scope**:
+  - Direct archiving of large-volume environmental data.
+  - Responsibility for data accuracy by FHWA or providers.
+  - Critical national security mission support.
+  - Defining regional boundaries for data presentation.
+  - Development of special database tools beyond standard interfaces.
+- **Roles and core use cases**:
+  - As a **data collector**, I want to submit environmental observations so that I can share data and receive quality feedback.
+  - As a **service provider**, I want to access quality-controlled environmental data so that I can generate value-added weather products.
+  - As a **system administrator**, I want to manage user privileges and security groups so that data sharing agreements are enforced.
+- **Success metrics**:
+  - Respond to 95% of data requests 95% of the time.
+  - Publish new data within 20 minutes of receipt.
+  - Support 600 concurrent users and 6,000 registered users.
+- **Major constraints**:
+  - System must use industry-standard, non-proprietary interfaces and protocols.
+  - Data must include location, timeframe, and source metadata.
+  - Timestamps must use Coordinated Universal Time (UTC).
+  - System must operate on redundant hardware for reliability.
+  - Data sharing is conditional on agreements with providers.
+- **Undecided issues**:
+  - Specific regional boundaries for data queries.
+  - Long-term data archiving strategy.
+  - Integration methods for new sensor technologies.
+  - Prioritization criteria for time-critical data handling.
+  - Not mentioned: Final selection of data communication standards.

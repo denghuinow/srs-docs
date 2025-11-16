@@ -1,0 +1,35 @@
+# Short Summary
+
+- **Background and objectives**: This plan ensures the CAISO grid has sufficient Black Start generators to self-start and restore power after a major blackout, meeting WECC restoration requirements.
+- **In scope**:  
+  - Black Start capability planning and contingency studies  
+  - Generator testing for Black Start units  
+  - Recordkeeping of Black Start resources  
+  - Operator training for system restoration  
+  - Coordination with neighboring Balancing Authorities
+- **Out of scope**:  
+  - Generators that can only reject load to auxiliary levels  
+  - Non-Black Start ancillary services  
+  - Day-to-day market operations  
+  - Non-CAISO Balancing Authority restoration  
+  - Environmental or safety procedure details
+- **Roles and core use cases**:  
+  - As a **CAISO planner**, I want to determine Black Start requirements so that restoration needs are met.  
+  - As a **generator owner**, I want to test Black Start capability so that my unit can be certified.  
+  - As a **grid operator**, I want training on Black Start procedures so that I can execute restoration.
+- **Success metrics**:  
+  - Annual verification of sufficient Black Start resources  
+  - Successful Black Start tests for at least one-third of contracted units  
+  - Compliance with NERC/WECC restoration standards
+- **Major constraints**:  
+  - Black Start units must self-start without off-site power  
+  - Start-up time limits vary by generator technology  
+  - Hydro units not tested during constrained water availability  
+  - Voltage/frequency regulation during restoration  
+  - Transmission path availability for cranking
+- **Undecided issues**:  
+  - Specific percentage of expected Black Start unit failures  
+  - Full system simulator availability timeline  
+  - Start time limits for unspecified/out-of-area technologies  
+  - Not mentioned  
+  - Not mentioned

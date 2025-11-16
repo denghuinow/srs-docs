@@ -1,0 +1,35 @@
+# Short Summary
+
+- **Background and objectives**: This document specifies the EIRENE System Requirements for a digital GSM-based radio system to meet European railways' mobile communications needs, ensuring interoperability and manufacturing economies of scale across national borders.  
+- **In scope**:  
+  - GSM teleservices, bearer services, and supplementary services.  
+  - Railway-specific services like functional addressing and emergency calls.  
+  - Network configuration, coverage, and handover requirements.  
+  - Mobile equipment specifications for Cab, General Purpose, and Operational radios.  
+  - Numbering plan and subscriber management for interoperability.  
+- **Out of scope**:  
+  - Public emergency calls (e.g., '112') handling.  
+  - Non-GSM public network internal operations.  
+  - Detailed on-train system interfaces beyond specified standards.  
+  - National implementations of optional text messaging applications.  
+  - Alphanumeric numbering plan support without translation.  
+- **Roles and core use cases**:  
+  - As a **train driver**, I want to initiate emergency and operational calls so that I can ensure safe and efficient train operations.  
+  - As a **railway controller**, I want to manage group calls and terminate VGCS/VBS calls so that I can coordinate railway movements and emergencies.  
+  - As a **trackside worker**, I want to use shunting mode and direct mode communications so that I can perform maintenance and shunting tasks safely.  
+- **Success metrics**:  
+  - Call setup times met per eMLPP priority levels with authentication enabled.  
+  - Handover success rate of at least 99.5% under design load conditions.  
+  - Railway emergency calls confirmed and logged for post-incident analysis.  
+- **Major constraints**:  
+  - Operation limited to R-GSM frequency bands (876–915/921–960 MHz).  
+  - Compliance with GSM, ETSI, and railway-specific environmental standards.  
+  - Functional numbers must not exceed 15 digits and use digits 0–9 only.  
+  - Direct mode use only permitted when GSM services are unavailable.  
+  - International interoperability requires adherence to specified numbering and priority schemes.  
+- **Undecided issues**:  
+  - Use of alphanumeric train numbers in numbering plans.  
+  - Implementation of location-dependent addressing using external sources.  
+  - National protocols for re-establishing contact via GSM-R after direct mode disruptions.  
+  - Encryption algorithm licensing and specific authentication methods.  
+  - Not mentioned: Integration details with non-ERTMS/ETCS train control systems.
