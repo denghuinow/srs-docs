@@ -27,85 +27,57 @@ SUMMARY_LEVELS = {
         "name": "Ultra Short Summary",
         "folder": "summary_ultra_short",
         "info_range": "5%-10%",
-        "prompt_template": """You are a requirements analysis assistant. Please generate an "Ultra Short Summary" with approximately 5–10% of the content.
-
-[Selection Rules]
-- Only retain the highest priority facts: business goals, MVP features, key constraints, major risks.
-- Each piece of information should appear only once; remove examples and implementation details.
-
-[Output format (Markdown)]
-# Ultra Short Summary
-- One-sentence positioning (1 sentence)
-- MVP points (≤4 items; each item 1 sentence)
-- Key constraints (≤3 items; each item 1 sentence)
-- Major risks/undecided issues (≤2 items; each item 1 sentence; unknown write "Not mentioned")"""
+        "prompt_file": "ultra_short.md"
     },
     "short": {
         "name": "Short Summary",
         "folder": "summary_short",
         "info_range": "10%-20%",
-        "prompt_template": """You are a requirements analysis assistant. Please generate a "Short Summary" with approximately 10–20% of the content.
-
-[Selection Rules]
-- Add boundary and success criteria outlines; avoid expanding on processes and data structures.
-- Each point should be limited to 1–2 sentences.
-
-[Output format (Markdown)]
-# Short Summary
-- Background and objectives (1–2 sentences)
-- In scope (≤5 items)
-- Out of scope (≤5 items)
-- Roles and core use cases (≤3 roles; each role 1 sentence: "As a <role>, I want <action> so that <value>")
-- Success metrics (≤3 items)
-- Major constraints (≤5 items)
-- Undecided issues (≤5 items; unknown write "Not mentioned")"""
+        "prompt_file": "short.md"
     },
     "balanced": {
         "name": "Balanced Summary",
         "folder": "summary_balanced",
         "info_range": "20%-30%",
-        "prompt_template": """You are a requirements analysis assistant. Please generate a "Balanced Summary" with approximately 20–30% of the content.
-
-[Selection Rules]
-- Introduce process skeletons and domain elements, but keep at a high-level overview.
-- Each point should be 1–2 sentences; list lengths are limited to control the amount of information.
-
-[Output format (Markdown)]
-# Balanced Summary
-- Goals and scope (2–3 sentences)
-- Roles and user stories (≤5 roles; total ≤6 user stories, format: "As a <role>, I want <action> so that <value>")
-- Key processes (ordered list ≤7 steps; each step 1 sentence, indicate the trigger)
-- Domain data elements (entities ≤6; for each entity, list the primary key and 3–5 key field names)
-- Non-functional requirements (≤6 items)
-- Milestones and external dependencies (≤5 items)
-- Risks and mitigation strategies (≤5 items)
-- Undecided issues (≤6 items; unknown write "Not mentioned")"""
+        "prompt_file": "balanced.md"
     },
     "detailed": {
         "name": "Detailed Summary",
         "folder": "summary_detailed",
         "info_range": "30%-50%",
-        "prompt_template": """You are a requirements analysis assistant. Please generate a "Detailed Summary" with approximately 30–50% of the content.
-
-[Selection Rules]
-- Expand to the level of detail suitable for review or task breakdown, but avoid implementing field-level details.
-- Each point should be 1–3 sentences; processes should include main flow and key branches; interfaces should be summarized as bullet points.
-
-[Output format (Markdown)]
-# Detailed Summary
-- Background and scope (3–5 sentences; including non-goals)
-- Role matrix and use cases (≤6 roles; main/exception scenarios ≤8 total)
-- Business process (main process ≤8 steps; key branches ≤2, each ≤4 steps; indicate trigger/input/output)
-- Domain model (entities ≤8; list field names with key constraints, such as "required/unique/reference")
-- Interfaces and integrations (for each, write: system, direction, interaction points or theme, input key points, output key points, SLA key points; ≤8 total)
-- Acceptance criteria (2–4 Given-When-Then per capability)
-- Non-functional metrics (performance/reliability/security/compliance/observability; each ≤2 items)
-- Milestones and release strategy (≤6 items)
-- Risk list and mitigation strategies (≤8 items)
-- Undecided issues and responsible parties (≤8 items; unknown write "Not mentioned")"""
+        "prompt_file": "detailed.md"
     }
 }
 
+
+
+def _load_prompt_template(prompt_file: str, prompt_version: str = "v1") -> str:
+    """
+    加载prompt模板
+
+    Args:
+        prompt_file: 模板文件名
+        prompt_version: 提示词版本，默认为 v1
+
+    Returns:
+        模板内容
+    """
+    # 构建文件路径：prompts/{version}/{prompt_file}
+    project_root = Path(__file__).parent
+    template_path = project_root / "prompts" / prompt_version / prompt_file
+    
+    if not template_path.exists():
+        # 如果指定版本不存在，尝试使用v1作为默认版本
+        if prompt_version != "v1":
+            with print_lock:
+                print(f"⚠️  提示词文件不存在: {template_path}，尝试使用 v1 版本")
+            template_path = project_root / "prompts" / "v1" / prompt_file
+    
+    if not template_path.exists():
+        raise FileNotFoundError(
+            f"模板文件不存在: {template_path}，请检查提示词版本和文件路径"
+        )
+    return template_path.read_text(encoding="utf-8")
 
 
 def get_markdown_files(source_dir: Path) -> List[Path]:
@@ -129,10 +101,13 @@ def generate_summary(
     content: str,
     level_config: Dict,
     model: str = None,
-    temperature: float = None
+    temperature: float = None,
+    prompt_version: str = "v1"
 ) -> str:
     """使用LLM生成摘要"""
-    system_prompt = level_config["prompt_template"]
+    # 从文件加载提示词模板
+    prompt_file = level_config["prompt_file"]
+    system_prompt = _load_prompt_template(prompt_file, prompt_version)
     
     try:
         response = client.chat.completions.create(
@@ -173,7 +148,8 @@ def process_file(
     selected_levels: Optional[List[str]] = None,
     force: bool = False,
     file_index: int = 0,
-    total_files: int = 0
+    total_files: int = 0,
+    prompt_version: str = "v1"
 ):
     """处理单个文件，生成指定级别的摘要"""
     # 为每个线程创建独立的OpenAI客户端
@@ -222,7 +198,8 @@ def process_file(
             content=content,
             level_config=level_config,
             model=model,
-            temperature=temperature
+            temperature=temperature,
+            prompt_version=prompt_version
         )
         
         if summary:
@@ -283,6 +260,12 @@ def main():
         default=1,
         help="并发处理的工作线程数（默认：1，即顺序处理）"
     )
+    parser.add_argument(
+        "--prompt-version",
+        type=str,
+        default="v1",
+        help="提示词版本（默认：v1）"
+    )
     
     args = parser.parse_args()
     
@@ -332,6 +315,7 @@ def main():
     
     print(f"🤖 使用模型: {model}")
     print(f"🌡️  温度参数: {temperature}")
+    print(f"📝 提示词版本: {args.prompt_version}")
     if args.force:
         print("🔄 强制模式：将重新生成已存在的摘要")
     if args.workers > 1:
@@ -370,7 +354,8 @@ def main():
                     selected_levels=selected_levels,
                     force=args.force,
                     file_index=idx,
-                    total_files=total_files
+                    total_files=total_files,
+                    prompt_version=args.prompt_version
                 ): file_path
                 for idx, file_path in enumerate(md_files, 1)
             }
@@ -397,7 +382,8 @@ def main():
                 selected_levels=selected_levels,
                 force=args.force,
                 file_index=idx,
-                total_files=total_files
+                total_files=total_files,
+                prompt_version=args.prompt_version
             )
     
     print("\n" + "="*60)

@@ -1,0 +1,14 @@
+# Ultra Short Summary
+- The OpenSG EIM system aims to establish a foundation for interoperable Smart Grid enterprise information management.
+- MVP points:
+  - Enable sharing of a common information model with external entities.
+  - Support data management for both Smart Grid and non-Smart Grid data.
+  - Incorporate standards such as IEC Common Information Model (CIM) for semantic interoperability.
+  - Provide logical breakdown of EIM capabilities including data validation and lifecycle management.
+- Key constraints:
+  - Must address information security across all data artifacts and processes.
+  - Must support both centralized and localized data stores.
+  - Must align with TOGAF 9.0 architecture framework.
+- Major risks/undecided issues:
+  - Not mentioned.
+  - Not mentioned.
