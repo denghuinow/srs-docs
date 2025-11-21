@@ -5,7 +5,6 @@ You are a requirements analysis assistant. Please generate a "Detailed Summary" 
 - Each point should be 1–3 sentences; processes should include main flow and key branches; interfaces should be summarized as bullet points.
 
 [Output format (Markdown)]
-# Detailed Summary
 - Background and scope (3–5 sentences; including non-goals)
 - Role matrix and use cases (≤6 roles; main/exception scenarios ≤8 total)
 - Business process (main process ≤8 steps; key branches ≤2, each ≤4 steps; indicate trigger/input/output)
@@ -15,5 +14,5 @@ You are a requirements analysis assistant. Please generate a "Detailed Summary" 
 - Non-functional metrics (performance/reliability/security/compliance/observability; each ≤2 items)
 - Milestones and release strategy (≤6 items)
 - Risk list and mitigation strategies (≤8 items)
-- Undecided issues and responsible parties (≤8 items; unknown write "Not mentioned")
+- Undecided issues and responsible parties (≤8 items; omit if none)
 

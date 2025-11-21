@@ -25,25 +25,25 @@ print_lock = threading.Lock()
 SUMMARY_LEVELS = {
     "ultra_short": {
         "name": "Ultra Short Summary",
-        "folder": "summary_ultra_short",
+        "folder": "ultra_short",
         "info_range": "5%-10%",
         "prompt_file": "ultra_short.md"
     },
     "short": {
         "name": "Short Summary",
-        "folder": "summary_short",
+        "folder": "short",
         "info_range": "10%-20%",
         "prompt_file": "short.md"
     },
     "balanced": {
         "name": "Balanced Summary",
-        "folder": "summary_balanced",
+        "folder": "balanced",
         "info_range": "20%-30%",
         "prompt_file": "balanced.md"
     },
     "detailed": {
         "name": "Detailed Summary",
-        "folder": "summary_detailed",
+        "folder": "detailed",
         "info_range": "30%-50%",
         "prompt_file": "detailed.md"
     }
@@ -107,15 +107,26 @@ def generate_summary(
     """使用LLM生成摘要"""
     # 从文件加载提示词模板
     prompt_file = level_config["prompt_file"]
-    system_prompt = _load_prompt_template(prompt_file, prompt_version)
+    prompt_template = _load_prompt_template(prompt_file, prompt_version)
+    
+    # 检查模板中是否包含 {srs_text} 占位符
+    if "{srs_text}" in prompt_template:
+        # 如果包含占位符，替换它并将整个内容作为 user message
+        user_message = prompt_template.replace("{srs_text}", content)
+        messages = [
+            {"role": "user", "content": user_message}
+        ]
+    else:
+        # 如果没有占位符，使用原有逻辑：模板作为 system prompt，内容作为 user message
+        messages = [
+            {"role": "system", "content": prompt_template},
+            {"role": "user", "content": content}
+        ]
     
     try:
         response = client.chat.completions.create(
             model=model,
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": content}
-            ],
+            messages=messages,
             temperature=temperature,
         )
         return response.choices[0].message.content.strip()
@@ -271,7 +282,7 @@ def main():
     
     # 配置路径
     project_root = Path(__file__).parent
-    source_dir = project_root / "req_md"
+    source_dir = project_root / "resources" / "req_md"
     
     # 检查源目录
     if not source_dir.exists():
@@ -292,7 +303,7 @@ def main():
     for level_key in levels_to_create:
         if level_key in SUMMARY_LEVELS:
             level_config = SUMMARY_LEVELS[level_key]
-            output_dir = project_root / level_config["folder"]
+            output_dir = project_root / "resources" / "summary" / level_config["folder"]
             output_dir.mkdir(parents=True, exist_ok=True)
             output_dirs[level_key] = output_dir
             print(f"📁 输出目录: {output_dir}")

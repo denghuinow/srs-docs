@@ -1,0 +1,15 @@
+**Purpose & Scope**: The system enables porting Open Watcom C Compiler and Linker to Linux with support for Position-Independent Code (PIC) and shared object building. It focuses on compiler/linker modifications for ELF format compatibility, excluding full Linux porting of other Open Watcom components. It does not address compiler optimizations or complete Linux environment integration.
+
+**Product Background / Positioning**: This extension builds on existing Open Watcom components (ORL, WLCore, LoadELF) to enable Linux shared library support. It positions Open Watcom as a compiler capable of producing Linux-compatible shared objects while maintaining compatibility with existing Open Watcom toolchain workflows.
+
+**Core Functional Overview**: Support PIC code generation with proper relocation handling; build shared objects (both PIC and position-dependent); enable using existing shared libraries; implement Global Offset Table (GOT) and Procedure Linkage Table (PLT); correctly handle ELF object files; support required relocation types (R_386_GOT32, R_386_GOTOFF, R_386_GOTPC, R_386_PLT32); fix segment mapping for .data and .bss sections; enable dynamic linking with required .dynamic sections.
+
+**Key Users & Usage Scenarios**: Linux developers creating shared libraries; application developers linking against shared objects; systems requiring position-independent code for security. Users will compile with -elf and -pic switches, link with wlink form ELF DLL, and use shared objects via standard Linux dynamic linking.
+
+**Major External Interfaces**: Linux ELF object file format; Linux dynamic linker (/lib/ld-linux.so.2); existing Open Watcom components (ORL, WLCore); System V ABI specifications for ELF; Linux Standard Base Specification.
+
+**Key Non-functional Requirements**: Must correctly implement all required ELF relocation types; must handle .data and .bss section mapping to prevent segmentation faults; must support building shared objects with correct segment alignment; must maintain compatibility with existing Open Watcom command-line interface where possible.
+
+**Constraints, Assumptions & Dependencies**: Requires Linux environment with ELF support; depends on existing Open Watcom source code (open_watcom_devel_1.1.7); assumes Linux Standard Base Specification for IA32 Architecture; depends on correct handling of ELF object files as defined in System V ABI; requires fixing existing relocation and symbol handling issues.
+
+**Priorities & Acceptance Approach**: Highest priority: Correct relocation handling (R_386_PC32, R_386_GOT32, etc.); second priority: Correct segment mapping for .data and .bss; third priority: PIC code generation. Acceptance criteria: Successful compilation of "Hello, world" with shared objects; correct handling of .data and .bss sections without segmentation faults; successful linking against standard Linux shared libraries.
