@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 脚本用于从 generated_documents.json 中提取 document 字段，
-并以 filename 为文件名保存到 srs-gen-baseline 文件夹中。
+并以 filename 为文件名保存到 docs 文件夹中。
 """
 
 import json
@@ -12,7 +12,7 @@ from pathlib import Path
 def extract_documents():
     # 定义路径
     json_file = Path(__file__).parent / "generated_documents.json"
-    output_dir = Path(__file__).parent / "srs-gen-baseline"
+    output_dir = Path(__file__).parent / "docs"
     
     # 创建输出目录（如果不存在）
     output_dir.mkdir(exist_ok=True)
