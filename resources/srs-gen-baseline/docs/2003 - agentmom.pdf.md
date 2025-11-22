@@ -2,7 +2,7 @@
 # Software Requirements Specification
 ## Secure Multi-Agent Communication Framework Extension
 
-**Version:** 1.0  
+**Document Version:** 1.0  
 **Date:** [Current Date]  
 **Status:** Draft
 
@@ -14,17 +14,18 @@
 3. [System Features](#3-system-features)
 4. [External Interface Requirements](#4-external-interface-requirements)
 5. [Non-Functional Requirements](#5-non-functional-requirements)
-6. [Other Requirements](#6-other-requirements)
+6. [Constraints, Assumptions & Dependencies](#6-constraints-assumptions--dependencies)
+7. [Acceptance Criteria](#7-acceptance-criteria)
 
 ---
 
 ## 1 Introduction
 
 ### 1.1 Purpose
-This document specifies the requirements for extending the agentMom framework to support secure broadcasting, multicasting, and unicast communication in multi-agent systems. The intended audience includes Java developers, system architects, and project stakeholders involved in multi-agent system development.
+This document specifies the requirements for extending the agentMom framework to support secure broadcasting, multicasting, and unicast communication in multi-agent systems. The system enhances existing agentMom 1.2 capabilities while maintaining backward compatibility.
 
 ### 1.2 Scope
-The system extends agentMom 1.2 to provide three communication modes:
+The system provides three communication modes within multi-agent applications:
 - **Broadcast**: Local network-wide message delivery
 - **Multicast**: Group-based message delivery
 - **Unicast**: Direct agent-to-agent communication
@@ -35,204 +36,180 @@ The system extends agentMom 1.2 to provide three communication modes:
 - Non-local network broadcasting
 - Message queuing or persistence
 
-### 1.3 Definitions, Acronyms, and Abbreviations
-- **agentMom**: Base multi-agent framework being extended
-- **TTL**: Time To Live (multicast packet lifetime)
-- **UDP**: User Datagram Protocol
-- **TCP**: Transmission Control Protocol
-- **NIC**: Network Interface Card
+### 1.3 Definitions & Acronyms
 
-### 1.4 References
-- agentMom 1.2 Framework Documentation
-- RFC 1112 - Host Extensions for IP Multicasting
-- Java Network Programming Specifications
+| Term | Definition |
+|------|------------|
+| agentMom | Existing Java-based multi-agent framework |
+| TTL | Time-to-Live for multicast packets |
+| UDP | User Datagram Protocol |
+| TCP/IP | Transmission Control Protocol/Internet Protocol |
 
 ## 2 Overall Description
 
 ### 2.1 Product Perspective
-This system integrates as a Java-based communication framework extension to agentMom 1.2, maintaining backward compatibility while adding enhanced communication capabilities.
+This system extends agentMom 1.2 as a Java-based communication framework, replacing the existing unicast-only implementation with enhanced communication modes while maintaining API compatibility.
 
-### 2.2 Product Functions
-*[DRIVING]* Core communication modes (broadcast, multicast, unicast)  
-*[DRIVING]* Encryption toggle for all message types  
-*[DRIVING]* Dynamic multicast group management  
-*[DRIVING]* Configuration of multicast parameters (TTL, group addresses)  
-*[DRIVING]* Maintain compatibility with existing agentMom 1.2 implementations
-
-### 2.3 User Characteristics
+### 2.2 User Characteristics
 **Primary Users:** Java developers with multi-agent systems experience
-- Proficient in Java network programming
-- Familiar with multi-agent communication patterns
-- Understand network protocols (UDP, TCP, multicast)
+**Technical Requirements:**
+- Understanding of network communication protocols
+- Knowledge of multicast and broadcast concepts
+- Familiarity with agent-based architectures
 
-### 2.4 Operating Environment
-- **Software**: Java Runtime Environment 8+, agentMom 1.2
-- **Hardware**: Standard network infrastructure
-- **Network**: Support for multicast protocols, UDP broadcast
+### 2.3 Operating Environment
+- **Platform**: Java-based applications
+- **Network**: Local area networks with multicast support
+- **Infrastructure**: Routers, operating systems, and network interface cards supporting multicast and broadcast protocols
 
-### 2.5 Design and Implementation Constraints
-- Must maintain API compatibility with agentMom 1.2
+### 2.4 Design & Implementation Constraints
+- Must maintain compatibility with agentMom 1.2 API
 - Java-based implementation required
-- Limited to local network for broadcast operations
-- Dependent on network infrastructure for multicast support
-
-### 2.6 Assumptions and Dependencies
-- Network infrastructure supports IP multicast
-- Operating system provides multicast and broadcast capabilities
-- Agents possess destination addresses for targeted communication
-- Basic encryption provides adequate security for intended use cases
+- Network infrastructure dependencies for multicast functionality
 
 ## 3 System Features
 
-### 3.1 Broadcast Communication *[DRIVING]*
-#### 3.1.1 Description
-Send messages to all agents within the local network segment.
+### 3.1 *Broadcast Communication [DRIVING REQUIREMENT]*
+**Description:** Agents can broadcast messages to all agents within the local network.
 
-#### 3.1.2 Requirements
-**3.1.2.1** The system SHALL allow agents to broadcast messages to all agents in the local network.  
-**3.1.2.2** Broadcast messages SHALL use UDP protocol.  
-**3.1.2.3** Broadcast operations SHALL be restricted to system administrators.  
-**3.1.2.4** Broadcast SHALL be limited to the local network segment.
+**Functional Requirements:**
+- 3.1.1 System shall support UDP-based broadcast messaging
+- 3.1.2 Broadcast scope shall be limited to local network boundaries
+- 3.1.3 System shall provide broadcast address configuration
+- 3.1.4 Broadcast messages shall support encryption toggle
 
-### 3.2 Multicast Communication *[DRIVING]*
-#### 3.2.1 Description
-Send messages to agents subscribed to specific multicast groups.
+### 3.2 *Multicast Communication [DRIVING REQUIREMENT]*
+**Description:** Agents can send messages to predefined multicast groups.
 
-#### 3.2.2 Requirements
-**3.2.2.1** The system SHALL allow agents to join multicast groups dynamically.  
-**3.2.2.2** The system SHALL allow agents to leave multicast groups dynamically.  
-**3.2.2.3** The system SHALL support configurable multicast TTL values.  
-**3.2.2.4** The system SHALL allow specification of multicast group addresses.  
-**3.2.2.5** Multicast delivery SHALL be best-effort with no delivery guarantees.
+**Functional Requirements:**
+- 3.2.1 System shall support dynamic multicast group join/leave operations
+- 3.2.2 System shall allow configuration of multicast group addresses
+- 3.2.3 System shall support multicast TTL (Time-to-Live) configuration
+- 3.2.4 Multicast messages shall support encryption toggle
+- 3.2.5 System shall handle multiple concurrent multicast groups
 
-### 3.3 Unicast Communication
-#### 3.3.1 Description
-Send messages directly between individual agents.
+### 3.3 *Unicast Communication [DRIVING REQUIREMENT]*
+**Description:** Agents can send direct messages to individual agents.
 
-#### 3.3.2 Requirements
-**3.3.2.1** The system SHALL maintain existing agentMom 1.2 unicast functionality.  
-**3.3.2.2** Unicast communication SHALL use TCP/IP protocol.  
-**3.3.2.3** Agents SHALL require destination addresses for unicast messages.
+**Functional Requirements:**
+- 3.3.1 System shall maintain existing agentMom 1.2 unicast compatibility
+- 3.3.2 System shall support TCP/IP-based unicast messaging
+- 3.3.3 Unicast messages shall support encryption toggle
+- 3.3.4 System shall handle agent address resolution
 
-### 3.4 Security Features *[DRIVING]*
-#### 3.4.1 Description
-Basic encryption capabilities for all communication modes.
+### 3.4 *Encryption Control [DRIVING REQUIREMENT]*
+**Description:** System-wide toggle for message encryption across all communication modes.
 
-#### 3.4.2 Requirements
-**3.4.2.1** The system SHALL provide encryption toggle for all message types.  
-**3.4.2.2** Encryption SHALL be applied consistently across broadcast, multicast, and unicast.  
-**3.4.2.3** The system SHALL NOT guarantee protection against decryption by unauthorized parties.
+**Functional Requirements:**
+- 3.4.1 System shall provide global encryption enable/disable capability
+- 3.4.2 Encryption shall apply consistently to broadcast, multicast, and unicast messages
+- 3.4.3 System shall use basic encryption mechanisms
 
-### 3.5 Configuration Management
-#### 3.5.1 Description
-System and agent-level configuration of communication parameters.
+### 3.5 *Multicast Group Management [DRIVING REQUIREMENT]*
+**Description:** Dynamic management of multicast group subscriptions.
 
-#### 3.5.2 Requirements
-**3.5.2.1** The system SHALL allow setting multicast TTL values.  
-**3.5.2.2** The system SHALL allow configuration of multicast group addresses.  
-**3.5.2.3** Agents SHALL be able to select communication mode per message.
+**Functional Requirements:**
+- 3.5.1 Agents shall be able to join multicast groups at runtime
+- 3.5.2 Agents shall be able to leave multicast groups at runtime
+- 3.5.3 System shall validate multicast group addresses
+- 3.5.4 System shall handle group membership conflicts
 
 ## 4 External Interface Requirements
 
-### 4.1 Hardware Interfaces
-- Network Interface Cards supporting multicast and broadcast
-- Routers and switches supporting IP multicast
+### 4.1 Network Interfaces
+- **Unicast**: TCP/IP protocol implementation
+- **Multicast**: Multicast protocol support (IGMP)
+- **Broadcast**: UDP protocol implementation
 
-### 4.2 Software Interfaces
-**4.2.1** TCP/IP stack for unicast communication  
-**4.2.2** Multicast protocol implementation (IGMP)  
-**4.2.3** UDP protocol for broadcast communication  
-**4.2.4** Operating system network APIs
+### 4.2 Hardware Interfaces
+- Network Interface Cards supporting multicast
+- Routers configured for multicast traffic
+- Operating systems with multicast support enabled
 
-### 4.3 Communications Interfaces
-**4.3.1** Local network access for broadcast operations  
-**4.3.2** Multicast-enabled network infrastructure  
-**4.3.3** Standard IP networking for unicast communication
+### 4.3 Software Interfaces
+- **agentMom 1.2 API**: Backward compatibility required
+- **Java Network Libraries**: java.net package dependencies
+- **Operating System**: Network stack configuration
 
 ## 5 Non-Functional Requirements
 
-### 5.1 Performance Requirements
-**5.1.1** Multicast and broadcast delivery SHALL be best-effort without delivery guarantees.  
-**5.1.2** The system SHALL handle multiple concurrent communication sessions.
+### 5.1 Performance
+- Multicast and broadcast messages delivered on best-effort basis
+- No performance degradation for existing unicast operations
+- Efficient group membership management
 
-### 5.2 Security Requirements
-**5.2.1** Broadcast operations SHALL require administrator privileges.  
-**5.2.2** Basic encryption SHALL be available for all communication modes.  
-**5.2.3** No advanced security features beyond encryption are required.
+### 5.2 Security
+- Broadcast message transmission restricted to system administrators
+- Basic encryption available for all message types
+- No advanced security guarantees provided
 
-### 5.3 Reliability Requirements
-**5.3.1** Unicast communication SHALL maintain agentMom 1.2 reliability levels.  
-**5.3.2** Multicast and broadcast MAY experience message loss due to network conditions.
+### 5.3 Reliability
+- No guaranteed message delivery for broadcast/multicast
+- Unicast reliability maintained at agentMom 1.2 levels
+- Graceful handling of network infrastructure limitations
 
-## 6 Other Requirements
+### 5.4 Availability
+- System availability dependent on network infrastructure
+- Multicast functionality requires network support
+- Broadcast limited to local network availability
 
-### 6.1 Usage Scenarios
-#### 6.1.1 Task Completion Notification (Multicast)
-```java
-// Agent joins task group and notifies completion
-agent.joinMulticastGroup("task-group-1");
-agent.multicast("task-group-1", "Task completed", true);
-```
+## 6 Constraints, Assumptions & Dependencies
 
-#### 6.1.2 New Agent Announcement (Broadcast)
-```java
-// System administrator broadcasts new agent presence
-if (agent.hasBroadcastPrivileges()) {
-    agent.broadcast("New agent joined: AgentX", true);
-}
-```
+### 6.1 Constraints
+- Multicast delivery dependent on network infrastructure support
+- Broadcast functionality restricted to system administrators
+- Agents must know destination addresses for unicast and multicast groups
+- Security limited to basic encryption with no decryption guarantees
 
-#### 6.1.3 Direct Coordination (Unicast)
-```java
-// Direct communication between two agents
-agent.unicast("agent-destination", "Coordinate on task", false);
-```
+### 6.2 Assumptions
+- Local network supports broadcast operations
+- Network routers and OS support multicast protocols
+- Agents have knowledge of appropriate addresses for intended communication
+- System administrators properly configure network environment
 
-### 6.2 Priorities and Acceptance Criteria
-#### Must-Have Requirements (Priority 1)
-- [ ] Core communication modes (broadcast/multicast/unicast)
-- [ ] Encryption toggle functionality
-- [ ] Dynamic group join/leave operations
-- [ ] Backward compatibility with agentMom 1.2
+### 6.3 Dependencies
+- agentMom 1.2 framework availability
+- Java runtime environment (JRE)
+- Network infrastructure supporting required protocols
+- Operating system network stack configuration
 
-#### Acceptance Approach
-All requirements marked *[DRIVING]* must be demonstrated in working system demonstrations. The system must show:
-- Successful broadcast to local network
-- Dynamic multicast group management
-- Unicast communication maintenance
-- Encryption enable/disable functionality
+## 7 Acceptance Criteria
 
-### 6.3 Constraints
-- Multicast delivery dependent on network infrastructure
-- Broadcast restricted to local network and administrators
-- No delivery guarantees for multicast/broadcast
-- Security limited to basic encryption
+### 7.1 Must-Have Requirements
+The following driving requirements (marked with asterisks) must be demonstrated for acceptance:
 
----
+1. **Broadcast Communication** (Section 3.1)
+2. **Multicast Communication** (Section 3.2)
+3. **Unicast Communication** (Section 3.3)
+4. **Encryption Control** (Section 3.4)
+5. **Multicast Group Management** (Section 3.5)
 
-## Appendix A: Protocol Specifications
+### 7.2 Demonstration Requirements
+Acceptance requires successful demonstration of:
+- All three communication modes functioning simultaneously
+- Dynamic group join/leave operations
+- Encryption toggle affecting all message types
+- Backward compatibility with agentMom 1.2 unicast implementation
+- Proper handling of network boundary limitations
 
-### Broadcast Implementation
-- Protocol: UDP
-- Scope: Local network segment
-- Port: Configurable (default: 8888)
-
-### Multicast Implementation
-- Protocol: IP Multicast
-- Group range: 224.0.0.0 - 239.255.255.255
-- TTL: Configurable (default: 1)
-
-### Unicast Implementation
-- Protocol: TCP/IP
-- Maintains existing agentMom 1.2 implementation
+### 7.3 Success Criteria
+- No regression in existing agentMom 1.2 functionality
+- All specified communication modes operational
+- Proper enforcement of security and access restrictions
+- Correct handling of network infrastructure dependencies
 
 ---
 
-**Document Approval**
+**Appendices**
 
-| Role | Name | Signature | Date |
-|------|------|-----------|------|
-| Project Manager | | | |
-| Lead Developer | | | |
-| Quality Assurance | | | |
+*Appendix A: References*
+- agentMom 1.2 API Documentation
+- Java Network Programming Specifications
+- Multicast Protocol Standards (RFC 1112)
+
+*Appendix B: Revision History*
+
+| Version | Date | Author | Changes |
+|---------|------|--------|---------|
+| 1.0 | [Date] | [Author] | Initial SRS Document |
 ```

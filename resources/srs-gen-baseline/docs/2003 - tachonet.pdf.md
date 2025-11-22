@@ -3,327 +3,281 @@
 # TACHOnet System
 **Version:** 1.0  
 **Date:** [Current Date]  
-**Authors:** [Author Names]
+**Authors:** [Author Names]  
+**Status:** Draft/Final  
 
 ---
 
 ## Table of Contents
-1. [Introduction](#1-introduction)
-2. [Overall Description](#2-overall-description)
-3. [System Features](#3-system-features)
-4. [External Interface Requirements](#4-external-interface-requirements)
-5. [Non-Functional Requirements](#5-non-functional-requirements)
-6. [Constraints, Assumptions & Dependencies](#6-constraints-assumptions--dependencies)
-7. [Acceptance Criteria](#7-acceptance-criteria)
+1. [Introduction](#1-introduction)  
+2. [Overall Description](#2-overall-description)  
+3. [System Features](#3-system-features)  
+4. [External Interface Requirements](#4-external-interface-requirements)  
+5. [Non-Functional Requirements](#5-non-functional-requirements)  
+6. [Constraints, Assumptions & Dependencies](#6-constraints-assumptions--dependencies)  
+7. [Acceptance Criteria](#7-acceptance-criteria)  
 
 ---
 
-## 1 Introduction
+## 1. Introduction
 
 ### 1.1 Purpose
-This document provides a comprehensive Software Requirements Specification (SRS) for the TACHOnet system. It describes the functional and non-functional requirements for a secure cross-border messaging hub that facilitates the exchange of tachograph card and driving license information among EU Member States. This SRS serves as a reference for stakeholders, developers, testers, and project managers throughout the system lifecycle.
+This document specifies the requirements for TACHOnet, a secure cross-border messaging system for exchanging tachograph card and driving license information among EU Member States. It serves as a comprehensive guide for stakeholders, developers, and testers involved in the system's implementation and validation.
 
 ### 1.2 Scope
-TACHOnet enables secure cross-border exchange of tachograph card and driving license information among EU Member States' Card Issuing Authorities (CIAs). The system handles:
+TACHOnet operates as a central messaging hub that:
+- Enables secure information exchange between Member State Card Issuing Authorities (CIAs)
+- Supports card status checks, modifications, and assignment notifications
+- **Explicitly excludes** storage of card data or management of Member State systems
+- **Prevents reconstruction** of a consolidated European database
 
-- Card status checks and verification
-- Status modification declarations
-- Assignment notifications for cards and foreign driving licenses
-- System usage statistics generation
-- Member State configuration management
+**Out-of-Scope:**
+- Member State system modifications
+- Long-term storage of tachograph card data
+- Direct enforcement operations
 
-**Out of Scope:**
-- Storage of persistent card data
-- Management of Member State internal systems
-- Reconstruction of a consolidated European database
-- Modification of existing Member State infrastructure
-
-### 1.3 Definitions, Acronyms, and Abbreviations
+### 1.3 Definitions and Acronyms
 
 | Term | Definition |
 |------|------------|
-| TACHOnet | Central messaging system for tachograph data exchange |
 | CIA | Card Issuing Authority |
 | DG TREN | Directorate-General for Transport and Energy |
 | TESTA-II | Trans-European Services for Telematics between Administrations |
-| XML | eXtensible Markup Language |
+| TCN | TACHOnet |
 | Phonex | Phonetic algorithm for name searching |
+| Non-repudiation | Assurance that message senders cannot deny sending |
 
-### 1.4 References
-- EU Regulation No 165/2014 - Tachograph system requirements
-- TESTA-II Network Security Specifications
-- DG TREN Technical Standards for Tachograph Data Exchange
+---
 
-## 2 Overall Description
+## 2. Overall Description
 
 ### 2.1 Product Perspective
-TACHOnet operates as a central messaging hub within the European Commission's DG TREN infrastructure. The system is built on the TESTA-II network and serves as an intermediary between Member State CIAs, replacing previous bilateral communication methods.
+TACHOnet replaces direct bilateral communications between Member States with a standardized central hub architecture. The system integrates with existing CIA infrastructure without requiring modifications to national systems.
 
 ### 2.2 Product Functions
-- Secure message routing between Member States
-- Card status verification and modification
+- Cross-border tachograph card status verification
+- Secure card status modification declarations
 - Driving license assignment notifications
 - Phonetic search key generation
-- Text transliteration services
-- Usage statistics compilation
-- System configuration management
+- System usage statistics generation
+- Member State configuration management
 
 ### 2.3 User Characteristics
 
-| User Role | Responsibilities | Technical Expertise |
-|-----------|------------------|---------------------|
-| CIA Clerk | Perform card checks and status modifications | Moderate - uses Member State application |
-| CIA Administrator | Access system usage statistics | Moderate - uses web interface |
-| TCN Administrator | System configuration and monitoring | High - uses administrative tools |
-| Road Enforcement Officer | Request card status during roadside checks | Low - indirect system user |
+| User Role | Responsibilities | Technical Proficiency |
+|-----------|------------------|----------------------|
+| CIA Clerk | Card checks, status modifications | Moderate (via national CIA applications) |
+| CIA Administrator | Statistics access, reporting | Moderate (web interface) |
+| TCN Administrator | System configuration, monitoring | High (administrative tools) |
 
 ### 2.4 Operating Environment
 - **Network:** TESTA-II secure government network
-- **Platform:** Windows-based servers
-- **Middleware:** BizTalk server for message processing
-- **Authentication:** Windows-integrated security
-- **Database:** SQL Server for operational data (non-card storage)
+- **Platform:** BizTalk server infrastructure
+- **Authentication:** Windows-based security
+- **Messaging:** XML-based communication
 
 ### 2.5 Design and Implementation Constraints
-- System must prevent reconstruction of consolidated European database
-- XML message formats must comply with EU standards
-- All transactions require non-repudiation and encryption
-- Integration must not require changes to Member State systems
+- Must prevent reconstruction of consolidated European database
+- Must use specified XML message formats
+- Must operate within TESTA-II network security protocols
 - Single CIA point of contact per Member State
 
-## 3 System Features
+---
 
-### 3.1 Card Information Exchange
+## 3. System Features
 
-#### 3.1.1 Card Status Check
-**Description:** System shall allow authorized users to check tachograph card status by driver details or card number.
+### 3.1 Card Information Checking
 
-**Requirements:**
-- `FR-001`: System shall accept card status check requests via XML messages
-- `FR-002`: System shall validate requesting Member State authorization
-- `FR-003`: System shall route requests to appropriate Member State CIA
-- `FR-004`: System shall return current card status (valid, lost, stolen, expired)
-- `FR-005`: System shall handle "card not found" scenarios appropriately
+#### 3.1.1 Description
+Enables authorized users to check driver's issued cards and tachograph card status across Member States.
 
-#### 3.1.2 Issued Cards Check
-**Description:** System shall enable checking of all cards issued to a specific driver.
+#### 3.1.2 Functional Requirements
+- **FR-001:** System shall allow card searches by driver details (name, birth date, nationality)
+- **FR-002:** System shall allow card searches by card number
+- **FR-003:** System shall return current card status (valid, lost, stolen, exchanged)
+- **FR-004:** System shall provide response within 60 seconds for enforcement requests
 
-**Requirements:**
-- `FR-006`: System shall accept driver identification parameters (name, birth date, license number)
-- `FR-007`: System shall generate Phonex search keys for driver names
-- `FR-008`: System shall perform US/ASCII transliteration for non-Latin characters
-- `FR-009`: System shall return list of all cards issued to the driver across Member States
+### 3.2 Card Status Modification
 
-### 3.2 Card Status Management
+#### 3.2.1 Description
+Allows CIAs to declare changes in card status (lost, stolen, exchanged) to other Member States.
 
-#### 3.2.1 Status Modification Declaration
-**Description:** System shall process declarations of card status changes.
+#### 3.2.2 Functional Requirements
+- **FR-005:** System shall accept card status modification declarations
+- **FR-006:** System shall validate modification request authenticity
+- **FR-007:** System shall propagate status changes to relevant Member States
+- **FR-008:** System shall provide confirmation of successful status update
 
-**Requirements:**
-- `FR-010`: System shall accept status modification requests (lost, stolen, exchanged, returned)
-- `FR-011`: System shall validate declaring Member State authorization
-- `FR-012`: System shall broadcast status changes to all Member States
-- `FR-013`: System shall provide confirmation of successful status update
+### 3.3 Assignment Notification
 
-#### 3.2.2 Assignment Notifications
-**Description:** System shall handle notifications for card and driving license assignments.
+#### 3.3.1 Description
+Handles notifications for card/driving license assignments, particularly for foreign licenses.
 
-**Requirements:**
-- `FR-014`: System shall process assignment notifications for foreign driving licenses
-- `FR-015`: System shall validate assignment data completeness
-- `FR-016`: System shall distribute assignments to relevant Member States
+#### 3.3.2 Functional Requirements
+- **FR-009:** System shall accept assignment notifications from CIAs
+- **FR-010:** System shall route assignments to appropriate Member States
+- **FR-011:** System shall verify assignment message integrity
 
-### 3.3 Administrative Functions
+### 3.4 Search and Transliteration Services
 
-#### 3.3.1 Statistics Generation and Browsing
-**Description:** System shall generate and provide access to usage statistics.
+#### 3.4.1 Description
+Provides phonetic search key generation and text transliteration services.
 
-**Requirements:**
-- `FR-017`: System shall compile monthly usage statistics by Member State
-- `FR-018`: System shall provide secure web interface for statistics access
-- `FR-019`: System shall support filtering of statistics by date range and Member State
-- `FR-020`: System shall generate exportable reports in standard formats
+#### 3.4.2 Functional Requirements
+- **FR-012:** System shall generate Phonex search keys for driver names
+- **FR-013:** System shall perform US/ASCII transliteration for non-Latin text
+- **FR-014:** System shall maintain consistent transliteration rules across all Member States
 
-#### 3.3.2 Member State Configuration Management
-**Description:** System shall support management of Member State configurations.
+### 3.5 Statistics and Reporting
 
-**Requirements:**
-- `FR-021`: System shall allow adding new Member States to the network
-- `FR-022`: System shall support editing existing Member State configurations
-- `FR-023`: System shall allow removal of Member States (with appropriate safeguards)
-- `FR-024`: System shall maintain audit trail of configuration changes
+#### 3.5.1 Description
+Generates and provides access to system usage statistics for authorized administrators.
 
-### 3.4 System Support Functions
+#### 3.5.2 Functional Requirements
+- **FR-015:** System shall collect usage statistics for all transactions
+- **FR-016:** System shall provide web-based statistics interface
+- **FR-017:** System shall generate predefined statistical reports
+- **FR-018:** System shall restrict statistics access to authorized CIA Administrators
 
-#### 3.4.1 Text Processing
-**Description:** System shall provide text processing utilities.
+### 3.6 System Configuration Management
 
-**Requirements:**
-- `FR-025`: System shall generate Phonex search keys for driver name matching
-- `FR-026`: System shall perform US/ASCII transliteration for non-Latin text
-- `FR-027`: System shall handle special characters and diacritics appropriately
+#### 3.6.1 Description
+Enables TCN Administrators to manage Member State configurations and system parameters.
 
-## 4 External Interface Requirements
+#### 3.6.2 Functional Requirements
+- **FR-019:** System shall allow adding new Member State configurations
+- **FR-020:** System shall allow editing existing Member State configurations
+- **FR-021:** System shall allow removing Member State configurations
+- **FR-022:** System shall maintain configuration change audit trails
+
+---
+
+## 4. External Interface Requirements
 
 ### 4.1 User Interfaces
-
-#### 4.1.1 Statistics Web Interface
-- **Technology:** Secure web application
-- **Authentication:** Windows integrated authentication
-- **Access:** Role-based access control for CIA Administrators
-- **Features:** Statistics browsing, filtering, export capabilities
-
-#### 4.1.2 Administrative Interface
-- **Technology:** BizTalk administration tools
-- **Users:** TCN Administrators only
-- **Functions:** System monitoring, configuration management, troubleshooting
+- **Web Interface:** Secure statistics reporting portal with Windows authentication
+- **Administrative Interface:** BizTalk-based tools for system configuration
+- **CIA Applications:** Member State-specific interfaces connecting via XML messaging
 
 ### 4.2 Hardware Interfaces
-- TESTA-II network infrastructure components
-- Server hardware meeting EU security standards
-- Redundant storage systems for operational data
+- TESTA-II network infrastructure
+- Member State CIA system endpoints
 
 ### 4.3 Software Interfaces
-
-#### 4.3.1 Member State CIA Interface
-```xml
-<!-- Example XML Message Structure -->
-<CardStatusRequest>
-    <RequestingMemberState>DE</RequestingMemberState>
-    <CardNumber>12345678901234567</CardNumber>
-    <RequestTimestamp>2024-01-15T10:30:00Z</RequestTimestamp>
-    <SecuritySignature>...</SecuritySignature>
-</CardStatusRequest>
-```
-
-**Interface Specifications:**
-- **Protocol:** XML over HTTP/S via TESTA-II
-- **Message Format:** EU-standard XML schemas
-- **Security:** XML encryption and digital signatures
-- **Transport:** TESTA-II secure network
-
-#### 4.3.2 TESTA-II Network Interface
-- **Network:** TESTA-II private government network
-- **Security:** Network-level encryption and access controls
-- **Availability:** 24x7 with guaranteed uptime
+- **XML Messaging Interface:** Standardized message formats for CIA communication
+- **TESTA-II Network Protocol:** Secure government network protocols
+- **BizTalk Server:** Message routing and processing engine
 
 ### 4.4 Communication Interfaces
-- XML web services for Member State communications
-- Secure HTTP/S for web interface access
-- Database connectivity for operational data management
+- Secure XML messaging over TESTA-II network
+- Encrypted web services for statistics access
+- Administrative communication channels
 
-## 5 Non-Functional Requirements
+---
 
-### 5.1 Performance Requirements
+## 5. Non-Functional Requirements
 
-| Metric | Requirement | Conditions |
-|--------|-------------|------------|
-| Response Time | < 1 minute | For enforcement-related requests |
-| Throughput | Support 100+ concurrent requests | During peak operational hours |
-| Message Processing | < 5 seconds | Average message routing time |
-| Statistics Generation | < 10 minutes | For monthly reports |
+### 5.1 Security Requirements
+- **SEC-001:** All transactions shall implement non-repudiation mechanisms
+- **SEC-002:** All data transmissions shall be encrypted
+- **SEC-003:** System shall prevent reconstruction of consolidated European database
+- **SEC-004:** Access to statistics shall require Windows authentication
+- **SEC-005:** Administrative functions shall require elevated privileges
 
-### 5.2 Security Requirements
-- `SR-001`: All transactions must implement non-repudiation through digital signatures
-- `SR-002`: All data in transit must be encrypted using EU-approved algorithms
-- `SR-003`: System must implement role-based access control
-- `SR-004`: Audit trails must be maintained for all system activities
-- `SR-005`: System must prevent unauthorized database reconstruction
-- `SR-006`: Member State authentication must be validated for each transaction
+### 5.2 Reliability Requirements
+- **REL-001:** System shall experience minimal interruptions (< 4 incidents) in first operational year
+- **REL-002:** Message delivery success rate shall exceed 99.5%
+- **REL-003:** System shall implement automatic retry mechanisms for failed transmissions
 
-### 5.3 Reliability Requirements
-- `RL-001`: System shall experience fewer than 5 unplanned interruptions in first operational year
-- `RL-002`: Mean Time Between Failures (MTBF) > 720 hours
-- `RL-003`: System shall automatically recover from minor failures
-- `RL-004`: Data integrity must be maintained during system failures
+### 5.3 Availability Requirements
+- **AVA-001:** System shall operate 24x7 with 99.5% uptime
+- **AVA-002:** Response time for enforcement requests shall be < 60 seconds
+- **AVA-003:** Scheduled maintenance windows shall not exceed 4 hours per month
 
-### 5.4 Availability Requirements
-- `AV-001`: System shall maintain 24x7 operational availability
-- `AV-002`: Scheduled maintenance windows limited to 4 hours per month
-- `AV-003`: System uptime target of 99.5% annually
-- `AV-004`: Redundant components for critical system functions
+### 5.4 Maintainability Requirements
+- **MAIN-001:** System shall be modular and extensible for future enhancements
+- **MAIN-002:** Configuration changes shall not require system downtime
+- **MAIN-003:** System shall provide comprehensive logging for troubleshooting
 
-### 5.5 Maintainability Requirements
-- `MN-001`: System shall be modular to allow component updates
-- `MN-002`: Configuration changes shall not require system downtime
-- `MN-003`: System shall support addition of new Member States without architectural changes
-- `MN-004`: Comprehensive logging for troubleshooting and maintenance
+### 5.5 Performance Requirements
+- **PERF-001:** System shall handle peak loads of 100 concurrent transactions
+- **PERF-002:** Statistical report generation shall complete within 5 minutes
+- **PERF-003:** Message processing shall not exceed 30 seconds average
 
-### 5.6 Scalability Requirements
-- `SC-001`: System shall support addition of new EU Member States
-- `SC-002`: Architecture shall support 50% increase in transaction volume
-- `SC-003`: Database design shall accommodate 5 years of operational data
+---
 
-## 6 Constraints, Assumptions & Dependencies
+## 6. Constraints, Assumptions & Dependencies
 
 ### 6.1 Constraints
-- `CON-001`: System design must explicitly prevent reconstruction of consolidated European database
-- `CON-002`: Member States must use specified XML message formats
-- `CON-003`: All communications must occur over TESTA-II network
-- `CON-004`: No persistent storage of card data beyond operational requirements
+- System architecture must prevent consolidated database reconstruction
+- Member States must adhere to specified XML message formats
+- All communications must occur through TESTA-II network
+- Single CIA point of contact per Member State
 
 ### 6.2 Assumptions
-- `ASM-001`: Each Member State maintains a single CIA point of contact
-- `ASM-002`: Member States have implemented required web services
-- `ASM-003`: TESTA-II network provides required security and availability
-- `ASM-004`: Member States will maintain their internal CIA systems
+- Member States will maintain their respective CIA systems
+- TESTA-II network will provide required security and reliability
+- CIAs will implement necessary services for TACHOnet integration
+- Member States will provide accurate and timely information updates
 
 ### 6.3 Dependencies
-- `DEP-001`: Member State implementation of required CIA web services
-- `DEP-002`: TESTA-II network infrastructure availability and performance
-- `DEP-003`: DG TREN provided XML schema specifications
-- `DEP-004`: Member State compliance with security protocols
+- Availability and reliability of TESTA-II network infrastructure
+- Member State implementation of required CIA services
+- Continued European Commission support and funding
+- Compliance with EU data protection regulations
 
-## 7 Acceptance Criteria
+---
 
-### 7.1 Functional Acceptance Criteria
-- All core messaging functions (FR-001 through FR-016) must be validated
-- Administrative functions (FR-017 through FR-024) must be demonstrated
-- Text processing utilities (FR-025 through FR-027) must meet accuracy requirements
-- End-to-end testing with at least 3 Member State test systems
+## 7. Acceptance Criteria
 
-### 7.2 Non-Functional Acceptance Criteria
-- Performance testing must demonstrate response times < 1 minute for enforcement requests
-- Security audit must validate encryption and non-repudiation implementation
-- Reliability testing must demonstrate compliance with interruption limits
-- Availability metrics must be monitored over 30-day continuous operation
+### 7.1 Functional Acceptance
+- All functional requirements (FR-001 through FR-022) shall be implemented and verified
+- System shall successfully process all specified message types
+- All user interfaces shall function as specified
+
+### 7.2 Non-Functional Acceptance
+- Security requirements shall be validated through penetration testing
+- Reliability metrics shall be demonstrated over 30-day continuous operation
+- Performance requirements shall be verified under load testing
+- Availability shall be measured and meet specified targets
 
 ### 7.3 Priority Classification
 
 | Priority | Requirements |
 |----------|-------------|
-| Critical | FR-001 to FR-016, SR-001 to SR-006, RL-001, AV-001 |
-| High | FR-017 to FR-024, RL-002 to RL-004, AV-002 to AV-004 |
-| Medium | FR-025 to FR-027, MN-001 to MN-004, SC-001 to SC-003 |
+| Critical | Security (SEC-001 to SEC-005), Core Messaging (FR-001 to FR-011), Reliability (REL-001) |
+| High | Statistics (FR-015 to FR-018), Performance (PERF-001 to PERF-003) |
+| Medium | Configuration Management (FR-019 to FR-022), Maintainability (MAIN-001 to MAIN-003) |
 
 ### 7.4 Acceptance Approach
-- Formal User Acceptance Testing with DG TREN and Member State representatives
-- Performance benchmarking against specified metrics
-- Security validation by independent auditors
-- 30-day operational trial with limited Member State participation
+- Formal testing against all specified requirements
+- Validation of non-functional requirements through performance testing
+- Security audit and penetration testing
+- User acceptance testing with representative CIA users
+- 30-day operational stability demonstration
 
 ---
 
-## Appendix A: Message Flow Diagrams
+## Appendix A: Message Format Specifications
 
-*(Note: Diagrams would be included here in actual SRS)*
+[This section would contain detailed XML schema definitions for all message types]
 
-## Appendix B: XML Schema Definitions
+## Appendix B: Security Protocol Details
 
-*(Note: Complete XML schemas would be included here in actual SRS)*
+[This section would contain detailed security implementation specifications]
 
-## Revision History
+## Appendix C: User Interface Mockups
 
-| Version | Date | Author | Changes |
-|---------|------|--------|---------|
-| 1.0 | [Date] | [Author] | Initial SRS version |
+[This section would contain interface design specifications]
 
 ---
-**Document Approval**
+
+**Document Approval:**
 
 | Role | Name | Signature | Date |
 |------|------|-----------|------|
 | Project Manager | | | |
 | Technical Lead | | | |
-| DG TREN Representative | | | |
+| Quality Assurance | | | |
+| Client Representative | | | |
 ```

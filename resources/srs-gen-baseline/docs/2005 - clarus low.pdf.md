@@ -3,7 +3,7 @@
 
 **Document Version:** 1.0  
 **Date:** [Current Date]  
-**Author:** [Author Name]  
+**Author:** [Author Name/Organization]  
 **Status:** Draft/Final  
 
 ---
@@ -19,185 +19,245 @@
 
 ---
 
-## 1 Introduction
+## 1. Introduction
 
 ### 1.1 Purpose
-This document specifies the software requirements for the Clarus Initiative, a U.S. Department of Transportation (DOT) project designed to create a comprehensive network for collecting, quality checking, and sharing surface transportation environmental data. This SRS serves as a contract between the development team and the client, ensuring a common understanding of the system's capabilities and constraints.
+This document specifies the requirements for the Clarus system, a U.S. Department of Transportation (DOT) initiative to create a comprehensive network for collecting, quality checking, and sharing surface transportation environmental data. The SRS serves as a contract between developers and stakeholders, ensuring all parties have a common understanding of system capabilities and constraints.
 
 ### 1.2 Scope
-The Clarus system will:
-*   Provide a one-stop portal for atmospheric, pavement, and hydrologic environmental observations.
-*   Enable continuous automated and manual quality checking with feedback mechanisms for data providers.
-*   Support integration with existing weather data sources using standardized, non-proprietary interfaces.
-*   Facilitate data sharing based on managed agreements between providers and consumers.
+The Clarus system provides:
+- A one-stop portal for environmental observations (atmospheric, pavement, and hydrologic)
+- Continuous quality checking with feedback mechanisms to data providers
+- Integration capabilities with existing weather data sources
+- Standardized interfaces for data dissemination
 
-The system will **not**:
-*   Handle long-term data archiving.
-*   Replace existing operational data collection systems (e.g., state DOT sensor networks).
-*   Be classified as a critical national security system.
+**Out of Scope:**
+- Long-term data archiving
+- Replacement of existing operational systems
+- National security mission operations
 
-### 1.3 Definitions, Acronyms, and Abbreviations
-*   **Clarus:** The initiative and system described in this document.
-*   **DOT:** Department of Transportation.
-*   **ESS:** Environmental Sensor Station.
-*   **NTCIP 1204:** A standard protocol for communicating with environmental sensor stations.
-*   **UTC:** Coordinated Universal Time.
-*   **ASOS/AWOS:** Automated Surface/Weather Observing Systems.
-*   **NOAA:** National Oceanic and Atmospheric Administration.
-*   **SRS:** Software Requirements Specification.
+### 1.3 Definitions and Acronyms
 
----
+| Term | Definition |
+|------|------------|
+| ESS | Environmental Sensor Station |
+| NTCIP 1204 | National Transportation Communications for ITS Protocol 1204 standard |
+| UTC | Coordinated Universal Time |
+| DOT | Department of Transportation |
+| NOAA | National Oceanic and Atmospheric Administration |
 
-## 2 Overall Description
+## 2. Overall Description
 
 ### 2.1 Product Perspective
-Clarus is positioned as an integrative network that connects independent surface transportation weather observation systems. It acts as a middleware layer, enhancing data coverage and quality for the broader meteorological community without replacing source systems.
+Clarus positions itself as the next evolutionary step in integrating surface transportation weather observations with broader meteorological community efforts. The system operates as a network hub connecting independent data collection systems to enhance data coverage and improve meteorological support services.
 
 ### 2.2 Product Functions
-The core functions of Clarus are:
-1.  **Data Ingestion:** Collect environmental data from diverse sources including ESS, vehicles, and cameras.
-2.  **Quality Control:** Apply automated and manual quality checks, appending quality flags to each observation.
-3.  **Data Publication & Dissemination:** Publish quality-checked data through standardized interfaces within strict time constraints.
-4.  **Data Sharing Management:** Manage and enforce data sharing agreements between data providers and consumers.
-5.  **Query Support:** Enable spatial and temporal queries for efficient data retrieval.
+- Data collection from diverse environmental sources
+- Automated and manual quality control processes
+- Standardized data publication with quality flags
+- Data sharing agreement management
+- Spatial and temporal query support
+- High-performance data dissemination
 
 ### 2.3 User Characteristics
-| User Group | Description | Key Needs |
-| :--- | :--- | :--- |
-| **State DOTs** | Government transportation departments. | Real-time data for road maintenance and safety operations; feedback on their data quality. |
-| **Weather Service Providers** (e.g., NOAA, private companies) | Organizations that create forecasts and weather products. | High-quality, integrated data for model input and value-added product generation. |
-| **Research Organizations** | Academic and institutional researchers. | Reliable, quality-controlled historical and real-time data for analysis. |
-| **Transportation Operators** | Entities managing traffic and logistics. | Current environmental conditions for operational decision-making. |
+
+| User Group | Primary Responsibilities | Technical Expertise |
+|------------|-------------------------|---------------------|
+| State DOTs | Operational decisions, road maintenance | Moderate to High |
+| Weather Service Providers | Forecasting, model integration | High |
+| Research Organizations | Data analysis, research studies | High |
+| Transportation Operators | Real-time operational decisions | Moderate |
 
 ### 2.4 Operating Environment
-*   **Software:** Must support standard Internet protocols (e.g., HTTP/S, FTP) and interface with systems using NTCIP 1204.
-*   **Hardware:** Must be deployable on scalable server infrastructure to handle the specified load.
-*   **Network:** Must operate over standard internet connections across North America.
+- 24x7 operational availability
+- North American coverage (US, Canada, Mexico)
+- Standard internet protocols for data exchange
+- Cloud-based or enterprise server infrastructure
 
 ### 2.5 Design and Implementation Constraints
-*   Must use non-proprietary, standards-based interfaces.
-*   Data must adhere to the NTCIP 1204 standard where applicable.
-*   All timestamps must be in UTC.
-*   All data must include mandatory metadata: location, timestamp, and source.
+- Must use non-proprietary interfaces
+- Standards-based architecture required
+- NTCIP 1204 compliance for sensor data
+- UTC timestamp standardization
+- Location and source metadata requirements
 
----
+## 3. System Features
 
-## 3 System Features
+### 3.1 Data Collection Module
 
-### 3.1 Data Ingestion Module
-**3.1.1 Description**
-This module is responsible for receiving environmental data from a wide array of external sources.
+#### 3.1.1 Description
+Collects environmental data from diverse sources including Environmental Sensor Stations (ESS), vehicle sensors, and camera systems.
 
-**3.1.2 Requirements**
-*   **REQ-DI-001:** The system shall accept data from Environmental Sensor Stations (ESS) using the NTCIP 1204 standard.
-*   **REQ-DI-002:** The system shall accept data from mobile sources (e.g., vehicles) and stationary sources (e.g., cameras).
-*   **REQ-DI-003:** The system shall accept data from third-party weather service providers (e.g., ASOS/AWOS).
-*   **REQ-DI-004:** All ingested data must be tagged with source, location, and a UTC timestamp upon receipt.
+#### 3.1.2 Requirements
+- **R1.1**: System shall collect data from ESS using NTCIP 1204 standard
+- **R1.2**: System shall support data ingestion from mobile sources (vehicles)
+- **R1.3**: System shall integrate camera-based environmental data
+- **R1.4**: System shall validate basic data format upon receipt
 
 ### 3.2 Quality Control Module
-**3.2.1 Description**
-This module performs automated and allows for manual quality checks on ingested data, appending quality flags to each data point.
 
-**3.2.2 Requirements**
-*   **REQ-QC-001:** The system shall perform automated quality checks on all ingested data.
-*   **REQ-QC-002:** The system shall complete automated quality checks within 10 seconds of data receipt.
-*   **REQ-QC-003:** The system shall append a quality flag (e.g., Pass, Suspect, Fail) to each observation based on the check results.
-*   **REQ-QC-004:** The system shall provide a mechanism for manual quality flagging and override by authorized users.
-*   **REQ-QC-005:** The system shall provide feedback reports to data providers regarding the quality of their submissions.
+#### 3.2.1 Description
+Applies automated and manual quality checking procedures with comprehensive flagging system.
 
-### 3.3 Data Publication & Dissemination Module
-**3.3.1 Description**
-This module makes quality-checked data available to authorized consumers through standardized interfaces.
+#### 3.2.2 Requirements
+- **R2.1**: System shall perform automated quality checks within 10 seconds of data receipt
+- **R2.2**: System shall support manual quality review interfaces
+- **R2.3**: System shall apply standardized quality flags to all data
+- **R2.4**: System shall provide quality feedback to data providers
 
-**3.3.2 Requirements**
-*   **REQ-PD-001:** The system shall publish new data with quality flags through standardized interfaces.
-*   **REQ-PD-002:** The system shall disseminate data to consumers within 20 minutes of its original receipt.
-*   **REQ-PD-003:** The system shall support spatial queries (e.g., by bounding box, radius) for data retrieval.
-*   **REQ-PD-004:** The system shall support temporal queries (e.g., by specific time range) for data retrieval.
-*   **REQ-PD-005:** The system shall handle at least 300 simultaneous data requests.
+### 3.3 Data Publication Module
 
-### 3.4 Data Sharing Agreement Module
-**3.4.1 Description**
-This module manages the legal and access control rules governing which consumers can access which providers' data.
+#### 3.3.1 Description
+Publishes quality-checked data through standardized interfaces with comprehensive metadata.
 
-**3.4.2 Requirements**
-*   **REQ-DSA-001:** The system shall store and manage data sharing agreements between providers and consumers.
-*   **REQ-DSA-002:** The system shall enforce access rights based on active data sharing agreements for every data request.
-*   **REQ-DSA-003:** The system shall provide an administrative interface for managing these agreements.
+#### 3.3.2 Requirements
+- **R3.1**: System shall publish new data within 20 minutes of receipt
+- **R3.2**: System shall include quality flags in all published data
+- **R3.3**: System shall maintain data metadata including location, timestamp, and source
+- **R3.4**: System shall use UTC time reference for all timestamps
 
----
+### 3.4 Data Access and Query Module
 
-## 4 External Interface Requirements
+#### 3.4.1 Description
+Provides spatial and temporal query capabilities for data retrieval with access control.
+
+#### 3.4.2 Requirements
+- **R4.1**: System shall support spatial queries by geographic coordinates
+- **R4.2**: System shall support temporal queries by date/time ranges
+- **R4.3**: System shall handle 300 simultaneous data requests
+- **R4.4**: System shall respond to data requests within one minute
+- **R4.5**: System shall enforce data sharing agreements for access control
+
+### 3.5 Data Sharing Management Module
+
+#### 3.5.1 Description
+Manages data sharing agreements between providers and consumers.
+
+#### 3.5.2 Requirements
+- **R5.1**: System shall require data sharing agreements for all providers
+- **R5.2**: System shall enforce access rights based on user groups
+- **R5.3**: System shall maintain agreement metadata and expiration dates
+
+## 4. External Interface Requirements
 
 ### 4.1 User Interfaces
-A web-based portal shall be provided for:
-*   Data query and visualization.
-*   Administrative functions (e.g., managing data sharing agreements, manual quality control).
-*   Accessing quality feedback reports (for providers).
+- Web-based portal for data access and visualization
+- Administrative interface for quality control and system management
+- API interfaces for programmatic data access
 
 ### 4.2 Hardware Interfaces
-The system must interface with remote hardware Environmental Sensor Stations (ESS) via the NTCIP 1204 protocol.
+- Environmental Sensor Stations (ESS) via NTCIP 1204
+- Vehicle sensor systems
+- Camera systems for visual environmental data
 
 ### 4.3 Software Interfaces
-*   **ESS Interface:** Communication via NTCIP 1204 standard.
-*   **Data Consumer Interface:** Data dissemination via standard Internet protocols (e.g., RESTful API, SOAP, OGC standards). Data formats must be non-proprietary (e.g., XML, JSON).
-*   **External Weather Service Interface:** Capability to ingest data from systems like ASOS/AWOS.
+- **Weather Service Providers**: Integration with NOAA, ASOS/AWOS systems
+- **Data Contributors**: Standardized ingestion interfaces
+- **Data Consumers**: RESTful APIs with standard data formats
 
-### 4.4 Communications Interfaces
-All external communications shall use standard Internet protocols (TCP/IP, HTTP/S).
+### 4.4 Communication Interfaces
+- Standard Internet protocols (HTTP/HTTPS)
+- Data dissemination via web services
+- Secure data transmission protocols
 
----
-
-## 5 Non-Functional Requirements
+## 5. Non-Functional Requirements
 
 ### 5.1 Performance Requirements
-*   **PERF-001:** The system shall publish new data within 20 minutes of receipt.
-*   **PERF-002:** The system shall respond to data requests within one minute.
-*   **PERF-003:** The system shall handle 300 simultaneous data requests without degradation of service.
-*   **PERF-004:** Automated quality checks shall be completed within 10 seconds of data receipt.
-*   **PERF-005:** The system shall support a database of at least 470 million current observations.
 
-### 5.2 Availability & Reliability
-*   **AVAIL-001:** The system shall maintain 24x7 operations (99.9% uptime).
-*   **REL-001:** The system must include reliable mechanisms for recovery from hardware and software failures.
+| Requirement | Metric | Value |
+|-------------|---------|-------|
+| Data Publication Time | Time from receipt to availability | ≤ 20 minutes |
+| Query Response Time | Time from request to response | ≤ 1 minute |
+| Simultaneous Requests | Maximum concurrent users | 300 requests |
+| Quality Check Performance | Automated check completion | ≤ 10 seconds |
+| Data Capacity | Current observations supported | 470 million |
 
-### 5.3 Scalability
-The system architecture shall be scalable to accommodate future growth in data volume and user requests.
+### 5.2 Reliability Requirements
+- **R6.1**: System shall maintain 24x7 operational availability
+- **R6.2**: System shall provide reliable recovery from failures
+- **R6.3**: System shall maintain data integrity during processing
 
-### 5.4 Interoperability
-*   **INTEROP-001:** The system must use non-proprietary, standards-based interfaces for all external communications.
+### 5.3 Security Requirements
+- **R7.1**: System shall enforce data sharing agreements
+- **R7.2**: System shall provide secure access to sensitive data
+- **R7.3**: System shall maintain audit trails for data access
 
----
+### 5.4 Interoperability Requirements
+- **R8.1**: System shall use non-proprietary interfaces
+- **R8.2**: System shall comply with industry standards
+- **R8.3**: System shall support North American data standards
 
-## 6 Constraints, Assumptions & Dependencies
+## 6. Constraints, Assumptions & Dependencies
 
 ### 6.1 Constraints
-*   The system is not mission-critical for national security.
-*   All data providers must have a formal data sharing agreement in place.
-*   The system must support data from across North America (US, Canada, Mexico).
+- System is not critical to existing operations (non-national security)
+- Requires data sharing agreements for all data providers
+- Must support data from across North America
+- Timestamps must use UTC time reference
 
 ### 6.2 Assumptions
-*   Data providers are capable of outputting data in the required standards (NTCIP 1204) and formats.
-*   A robust and high-availability hosting infrastructure is available.
+- Data providers will comply with NTCIP 1204 standards
+- Sufficient network bandwidth will be available for data transfer
+- Users will have adequate internet connectivity for system access
 
 ### 6.3 Dependencies
-*   Successful operation depends on the continuous and reliable data feed from external providers.
-*   The validity of the system depends on the correct implementation and enforcement of data sharing agreements.
+- Availability of standardized environmental data formats
+- Cooperation from data providers across North America
+- Continued support for NTCIP 1204 standard in sensor systems
+
+## 7. Acceptance Criteria
+
+### 7.1 Performance Acceptance
+- **AC1**: System must demonstrate data publication within 20 minutes of receipt
+- **AC2**: System must respond to data requests within one minute
+- **AC3**: System must handle 300 simultaneous requests without degradation
+- **AC4**: System must complete automated quality checks within 10 seconds
+
+### 7.2 Functional Acceptance
+- **AC5**: All standardized interfaces must be implemented and functional
+- **AC6**: Data sharing agreement management must be fully operational
+- **AC7**: Quality checking and flagging system must meet specification requirements
+
+### 7.3 Operational Acceptance
+- **AC8**: System must demonstrate 24x7 availability capabilities
+- **AC9**: Recovery procedures must be tested and validated
+- **AC10**: System must handle the specified data volume (470 million observations)
+
+### 7.4 Priority Matrix
+
+| Requirement | Priority | Verification Method |
+|-------------|----------|---------------------|
+| Timeliness (20-min publication) | High | Performance testing |
+| Response Time (1-minute) | High | Load testing |
+| Quality Checks (10-second) | Medium | Functional testing |
+| Standardized Interfaces | High | Compliance testing |
+| 24x7 Availability | High | Availability monitoring |
 
 ---
 
-## 7 Acceptance Criteria
+## Appendix A: Data Standards Reference
 
-### 7.1 Priority
-*   **P0 (Highest Priority):** All performance timeliness requirements (20-minute publication, 1-minute response).
-*   **P1 (High Priority):** Quality checking functionality and performance (10-second checks).
-*   **P2 (Medium Priority):** All other functional and non-functional requirements.
+### A.1 NTCIP 1204 Compliance
+All environmental sensor data must comply with NTCIP 1204 standards for:
+- Data structure and format
+- Measurement units
+- Communication protocols
 
-### 7.2 Acceptance Tests
-Final acceptance of the system is contingent upon successful demonstration of the following:
-1.  A test suite showing that 100% of data is published through standard interfaces within 20 minutes of receipt.
-2.  Load testing demonstrating 300 simultaneous requests are served with sub-one-minute response times.
-3.  Validation that automated quality checks are completed within 10 seconds.
-4.  Verification that all external interfaces are non-proprietary and standards-based.
-5.  A 30-day continuous uptime demonstration meeting the 24x7 availability requirement.
+### A.2 Metadata Requirements
+All data must include:
+- Geographic coordinates (latitude/longitude)
+- UTC timestamp with timezone indication
+- Source identification and provenance
+- Quality control flags and status
+
+---
+
+**Document Approval**
+
+| Role | Name | Signature | Date |
+|------|------|-----------|------|
+| Project Manager | | | |
+| Technical Lead | | | |
+| Quality Assurance | | | |
+| Stakeholder Representative | | | |
 ```

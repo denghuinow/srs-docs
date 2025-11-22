@@ -1,187 +1,322 @@
-Of course. Below is a comprehensive Software Requirements Specification (SRS) document for the EIRENE system, structured according to professional standards (IEEE Std 830-1998) and formatted in Markdown.
+```markdown
+# Software Requirements Specification (SRS)
+# EIRENE GSM-R Railway Communication System
 
-***
-
-# Software Requirements Specification (SRS) for the EIRENE System
-
-**Version:** 1.0
-**Date:** 2023-10-27
-**Status:** Draft
+**Document Version:** 1.0  
+**Date:** [Current Date]  
+**Status:** Draft/Final  
+**Distribution:** Project Stakeholders, Development Team, Quality Assurance
 
 ---
 
 ## Table of Contents
 1. [Introduction](#1-introduction)
-    1.1 [Purpose](#11-purpose)
-    1.2 [Scope](#12-scope)
-    1.3 [Definitions, Acronyms, and Abbreviations](#13-definitions-acronyms-and-abbreviations)
-    1.4 [References](#14-references)
-    1.5 [Overview](#15-overview)
 2. [Overall Description](#2-overall-description)
-    2.1 [Product Perspective](#21-product-perspective)
-    2.2 [Product Functions](#22-product-functions)
-    2.3 [User Characteristics](#23-user-characteristics)
-    2.4 [Constraints](#24-constraints)
-    2.5 [Assumptions and Dependencies](#25-assumptions-and-dependencies)
-3. [Specific Requirements](#3-specific-requirements)
-    3.1 [External Interface Requirements](#31-external-interface-requirements)
-    3.2 [Functional Requirements](#32-functional-requirements)
-    3.3 [Non-Functional Requirements](#33-non-functional-requirements)
+3. [System Features](#3-system-features)
+4. [External Interface Requirements](#4-external-interface-requirements)
+5. [Non-Functional Requirements](#5-non-functional-requirements)
+6. [Constraints, Assumptions & Dependencies](#6-constraints-assumptions--dependencies)
+7. [Acceptance Criteria](#7-acceptance-criteria)
 
 ---
 
-## 1. Introduction
+## 1 Introduction
 
 ### 1.1 Purpose
-This document provides a detailed Software Requirements Specification (SRS) for the EIRENE (European Integrated Railway Radio Enhanced Network) system. It describes the functional and non-functional requirements necessary to deliver a standardized, interoperable GSM-R based digital radio network for European railways. This SRS is intended for system architects, developers, testers, and project managers involved in the implementation and validation of the EIRENE system.
+This document specifies the requirements for the EIRENE (European Integrated Railway Radio Enhanced Network) system, a standardized GSM-R based digital radio network for European railways. The SRS serves as a contractual agreement between stakeholders and the development team, ensuring all parties have a common understanding of system capabilities and constraints.
 
 ### 1.2 Scope
-The EIRENE system is a core network infrastructure that enables secure, reliable, and interoperable voice and data communications across national borders for European railway operations. It supports critical applications including operational communications, railway emergency calls, and data exchange for train control systems (ERTMS/ETCS).
+The EIRENE system provides interoperable voice and data communications across national borders for European railways, supporting:
+- Operational communications for railway staff
+- Emergency call functionality
+- Train control applications integration
+- Cross-border interoperability
 
-**In-Scope:**
-*   GSM-R core network and base station subsystems.
-*   Call management and control functions (voice and data).
-*   Functional and location-dependent addressing services.
-*   Interfaces with ERTMS/ETCS, controller equipment, and other train-borne systems.
-*   Management of call priorities and shunting operations.
+**Out of Scope:**
+- Terminal equipment design and manufacturing
+- Non-railway public communications
+- National railway systems not compliant with EIRENE standards
 
-**Out-of-Scope:**
-*   Design and manufacture of end-user terminals (e.g., cab radios, operational radios).
-*   Public communications services for non-railway purposes.
+### 1.3 Definitions and Acronyms
 
-### 1.3 Definitions, Acronyms, and Abbreviations
-| Acronym | Definition |
-| :--- | :--- |
-| **EIRENE** | European Integrated Railway Radio Enhanced Network |
-| **GSM-R** | Global System for Mobile Communications – Railway |
-| **UIC** | International Union of Railways |
-| **ERTMS** | European Rail Traffic Management System |
-| **ETCS** | European Train Control System |
-| **FRS** | Functional Requirements Specification |
-| **SRS** | Software Requirements Specification |
-| **LAS** | Link Assurance Signal |
+| Term | Definition |
+|------|------------|
+| GSM-R | GSM for Railways |
+| UIC | International Union of Railways |
+| ERTMS/ETCS | European Rail Traffic Management System/European Train Control System |
+| Functional Addressing | Addressing users by their role rather than physical device |
+| Link Assurance Signal | Continuous signal confirming communication link integrity |
 
 ### 1.4 References
-*   UIC Fiche 751-3: "Specifications for an International Radio System for the Railways"
-*   EIRENE Functional Requirements Specification (FRS)
-*   IEEE Std 830-1998: IEEE Recommended Practice for Software Requirements Specifications
+- UIC Project EIRENE Specifications
+- UIC Fiche 751-3 (National Radio Systems Replacement)
+- ERTMS/ETCS Integration Standards
+- GSM-R Technical Specifications
 
-### 1.5 Overview
-This document is structured in three main sections: Introduction, Overall Description, and Specific Requirements. The Specific Requirements section details the external interfaces, functional capabilities, and performance criteria that the system must satisfy.
-
-## 2. Overall Description
+## 2 Overall Description
 
 ### 2.1 Product Perspective
-The EIRENE system is a cornerstone of the European Railway Traffic Management System (ERTMS). It is designed to replace disparate national analog radio systems to achieve seamless cross-border interoperability for high-speed and conventional rail traffic. It operates as a closed, railway-dedicated network that interfaces with critical safety and operational systems.
+EIRENE replaces legacy national radio systems to enable seamless international railway operations. The system integrates with existing railway infrastructure and serves as the communication backbone for future railway developments across Europe.
 
 ### 2.2 Product Functions
-The core functions of the EIRENE system include:
-*   **Railway Emergency Calls:** High-priority voice calls initiated in both train-running and shunting modes.
-*   **Functional Addressing:** Dynamic mapping of calls to a user based on their current role (e.g., "Driver of Train 1234").
-*   **Location-Dependent Addressing:** Routing calls to the correct controller based on the train's geographical location.
-*   **Shunting Mode:** A dedicated operational mode with a Link Assurance Signal (LAS) to confirm continuous radio communication.
-*   **Multi-Driver Communications:** Enabling communication between multiple drivers within the same train consist.
-*   **Priority-Based Call Handling:** Management of five distinct call priority levels, with pre-emption capabilities.
-*   **Voice Group and Broadcast Calls:** One-to-many voice communication for operational coordination.
-*   **Direct Mode Operation (DMO):** Local, set-to-set communication independent of the network infrastructure.
+| Function ID | Function Name | Description |
+|-------------|---------------|-------------|
+| FUNC-001 | Railway Emergency Calls | Emergency communication in train and shunting modes |
+| FUNC-002 | Functional Addressing | Role-based addressing system |
+| FUNC-003 | Location-Dependent Addressing | Geographic-based call routing |
+| FUNC-004 | Shunting Mode Operations | Specialized communication for shunting activities |
+| FUNC-005 | Multi-Driver Communications | Intra-train communication capabilities |
+| FUNC-006 | Priority Call Handling | 5-level priority-based call management |
+| FUNC-007 | Voice Group/Broadcast Calls | One-to-many communication functionality |
+| FUNC-008 | Direct Mode Operation | Local set-to-set communication without network |
 
 ### 2.3 User Characteristics
-| User Role | Description | Primary Use Case |
-| :--- | :--- | :--- |
-| **Train Driver** | Operates the train; uses a Cab Radio. | Emergency calls, receiving movement authorities, operational communication with controllers. |
-| **Controller (Primary/Secondary)** | Manages train traffic in a control center. | Issuing movement authorities, coordinating train paths, handling emergencies. |
-| **Shunting Team** | Personnel involved in shunting maneuvers. | Local coordination using shunting mode and DMO. |
-| **Operational Staff** | Maintenance and trackside staff. | Coordinating maintenance activities and line-side operations. |
-| **General Staff** | Other railway employees. | General administrative and logistical communications. |
 
-### 2.4 Constraints
-*   The system **must** achieve mandatory interoperability for international rail traffic.
-*   Functional addressing **must** be implemented consistently across all national network segments.
-*   Integration with the ERTMS/ETCS Level 2 and 3 train control systems is **required**.
-*   The shunting mode with Link Assurance Signal is a **mandatory** feature.
-*   The system **must** support all five defined priority levels for call handling.
+| User Role | Primary Functions | Special Requirements |
+|-----------|-------------------|---------------------|
+| Train Driver (Cab Radio) | Emergency calls, operational communications, train control integration | Must support hands-free operation, high reliability |
+| Controller (Primary/Secondary/Power Supply) | Network management, emergency response, operational coordination | Multi-level access control, real-time monitoring |
+| Shunting Teams | Shunting mode operations, local communications | Link assurance signal requirement |
+| Operational Staff (Operational Radio) | Daily operational communications, maintenance coordination | Mobile operation support |
+| General Staff (General Purpose Radio) | General communications, administrative functions | Standard communication features |
 
-### 2.5 Assumptions and Dependencies
-*   It is assumed that a GSM-R license and frequency spectrum are available in all operational territories.
-*   The system's performance is dependent on the underlying GSM-R infrastructure and its deployment coverage.
-*   Successful operation assumes that external systems (e.g., ERTMS/ETCS) provide data via the defined standardized interfaces.
+### 2.4 Operating Environment
+- **Geographic Coverage:** 95% coverage over 95% of designated European railway areas
+- **Speed Support:** Up to 500 km/h train operations
+- **Environmental Conditions:** Railway operational environments including tunnels, stations, and open tracks
+- **Network Conditions:** Cross-border handover capabilities, varying signal conditions
 
-## 3. Specific Requirements
+### 2.5 Design and Implementation Constraints
+- Must comply with UIC EIRENE standards
+- Mandatory interoperability with ERTMS/ETCS
+- Support for international roaming between national GSM-R networks
+- Compliance with European railway safety regulations
 
-### 3.1 External Interface Requirements
+## 3 System Features
 
-#### 3.1.1 Hardware Interfaces
-*   **HWI-001:** The system shall interface with GSM-R Base Transceiver Stations (BTS).
-*   **HWI-002:** The system shall interface with railway controller workstations and consoles.
-*   **HWI-003:** The system shall provide a data interface to train-borne systems, including the Driver Safety Device and the On-Board Recorder.
+### 3.1 Railway Emergency Calls (FUNC-001)
 
-#### 3.1.2 Software Interfaces
-*   **SWI-001:** The system shall interface with the ERTMS/ETCS Radio Block Centre (RBC) for the exchange of train control messages.
-*   **SWI-002:** The system shall provide standardized data interfaces (e.g., APIs) for external railway applications.
-*   **SWI-003:** The system shall support a gateway interface to public networks (e.g., PSTN/ISDN) for authorized calls.
+#### 3.1.1 Description
+Provides immediate emergency communication capabilities for railway staff in critical situations, supporting both train and shunting operational modes.
 
-#### 3.1.3 Communications Interfaces
-*   **CI-001:** The system shall operate on the standardized GSM-R frequency bands as defined by the UIC.
-*   **CI-002:** The system shall support all mandatory GSM-R protocols for voice and data services.
+#### 3.1.2 Requirements
+**REQ-EMG-001:** The system shall establish railway emergency calls within 2 seconds of initiation.
 
-### 3.2 Functional Requirements
+**REQ-EMG-002:** The system shall support emergency calls in both train mode and shunting mode.
 
-#### 3.2.1 Call Management
-*   **FUNC-001:** The system shall establish a Railway Emergency Call with a priority that pre-empts all other ongoing calls.
-    *   *Priority: Mandatory*
-*   **FUNC-002:** The system shall support Functional Addressing, allowing a call to be placed to a role (e.g., "Driver of Train XYZ") rather than a physical device.
-    *   *Priority: Mandatory*
-*   **FUNC-003:** The system shall implement Location-Dependent Addressing to route a driver's call to the correct line controller based on the train's current position.
-    *   *Priority: Mandatory*
-*   **FUNC-004:** The system shall manage five distinct call priority levels (e.g., Emergency, High, Normal, Low).
-    *   *Priority: Mandatory*
-*   **FUNC-005:** The system shall allow authorized users to initiate Voice Group Calls and Broadcast Calls to predefined groups.
-    *   *Priority: High*
+**REQ-EMG-003:** Emergency calls shall preempt all other communications regardless of priority.
 
-#### 3.2.2 Shunting Operations
-*   **FUNC-006:** The system shall provide a dedicated "Shunting Mode" for users involved in shunting activities.
-    *   *Priority: Mandatory*
-*   **FUNC-007:** In Shunting Mode, the system shall generate a periodic Link Assurance Signal (LAS) to provide audible confirmation of an active radio link.
-    *   *Priority: Mandatory*
+**REQ-EMG-004:** The system shall provide clear visual and audible indicators for emergency call status.
 
-#### 3.2.3 Direct Mode Operation
-*   **FUNC-008:** The system shall support Direct Mode Operation (DMO), allowing terminals to communicate directly when outside network coverage.
-    *   *Priority: High*
+### 3.2 Functional Addressing (FUNC-002)
 
-### 3.3 Non-Functional Requirements
+#### 3.2.1 Description
+Enables addressing of users based on their functional role rather than specific device numbers, supporting dynamic role assignment and mobility.
 
-#### 3.3.1 Performance Requirements
-*   **PERF-001:** The call set-up time for a Railway Emergency Call shall be less than 2 seconds (95th percentile).
-    *   *Priority: Mandatory*
-*   **PERF-002:** The call set-up time for a Group Call between drivers shall be less than 5 seconds (95th percentile).
-    *   *Priority: High*
-*   **PERF-003:** The system shall maintain radio coverage over 95% of the designated railway operational area for 95% of the time.
-    *   *Priority: Mandatory*
-*   **PERF-004:** The system shall maintain all communication services for trains traveling at speeds up to 500 km/h.
-    *   *Priority: High*
-*   **PERF-005:** 95% of all calls shall be established within their respective required set-up times; 99% of calls shall be established within 1.5 times the required set-up time.
-    *   *Priority: High*
+#### 3.2.2 Requirements
+**REQ-FA-001:** The system shall support functional addressing across all participating national networks.
 
-#### 3.3.2 Reliability & Availability
-*   **RELY-001:** The core network subsystems shall achieve an availability of 99.999% (Five Nines).
-    *   *Priority: High*
+**REQ-FA-002:** Functional numbers shall be mapped to physical devices in real-time.
 
-#### 3.3.3 Safety & Security
-*   **SEC-001:** The system shall implement authentication mechanisms to prevent unauthorized network access.
-    *   *Priority: Mandatory*
-*   **SEC-002:** The system shall ensure the integrity and confidentiality of data communications with the ERTMS/ETCS system.
-    *   *Priority: Mandatory*
+**REQ-FA-003:** Role changes shall be reflected in functional addressing within 30 seconds.
 
-#### 3.3.4 Operational Requirements
-*   **OPER-001:** End-user terminals (outside the scope of this SRS but dependent on the network) shall have a minimum battery life of 8 hours under a standard usage profile (20% talk time, 60% group call reception, 20% standby).
-    *   *Priority: High*
+### 3.3 Location-Dependent Addressing (FUNC-003)
+
+#### 3.3.1 Description
+Routes calls to the appropriate controller based on the geographic location of the calling party.
+
+#### 3.3.2 Requirements
+**REQ-LDA-001:** The system shall determine caller location with accuracy sufficient for controller routing.
+
+**REQ-LDA-002:** Location-based routing shall occur automatically without user intervention.
+
+**REQ-LDA-003:** The system shall handle location updates during mobile operations seamlessly.
+
+### 3.4 Shunting Mode with Link Assurance (FUNC-004)
+
+#### 3.4.1 Description
+Specialized communication mode for shunting operations with continuous link verification.
+
+#### 3.4.2 Requirements
+**REQ-SHUNT-001:** The system shall provide a continuous link assurance signal during shunting operations.
+
+**REQ-SHUNT-002:** Loss of link assurance shall trigger immediate audible and visual alerts.
+
+**REQ-SHUNT-003:** Shunting mode shall support direct communication between shunting team members.
+
+### 3.5 Priority-Based Call Handling (FUNC-006)
+
+#### 3.5.1 Description
+Manages communication resources based on five distinct priority levels to ensure critical communications are handled appropriately.
+
+#### 3.5.2 Requirements
+**REQ-PRI-001:** The system shall support five priority levels as defined in EIRENE specifications.
+
+**REQ-PRI-002:** Higher priority calls shall preempt lower priority communications when necessary.
+
+**REQ-PRI-003:** Priority levels shall be configurable based on user roles and situations.
+
+## 4 External Interface Requirements
+
+### 4.1 ERTMS/ETCS Train Control Systems
+
+**REQ-IF-001:** The system shall provide standardized data interfaces for ERTMS/ETCS integration.
+
+**REQ-IF-002:** Data exchange with train control systems shall maintain integrity and timing requirements.
+
+**REQ-IF-003:** The interface shall support bidirectional communication for train control applications.
+
+### 4.2 Controller Equipment
+
+**REQ-IF-004:** The system shall interface with existing controller workstations and equipment.
+
+**REQ-IF-005:** Controller interfaces shall provide real-time status information and call management capabilities.
+
+### 4.3 Public Networks
+
+**REQ-IF-006:** The system shall support limited interconnection with public networks for authorized communications.
+
+**REQ-IF-007:** Public network interfaces shall include appropriate security and access controls.
+
+### 4.4 Train-Borne Systems
+
+**REQ-IF-008:** Integration with driver safety devices shall be supported.
+
+**REQ-IF-009:** Interfaces with train-borne recorders shall comply with data recording requirements.
+
+## 5 Non-Functional Requirements
+
+### 5.1 Performance Requirements
+
+**REQ-PERF-001:** Railway emergency call set-up time shall be less than 2 seconds.
+
+**REQ-PERF-002:** Group calls between drivers shall be established within 5 seconds.
+
+**REQ-PERF-003:** 95% of all calls shall be established within their respective required time limits.
+
+**REQ-PERF-004:** 99% of all calls shall be established within 1.5 times their required time limits.
+
+**REQ-PERF-005:** The system shall maintain communication integrity at train speeds up to 500 km/h.
+
+### 5.2 Reliability Requirements
+
+**REQ-REL-001:** The system shall provide 95% radio coverage over 95% of the designated railway area.
+
+**REQ-REL-002:** Network availability shall meet or exceed 99.5% in covered areas.
+
+**REQ-REL-003:** Mean Time Between Failures (MTBF) for critical components shall exceed 10,000 hours.
+
+### 5.3 Usability Requirements
+
+**REQ-USE-001:** The system shall be operable with minimal training for standard functions.
+
+**REQ-USE-002:** Emergency functions shall be accessible within two actions from any screen.
+
+**REQ-USE-003:** User interfaces shall be consistent across different device types where applicable.
+
+### 5.4 Supportability Requirements
+
+**REQ-SUP-001:** The system shall support remote diagnostics and maintenance.
+
+**REQ-SUP-002:** Software updates shall be deployable without service interruption for non-critical components.
+
+### 5.5 Environmental Requirements
+
+**REQ-ENV-001:** Mobile equipment shall provide minimum 8 hours battery life under typical usage:
+- 20% talk time
+- 60% group call listening
+- 20% standby
+
+**REQ-ENV-002:** Equipment shall operate within specified temperature, humidity, and vibration ranges for railway environments.
+
+## 6 Constraints, Assumptions & Dependencies
+
+### 6.1 Technical Constraints
+
+**CONST-TECH-001:** Mandatory interoperability for international railway traffic.
+
+**CONST-TECH-002:** Functional addressing must be implemented consistently across all national networks.
+
+**CONST-TECH-003:** Integration with ERTMS/ETCS train control systems is required.
+
+**CONST-TECH-004:** Shunting mode with link assurance signal is mandatory.
+
+### 6.2 Business Constraints
+
+**CONST-BUS-001:** Compliance with UIC EIRENE standards is mandatory.
+
+**CONST-BUS-002:** The system must support existing national railway operational procedures during transition.
+
+### 6.3 Assumptions
+
+**ASSUMP-001:** National railway administrations will provide necessary infrastructure support.
+
+**ASSUMP-002:** GSM-R spectrum allocation will remain available in all operating countries.
+
+**ASSUMP-003:** Equipment manufacturers will comply with EIRENE interface specifications.
+
+### 6.4 Dependencies
+
+**DEP-001:** Successful deployment depends on coordinated implementation across multiple national networks.
+
+**DEP-002:** ERTMS/ETCS deployment schedules may impact certain EIRENE functionality.
+
+**DEP-003:** Availability of standardized terminal equipment from manufacturers.
+
+## 7 Acceptance Criteria
+
+### 7.1 Mandatory Requirements
+
+**ACCEPT-001:** All mandatory interoperability requirements must be fully implemented and verified.
+
+**ACCEPT-002:** Railway emergency calls must demonstrate consistent performance meeting the 2-second setup time requirement.
+
+**ACCEPT-003:** Functional addressing must work seamlessly across test networks representing different national systems.
+
+### 7.2 Performance Verification
+
+**ACCEPT-004:** Call setup times shall be verified through extensive testing:
+- 95% of emergency calls within 2 seconds
+- 95% of group calls within 5 seconds
+- 99% of all calls within 1.5x required times
+
+**ACCEPT-005:** Coverage requirements shall be verified through field testing in representative geographic areas.
+
+**ACCEPT-006:** Priority handling shall be demonstrated through simulated high-load scenarios.
+
+### 7.3 Documentation and Training
+
+**ACCEPT-007:** Complete system documentation shall be delivered and approved.
+
+**ACCEPT-008:** Training materials and sessions shall be provided for all user categories.
+
+### 7.4 Integration Testing
+
+**ACCEPT-009:** Successful integration with ERTMS/ETCS systems shall be demonstrated.
+
+**ACCEPT-010:** Interfaces with all specified external systems shall be verified and validated.
 
 ---
-**Document Approval:**
 
-| Name | Role | Signature | Date |
-| :--- | :--- | :--- | :--- |
-| | Project Manager | | |
-| | Lead System Architect | | |
-| | Quality Assurance Manager | | |
-***
+## Appendix A: Priority Definitions
+
+| Priority Level | Description | Use Cases |
+|---------------|-------------|-----------|
+| 0 | Emergency | Railway emergency calls |
+| 1 | High | Critical operational communications |
+| 2 | Medium | Normal operational communications |
+| 3 | Low | Administrative communications |
+| 4 | Very Low | General purpose communications |
+
+## Appendix B: Call Type Performance Requirements
+
+| Call Type | Maximum Setup Time | Reliability Requirement |
+|-----------|-------------------|------------------------|
+| Railway Emergency Call | 2 seconds | 99.9% |
+| Driver Group Call | 5 seconds | 99% |
+| Functional Call | 8 seconds | 98% |
+| Location-Based Call | 8 seconds | 98% |
+| Direct Mode Call | 1 second | 95% |
+
+*Document End*
+```

@@ -3,24 +3,18 @@
 ## XRT Control Processor (XCP) Flight Software
 **Document Version:** 1.0  
 **Date:** [Current Date]  
-**Project:** Swift Gamma Ray Burst Explorer Mission  
-**Subsystem:** X-Ray Telescope (XRT) Control Processor
+**Project:** Swift Gamma Ray Burst Explorer - X-Ray Telescope (XRT)  
+**Prepared for:** NASA/GSFC Swift Mission
 
 ---
 
 ## 1. Introduction
 
 ### 1.1 Purpose
-This document specifies the requirements for the XRT Control Processor (XCP) flight software, which manages the Swift X-Ray Telescope (XRT) instrument. The XCP is responsible for controlling telescope operations, processing scientific data, and maintaining instrument health and safety.
+This document specifies the requirements for the XRT Control Processor (XCP) flight software, which manages the Swift X-Ray Telescope instrument. The XCP software controls critical telescope subsystems, processes scientific data, and interfaces with the Swift spacecraft to enable rapid Gamma Ray Burst (GRB) afterglow observations.
 
 ### 1.2 Scope
-The XCP flight software manages the XRT instrument's core functions including science data processing, telemetry transmission, command execution, thermal control, and alignment monitoring. The system interfaces with the Swift spacecraft via MIL-STD-1553B and operates within strict real-time constraints for Gamma Ray Burst (GRB) observations.
-
-**Out of Scope:**
-- Spacecraft attitude control
-- Scientific data analysis
-- Ground-based data processing
-- BAT or UVOT instrument control
+The XCP software manages the XRT instrument's operation including science data processing, thermal control, telemetry generation, and command execution. The system refines BAT position data to 2.5 arcseconds within 5 seconds of target acquisition. Out of scope are spacecraft attitude control and scientific data analysis functions.
 
 ### 1.3 Definitions and Acronyms
 
@@ -38,246 +32,174 @@ The XCP flight software manages the XRT instrument's core functions including sc
 | HK | Housekeeping |
 | TDRSS | Tracking and Data Relay Satellite System |
 
+### 1.4 References
+- Swift Mission Requirements Document
+- MIL-STD-1553B Interface Control Document
+- CCSDS Packet Telemetry Standard
+- XRT Instrument Interface Specification
+
 ## 2. Overall Description
 
 ### 2.1 Product Perspective
-The XCP is a critical component of the Swift Observatory, one of three semi-autonomous instruments (XRT, BAT, UVOT) designed for multi-wavelength transient astronomy. The system leverages heritage hardware from previous missions including CUBIC, IMAGE, JET-X, and XMM.
+The XCP software operates as part of the Swift observatory, one of three semi-autonomous instruments (XRT, BAT, UVOT) for multi-wavelength transient astronomy. The system interfaces with the spacecraft bus and reuses heritage components from previous missions including CUBIC, IMAGE, JET-X, and XMM.
 
 ### 2.2 Product Functions
-- Science data acquisition and processing from XRT camera
-- CCSDS packet generation and transmission to spacecraft
-- Command reception and execution from spacecraft
-- Housekeeping telemetry collection and transmission
-- Spacecraft time synchronization via 1PPS
-- Closed-loop thermal control of telescope subsystems
-- Telescope Alignment Monitor data acquisition and processing
-- Multiple observation sequence management
-- Science mode operation and transitions
+- Science data processing from CCD camera
+- Telemetry generation and transmission to spacecraft
+- Command reception and execution
+- Thermal subsystem control (heaters)
+- Telescope Alignment Monitor data acquisition
+- Time synchronization with spacecraft
+- Multiple observation sequence support
+- Science mode management
 
 ### 2.3 User Characteristics
-**Primary Users:** Mission operators at SMOC
-- Expert knowledge of spacecraft operations
-- Familiar with XRT instrument capabilities
-- Trained in telecommand procedures
-- Access to ITOS ground system
+**Primary Users:** Ground-based mission operators at SMOC
+- **Expertise:** Highly trained spacecraft operations personnel
+- **Interaction:** Remote telecommanding via ground stations
+- **Frequency:** Daily operations with 7-10 minute ground contacts
 
 ### 2.4 Constraints
 - **Telemetry:** 230-byte packet size limit
 - **Bandwidth:** TDRSS downlink limited to 1 kbps
-- **Power:** Limited 28VDC from OPB and SPB buses
-- **Ground Contacts:** ~7 Malindi contacts daily (7-10 minutes each)
-- **Data Handling:** Spacecraft does not reassemble segmented packets
+- **Power:** Limited 28VDC from spacecraft buses (OPB and SPB)
+- **Ground Contacts:** ~7 Malindi contacts per day (7-10 minutes each)
+- **Data Processing:** Spacecraft does not reassemble segmented packets
 - **Ground System:** ITOS cannot decompress packets
 
-## 3. System Features and Requirements
+### 2.5 Assumptions and Dependencies
+- Spacecraft provides reliable 1PPS synchronization
+- BAT provides initial GRB position data
+- Spacecraft maintains stable power supply
+- Ground operators follow established command procedures
 
-### 3.1 Science Data Processing
+## 3. Specific Requirements
 
-#### 3.1.1 Data Acquisition
-**XCP-FUNC-001:** The system shall acquire science data from the XRT camera CCD.
-> *Priority: High*
+### 3.1 External Interface Requirements
 
-**XCP-FUNC-002:** The system shall process raw camera data into calibrated scientific measurements.
-> *Priority: High*
-
-#### 3.1.2 Data Packaging
-**XCP-FUNC-003:** The system shall format science data into CCSDS-compliant packets.
-> *Priority: High*
-
-**XCP-FUNC-004:** The system shall transmit science packets to the spacecraft via MIL-STD-1553B.
-> *Priority: High*
-
-### 3.2 Command and Control
-
-#### 3.2.1 Command Reception
-**XCP-FUNC-005:** The system shall receive and validate commands from the spacecraft.
-> *Priority: High*
-
-**XCP-FUNC-006:** The system shall execute valid commands to establish instrument state.
-> *Priority: High*
-
-#### 3.2.2 Observation Sequences
-**XCP-FUNC-007:** The system shall support three observation sequences:
-- Automatic (GRB response)
-- Preplanned (scheduled observations)
-- Target of Opportunity (ground-initiated)
-> *Priority: High*
-
-### 3.3 Telemetry Management
-
-#### 3.3.1 Housekeeping Telemetry
-**XCP-FUNC-008:** The system shall collect housekeeping data from all instrument subsystems.
-> *Priority: Medium*
-
-**XCP-FUNC-009:** The system shall format housekeeping telemetry within 230-byte constraints.
-> *Priority: High*
-
-**XCP-FUNC-010:** The system shall transmit housekeeping packets at configured intervals.
-> *Priority: Medium*
-
-### 3.4 Time Synchronization
-
-#### 3.4.1 Clock Management
-**XCP-FUNC-011:** The system shall maintain a local time reference.
-> *Priority: High*
-
-**XCP-FUNC-012:** The system shall synchronize local time with spacecraft time using 1PPS signals.
-> *Priority: High*
-
-### 3.5 Thermal Control
-
-#### 3.5.1 Heater Management
-**XCP-FUNC-013:** The system shall monitor telescope tube and baffle temperatures.
-> *Priority: High*
-
-**XCP-FUNC-014:** The system shall implement closed-loop control for telescope heaters.
-> *Priority: High*
-
-**XCP-FUNC-015:** The system shall maintain telescope components within operational temperature ranges.
-> *Priority: High*
-
-### 3.6 Alignment Monitoring
-
-#### 3.6.1 TAM Operations
-**XCP-FUNC-016:** The system shall acquire data from the Telescope Alignment Monitor via RS-422.
-> *Priority: Medium*
-
-**XCP-FUNC-017:** The system shall process TAM data to detect alignment changes.
-> *Priority: Medium*
-
-### 3.7 Science Modes
-
-#### 3.7.1 Mode Management
-**XCP-FUNC-018:** The system shall operate in the following science modes:
-- Image Mode
-- Photo-Diode Mode  
-- Windowed Timing Mode
-- Photon Counting Mode
-> *Priority: High*
-
-**XCP-FUNC-019:** The system shall support transitions between science modes based on command or autonomous triggers.
-> *Priority: High*
-
-## 4. External Interface Requirements
-
-### 4.1 Spacecraft Interface
-
-#### 4.1.1 Communication Bus
+#### 3.1.1 Spacecraft Communication Interface
 **XCP-IF-001:** The system shall communicate with the spacecraft via MIL-STD-1553B bus.
-> *Priority: High*
+**XCP-IF-002:** All telemetry packets shall comply with CCSDS packet standards.
+**XCP-IF-003:** Housekeeping telemetry packets shall not exceed 230 bytes.
 
-**XCP-IF-002:** The system shall implement the spacecraft-defined MIL-STD-1553B protocol.
-> *Priority: High*
+#### 3.1.2 Telescope Alignment Monitor Interface
+**XCP-IF-004:** The system shall interface with the TAM via RS-422 serial interface.
+**XCP-IF-005:** TAM data shall be sampled at minimum 1 Hz frequency.
 
-### 4.2 Telescope Alignment Monitor Interface
+#### 3.1.3 Housekeeping Interface
+**XCP-IF-006:** The system shall monitor analog housekeeping sensors including temperatures, voltages, and currents.
+**XCP-IF-007:** Analog-to-digital conversion shall provide minimum 12-bit resolution.
 
-#### 4.2.1 Serial Interface
-**XCP-IF-003:** The system shall interface with the TAM via RS-422 serial communication.
-> *Priority: Medium*
+#### 3.1.4 Development Interface
+**XCP-IF-008:** The system shall provide engineering Ethernet interface for development and testing.
 
-**XCP-IF-004:** The system shall implement the TAM-specific communication protocol.
-> *Priority: Medium*
+### 3.2 Functional Requirements
 
-### 4.3 Analog Interfaces
+#### 3.2.1 Science Data Processing
+**XCP-FUNC-001:** The system shall process science data from the XRT camera CCD.
+**XCP-FUNC-002:** Processed science data shall be formatted as CCSDS packets for transmission.
+**XCP-FUNC-003:** The system shall refine BAT position data to 2.5 arcseconds accuracy.
+**XCP-FUNC-004:** Position refinement shall complete within 5 seconds of target acquisition.
 
-#### 4.3.1 Housekeeping Monitoring
-**XCP-IF-005:** The system shall monitor analog housekeeping signals including temperatures, voltages, and currents.
-> *Priority: Medium*
+#### 3.2.2 Command Processing
+**XCP-FUNC-005:** The system shall receive and validate commands from the spacecraft.
+**XCP-FUNC-006:** The system shall maintain instrument state based on received commands.
+**XCP-FUNC-007:** Command execution shall provide success/failure status in telemetry.
 
-### 4.4 Development Interface
+#### 3.2.3 Telemetry Generation
+**XCP-FUNC-008:** The system shall generate housekeeping telemetry within 230-byte constraints.
+**XCP-FUNC-009:** Telemetry shall include instrument health, status, and science data metrics.
+**XCP-FUNC-010:** Telemetry generation rate shall comply with 1 kbps TDRSS bandwidth limit.
 
-#### 4.4.1 Engineering Access
-**XCP-IF-006:** The system shall provide engineering Ethernet interface for development and testing.
-> *Priority: Low*
+#### 3.2.4 Time Synchronization
+**XCP-FUNC-011:** The system shall synchronize local clock using spacecraft 1PPS signal.
+**XCP-FUNC-012:** Time synchronization shall maintain accuracy within ±1 millisecond.
 
-## 5. Non-Functional Requirements
+#### 3.2.5 Thermal Control
+**XCP-FUNC-013:** The system shall control telescope tube heaters via closed-loop control.
+**XCP-FUNC-014:** The system shall control baffle heaters via closed-loop control.
+**XCP-FUNC-015:** Thermal control shall maintain instrument within operational temperature ranges.
 
-### 5.1 Performance Requirements
+#### 3.2.6 Observation Sequences
+**XCP-FUNC-016:** The system shall support Automatic observation sequence for GRB responses.
+**XCP-FUNC-017:** The system shall support Preplanned observation sequences.
+**XCP-FUNC-018:** The system shall support Target of Opportunity observation sequences.
 
-#### 5.1.1 Real-Time Performance
-**XCP-PERF-001:** The system shall refine BAT position data to 2.5 arcseconds within 5 seconds of target acquisition.
-> *Priority: High*
+#### 3.2.7 Science Modes
+**XCP-FUNC-019:** The system shall operate in Image mode for positional astronomy.
+**XCP-FUNC-020:** The system shall operate in Photo-Diode mode for high-time resolution.
+**XCP-FUNC-021:** The system shall operate in Windowed Timing mode for bright sources.
+**XCP-FUNC-022:** The system shall operate in Photon Counting mode for faint sources.
 
-**XCP-PERF-002:** The system shall process and transmit GRB position data within mission time constraints.
-> *Priority: High*
+### 3.3 Performance Requirements
 
-#### 5.1.2 Telemetry Bandwidth
-**XCP-PERF-003:** The system shall limit telemetry transmission to within TDRSS downlink capacity of 1 kbps.
-> *Priority: High*
+#### 3.3.1 Real-Time Performance
+**XCP-PERF-001:** GRB position refinement shall complete within 5 seconds of acquisition.
+**XCP-PERF-002:** Command response latency shall be less than 100 milliseconds.
+**XCP-PERF-003:** Telemetry generation shall sustain 1 kbps continuous downlink rate.
 
-### 5.2 Reliability Requirements
+#### 3.3.2 Data Processing Performance
+**XCP-PERF-004:** Science data processing shall handle maximum expected event rates.
+**XCP-PERF-005:** On-board memory shall support storage of critical data between ground contacts.
 
-#### 5.2.1 Fault Tolerance
-**XCP-REL-001:** The system shall have no single point of failure that would prevent GRB observations.
-> *Priority: High*
+### 3.4 Software Quality Attributes
 
-**XCP-REL-002:** The system shall implement error detection and correction for memory operations.
-> *Priority: High*
+#### 3.4.1 Reliability
+**XCP-REL-001:** The system shall have no single point of failure.
+**XCP-REL-002:** Mean Time Between Failures (MTBF) shall exceed mission duration.
+**XCP-REL-003:** The system shall support error detection and correction for memory.
 
-#### 5.2.2 Availability
-**XCP-REL-003:** The system shall maintain operational availability for GRB detection and observation.
-> *Priority: High*
+#### 3.4.2 Availability
+**XCP-AVAIL-001:** The system shall maintain 99.9% operational availability during observation periods.
 
-### 5.3 Safety Requirements
+#### 3.4.3 Maintainability
+**XCP-MAIN-001:** The software shall support in-flight parameter updates.
+**XCP-MAIN-002:** The system shall provide comprehensive health and status monitoring.
 
-#### 5.3.1 Thermal Safety
-**XCP-SAFE-001:** The system shall implement thermal safing procedures to prevent instrument damage.
-> *Priority: High*
+#### 3.4.4 Safety
+**XCP-SAFE-001:** The system shall implement thermal safe modes for fault conditions.
+**XCP-SAFE-002:** Critical commands shall require validation before execution.
 
-**XCP-SAFE-002:** The system shall monitor critical temperatures and execute protective actions when limits are exceeded.
-> *Priority: High*
+### 3.5 Design Constraints
 
-### 5.4 Software Quality Requirements
+#### 3.5.1 Hardware Constraints
+**XCP-CONST-001:** Software shall operate within allocated processor resources.
+**XCP-CONST-002:** Memory usage shall not exceed allocated spacecraft memory.
 
-#### 5.4.1 Maintainability
-**XCP-SQR-001:** The software shall be modular to support updates and maintenance.
-> *Priority: Medium*
+#### 3.5.2 Operational Constraints
+**XCP-CONST-003:** Software shall operate autonomously between ground contacts.
+**XCP-CONST-004:** Power consumption shall remain within spacecraft allocation.
 
-#### 5.4.2 Testability
-**XCP-SQR-002:** The software shall support ground testing through simulation interfaces.
-> *Priority: Medium*
+## 4. Verification Requirements
 
-## 6. Verification and Validation
+### 4.1 Acceptance Criteria
+**XCP-VER-001:** Successful GRB position refinement within 5 seconds.
+**XCP-VER-002:** Telemetry transmission within 1 kbps bandwidth limit.
+**XCP-VER-003:** Operation across all science modes with required error handling.
+**XCP-VER-004:** Thermal control stability within specified temperature ranges.
 
-### 6.1 Acceptance Criteria
-
-#### 6.1.1 Mission Success Criteria
-**XCP-ACCEPT-001:** The system shall successfully refine GRB positions to 2.5 arcseconds within 5 seconds.
-> *Verification Method: On-orbit GRB observation*
-
-**XCP-ACCEPT-002:** The system shall operate within 1 kbps telemetry bandwidth limit.
-> *Verification Method: Ground testing and on-orbit monitoring*
-
-**XCP-ACCEPT-003:** The system shall operate correctly in all science modes with proper error handling.
-> *Verification Method: Ground testing and on-orbit verification*
-
-### 6.2 Verification Approach
-
-#### 6.2.1 Testing Methodology
-- Ground testing with instrument simulators
+### 4.2 Verification Methods
+- Ground testing with simulated GRB events
 - On-orbit observation of known GRB events
-- Thermal vacuum testing
-- Interface compatibility testing
+- Interface compatibility testing with spacecraft bus
+- Thermal vacuum testing of control systems
 
-## 7. Appendices
+## 5. Appendices
 
-### 7.1 References
-- Swift Mission Requirements Document
-- MIL-STD-1553B Protocol Specification
-- CCSDS Packet Telemetry Standard
-- XRT Instrument Design Document
+### 5.1 Data Flow Diagrams
+*(To be completed during detailed design phase)*
 
-### 7.2 Assumptions
-- Spacecraft provides stable 28VDC power
-- Malindi ground station contacts available as scheduled
-- BAT provides accurate initial GRB positions
-- Thermal environment remains within design limits
+### 5.2 State Transition Diagrams
+*(To be completed during detailed design phase)*
 
-### 7.3 Dependencies
-- Spacecraft MIL-STD-1553B interface availability
-- TAM hardware functionality
-- XRT camera operational status
-- Ground command and control system availability
+### 5.3 Interface Control Documents
+*(Reference to separate ICD documents)*
+
+---
+
+## Revision History
+
+| Version | Date | Author | Description |
+|---------|------|--------|-------------|
+| 1.0 | [Date] | [Author] | Initial SRS for XCP Flight Software |
 ```
-
-*This SRS document provides a comprehensive specification for the XRT Control Processor flight software, covering all functional and non-functional requirements necessary for successful mission operations. The document follows professional SRS standards with clear requirement statements, priorities, and verification methods.*
