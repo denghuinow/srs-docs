@@ -1,270 +1,394 @@
-# Software Requirements Specification (SRS)
-## Open Watcom GUI Library Linux Port
+Here is a comprehensive Software Requirements Specification (SRS) document for the Open Watcom GUI Library Port to Linux/GTK.
 
-**Document Version:** 1.0  
-**Date:** [Current Date]  
-**Status:** Draft
+```markdown
+# Software Requirements Specification
+## Open Watcom GUI Library Port to Linux/GTK
+
+**Version:** 1.0  
+**Date:** October 26, 2023  
+**Status:** Draft  
+**Authors:** [Your Name/Team]
 
 ---
 
-## 1. Introduction
+## Table of Contents
+
+1. [Introduction](#1-introduction)
+   - [1.1 Purpose](#11-purpose)
+   - [1.2 Project Scope](#12-project-scope)
+   - [1.3 Definitions, Acronyms, and Abbreviations](#13-definitions-acronyms-and-abbreviations)
+   - [1.4 References](#14-references)
+2. [Overall Description](#2-overall-description)
+   - [2.1 Product Perspective](#21-product-perspective)
+   - [2.2 Product Functions](#22-product-functions)
+   - [2.3 User Characteristics](#23-user-characteristics)
+   - [2.4 Constraints](#24-constraints)
+   - [2.5 Assumptions and Dependencies](#25-assumptions-and-dependencies)
+3. [System Features and Requirements](#3-system-features-and-requirements)
+   - [3.1 GUI Initialization and Management](#31-gui-initialization-and-management)
+   - [3.2 Window Management](#32-window-management)
+   - [3.3 Dialog and Control Rendering](#33-dialog-and-control-rendering)
+   - [3.4 Text Rendering](#34-text-rendering)
+   - [3.5 Common UI Controls](#35-common-ui-controls)
+   - [3.6 Type Conversion and Handle Management](#36-type-conversion-and-handle-management)
+4. [External Interface Requirements](#4-external-interface-requirements)
+   - [4.1 User Interfaces](#41-user-interfaces)
+   - [4.2 Hardware Interfaces](#42-hardware-interfaces)
+   - [4.3 Software Interfaces](#43-software-interfaces)
+   - [4.4 Communications Interfaces](#44-communications-interfaces)
+5. [Non-Functional Requirements](#5-non-functional-requirements)
+   - [5.1 Performance Requirements](#51-performance-requirements)
+   - [5.2 Reliability Requirements](#52-reliability-requirements)
+   - [5.3 Portability Requirements](#53-portability-requirements)
+   - [5.4 Maintainability Requirements](#54-maintainability-requirements)
+6. [Other Requirements](#6-other-requirements)
+   - [6.1 Development Constraints](#61-development-constraints)
+   - [6.2 Open Issues and Risks](#62-open-issues-and-risks)
+
+---
+
+## 1 Introduction
 
 ### 1.1 Purpose
-This document specifies the requirements for porting Open Watcom's Windows GUI library to Linux using the GTK toolkit. The primary purpose is to enable cross-platform GUI compatibility for the Open Watcom Integrated Development Environment (IDE) on Linux systems while maintaining API compatibility with existing application logic.
 
-### 1.2 Scope
-The scope of this project includes:
-- Creating a Linux-compatible GUI library that mimics Windows API behavior
-- Integrating with GTK 2.0+ as the underlying UI toolkit
-- Providing window management, dialog handling, and control rendering
-- Maintaining visual and behavioral consistency across platforms
+This document specifies the requirements for porting the Open Watcom GUI library to Linux using the GTK toolkit. The primary objective is to enable existing Open Watcom applications to run natively on Linux systems while maintaining graphical interface compatibility and functionality.
+
+### 1.2 Project Scope
+
+The project involves creating a compatibility layer that translates Open Watcom GUI API calls to their GTK equivalents, allowing legacy applications to operate on modern Linux distributions without source code modification.
+
+**In Scope:**
+- Core GUI initialization and termination
+- Basic window creation and management
+- Standard UI controls (buttons, lists, labels, etc.)
+- Dialog box rendering and management
+- Text drawing and font handling
+- Event handling and message processing
 
 **Out of Scope:**
-- Windows-style resource file support
-- Multiple Document Interface (MDI) "windows in window" model
-- Built-in help subsystem implementation
-- Windows API dependencies
+- Multiple Document Interface (MDI) support
+- Windows/OS/2 resource file parsing
+- Help subsystem integration
+- Advanced graphics operations (GDI+ equivalents)
 
-### 1.3 Definitions and Acronyms
+### 1.3 Definitions, Acronyms, and Abbreviations
 
-| Term | Definition |
-|------|------------|
-| GTK | GIMP Toolkit, a cross-platform widget toolkit |
-| MDI | Multiple Document Interface |
-| IDE | Integrated Development Environment |
-| X Window System | Window system for bitmap displays |
-| libglade | Library for loading GLADE interface files |
+- **GTK**: GIMP Toolkit, a cross-platform widget toolkit
+- **GLib**: A low-level core library for GTK
+- **Pango**: A library for internationalized text handling
+- **HWND**: Window Handle (Windows API)
+- **MDI**: Multiple Document Interface
+- **MVP**: Minimum Viable Product
+- **API**: Application Programming Interface
+- **SRS**: Software Requirements Specification
 
-## 2. Overall Description
+### 1.4 References
+
+- Open Watcom Project Documentation
+- GTK+ 3.0 Reference Manual
+- GLib Reference Manual
+- Pango Documentation
+
+## 2 Overall Description
 
 ### 2.1 Product Perspective
-This library serves as a compatibility layer between Open Watcom's existing Windows GUI API calls and the Linux GTK environment. It positions itself as the foundation for Open Watcom IDE's Linux port, replacing Windows/OS2 API dependencies with GTK equivalents.
+
+The ported GUI library will serve as a compatibility layer between existing Open Watcom applications and the Linux/GTK environment. It will intercept API calls from the application and translate them to appropriate GTK operations.
+
+```
++---------------------+     +---------------------+     +-------------------+
+| Open Watcom         |     | Ported GUI          |     | GTK+              |
+| Application         |---->| Library Layer       |---->| Toolkit           |
+|                     |     | (This Project)      |     |                   |
++---------------------+     +---------------------+     +-------------------+
+```
 
 ### 2.2 Product Functions
-- **Window Management**: Creation, destruction, and management of application windows
-- **Dialog Systems**: Modal and modeless dialog implementation
-- **Control Handling**: Standard UI controls (buttons, text fields, lists)
-- **Menu Management**: Menu creation and event handling
-- **Rendering Services**: Text and font rendering capabilities
-- **UI Components**: Status bars and scrolling functionality
+
+The core functions of the ported library include:
+
+1. **Initialization**: Initialize GTK environment and set up application context
+2. **Window Management**: Create, destroy, and manage application windows
+3. **Control Rendering**: Display and manage standard UI controls
+4. **Event Handling**: Process user input and system events
+5. **Text Rendering**: Display text with appropriate font and formatting
+6. **Resource Management**: Handle memory and resource allocation
 
 ### 2.3 User Characteristics
-**Primary Users:** Open Watcom developers porting the IDE to Linux
-- **Technical Expertise:** Advanced
-- **Permissions:** Full access to porting tools and development environment
-- **Experience:** Familiar with Open Watcom codebase and cross-platform development
+
+The primary users of this system are:
+
+- **Developers**: Maintaining or porting existing Open Watcom applications
+- **End Users**: Running legacy Open Watcom applications on Linux systems
+- **System Administrators**: Deploying and supporting the compatibility layer
 
 ### 2.4 Constraints
-- **Technical Constraint:** No MDI "windows in window" support due to GTK limitations
-- **Platform Constraint:** Must run on GTK 2.0+ with X Window System
-- **Compatibility Constraint:** No support for Windows resource files
-- **Architectural Constraint:** Must maintain API compatibility with existing Open Watcom applications
+
+#### Technical Constraints:
+- Must use GTK+ 3.0 or later as the underlying toolkit
+- Must maintain API compatibility with existing Open Watcom applications
+- Cannot modify source code of existing applications
+- Must handle 32-bit to 64-bit type conversions where necessary
+
+#### Platform Constraints:
+- Target platform: Modern Linux distributions (Ubuntu 18.04+, RHEL 8+, etc.)
+- Required libraries: GTK+ 3.0, GLib 2.0, Pango 1.0
+- Architecture support: x86_64 primarily, with consideration for ARM64
 
 ### 2.5 Assumptions and Dependencies
+
 **Assumptions:**
-- Resource file conversion via libglade is acceptable for non-string resources
-- GTK 2.0+ is available on target Linux systems
-- X Window System is the primary display server
+- Existing Open Watcom applications follow standard API usage patterns
+- GTK+ 3.0 provides sufficient functionality to emulate required features
+- Performance overhead of the translation layer is acceptable
 
 **Dependencies:**
-- GTK 2.0+ development libraries
-- X Window System
-- libglade for partial resource file support
+- Availability of GTK+ development libraries on target systems
+- Compatibility with modern Linux display servers (X11 and Wayland)
+- C compiler supporting both Open Watcom and Linux calling conventions
 
-## 3. System Features and Requirements
+## 3 System Features and Requirements
 
-### 3.1 Core Window Management
+### 3.1 GUI Initialization and Management
 
-#### 3.1.1 Functional Requirements
+**3.1.1 Requirement: GUI System Initialization**
+- **ID:** GUI-INIT-001
+- **Description:** The library must initialize the GTK environment when the application starts
+- **Priority:** High
+- **Verification:** Unit testing, integration testing
 
-**FR-001: Window Initialization**
+**3.1.2 Requirement: Application Context Setup**
+- **ID:** GUI-INIT-002
+- **Description:** The library must create and maintain application context matching Open Watcom semantics
+- **Priority:** High
+- **Verification:** Application startup testing
+
+### 3.2 Window Management
+
+**3.2.1 Requirement: Window Creation**
+- **ID:** WIN-CREATE-001
+- **Description:** The system must create top-level windows with properties equivalent to Windows/OS2
+- **Priority:** High
+- **Verification:** Visual inspection, functional testing
+
+**3.2.2 Requirement: Window Operations**
+- **ID:** WIN-OPS-001
+- **Description:** The system must support standard window operations: resize, minimize, maximize, close
+- **Priority:** High
+- **Verification:** User interaction testing
+
 ```c
-// Must support equivalent of Windows CreateWindow() API
-HWND CreateWindow(LPCTSTR className, LPCTSTR windowName, DWORD style, 
-                  int x, int y, int width, int height, HWND parent, 
-                  HMENU menu, HINSTANCE instance, LPVOID param);
+// Example: Window creation API compatibility
+HWND CreateWindow(...); // Must map to gtk_window_new()
 ```
-- **Priority:** Critical
-- **Description:** Create and initialize application windows using GTK equivalents
-- **Acceptance Criteria:** 100% functional equivalence in window creation
 
-**FR-002: Window Message Handling**
-- **Priority:** Critical
-- **Description:** Implement Windows message loop equivalent using GTK event system
-- **Acceptance Criteria:** All window events properly routed to application handlers
+### 3.3 Dialog and Control Rendering
 
-**FR-003: Window Destruction**
-- **Priority:** Critical
-- **Description:** Proper cleanup and destruction of window resources
-- **Acceptance Criteria:** No memory leaks or resource retention
-
-### 3.2 Dialog System
-
-#### 3.2.1 Functional Requirements
-
-**FR-010: Dialog Creation**
-```c
-// Must support modal and modeless dialog creation
-HWND CreateDialog(HINSTANCE instance, LPCTSTR template, HWND parent, DLGPROC dialogProc);
-```
-- **Priority:** Critical
-- **Description:** Create dialogs from converted resource definitions
-- **Acceptance Criteria:** Dialog appearance and behavior match Windows version
-
-**FR-011: Dialog Control Management**
-- **Priority:** Critical
-- **Description:** Handle standard controls (buttons, edit boxes, lists, combo boxes)
-- **Acceptance Criteria:** All control types render and function correctly
-
-### 3.3 Menu and Toolbar System
-
-#### 3.3.1 Functional Requirements
-
-**FR-020: Menu Creation**
-```c
-// Support for menu creation and management
-HMENU CreateMenu();
-HMENU CreatePopupMenu();
-```
+**3.3.1 Requirement: Dialog Box Support**
+- **ID:** DIALOG-001
+- **Description:** The system must render modal and modeless dialog boxes using GTK containers
 - **Priority:** High
-- **Description:** Convert Windows menu resources to GTK menu structures
-- **Acceptance Criteria:** 95% functional coverage of menu operations
+- **Verification:** Dialog functionality testing
 
-**FR-021: Menu Event Handling**
+**3.3.2 Requirement: Control Layout**
+- **ID:** LAYOUT-001
+- **Description:** The system must approximate Windows dialog layout using GTK layout managers
+- **Priority:** Medium
+- **Verification:** Visual comparison with Windows version
+
+### 3.4 Text Rendering
+
+**3.4.1 Requirement: Text Drawing**
+- **ID:** TEXT-001
+- **Description:** The system must support basic text drawing operations with font selection
 - **Priority:** High
-- **Description:** Route menu selection events to appropriate handlers
-- **Acceptance Criteria:** Menu commands properly execute application functions
+- **Verification:** Text rendering tests
 
-**FR-022: Toolbar Implementation**
+**3.4.2 Requirement: Font Management**
+- **ID:** FONT-001
+- **Description:** The system must map Windows font requests to available system fonts
+- **Priority:** Medium
+- **Verification:** Font rendering comparison
+
+### 3.5 Common UI Controls
+
+**3.5.1 Requirement: Button Controls**
+- **ID:** CTRL-BTN-001
+- **Description:** The system must render push buttons, checkboxes, and radio buttons
 - **Priority:** High
-- **Description:** Create and manage toolbar controls
-- **Acceptance Criteria:** Toolbar buttons display and function correctly
+- **Verification:** Control interaction testing
 
-### 3.4 Rendering and Display
-
-#### 3.4.1 Functional Requirements
-
-**FR-030: Text Rendering**
-- **Priority:** Critical
-- **Description:** Render text using compatible fonts and metrics
-- **Acceptance Criteria:** Text appearance matches Windows rendering
-
-**FR-031: Font Management**
-- **Priority:** Critical
-- **Description:** Create, select, and manage font resources
-- **Acceptance Criteria:** Font rendering consistent across platforms
-
-**FR-032: Status Bar Implementation**
+**3.5.2 Requirement: List Controls**
+- **ID:** CTRL-LIST-001
+- **Description:** The system must support list boxes and combo boxes
 - **Priority:** High
-- **Description:** Create and update status bar controls
-- **Acceptance Criteria:** Status information displays correctly
+- **Verification:** List population and selection testing
 
-**FR-033: Scrolling Support**
+**3.5.3 Requirement: Input Controls**
+- **ID:** CTRL-INPUT-001
+- **Description:** The system must support text entry fields and edit controls
 - **Priority:** High
-- **Description:** Implement scrollable areas and scroll bar controls
-- **Acceptance Criteria:** Scrolling behavior matches Windows implementation
+- **Verification:** Text input testing
 
-## 4. External Interface Requirements
+### 3.6 Type Conversion and Handle Management
+
+**3.6.1 Requirement: Handle Translation**
+- **ID:** TYPE-HWND-001
+- **Description:** The system must map HWND handles to GTK window references
+- **Priority:** High
+- **Verification:** Handle validity testing
+
+**3.6.2 Requirement: Data Type Compatibility**
+- **ID:** TYPE-DATA-001
+- **Description:** The system must handle 16-bit to 32/64-bit type conversions
+- **Priority:** Medium
+- **Verification:** Cross-platform data structure testing
+
+## 4 External Interface Requirements
 
 ### 4.1 User Interfaces
-- **API Compatibility:** Must maintain identical function signatures to Windows version
-- **Visual Consistency:** UI elements must maintain identical visual behavior across platforms
-- **Input Handling:** Keyboard and mouse events must be processed identically
+
+The library itself has no direct user interface. It enables applications to display:
+
+- Native-looking GTK windows and dialogs
+- Standard UI controls consistent with Linux desktop themes
+- Text rendering using system fonts
 
 ### 4.2 Hardware Interfaces
-- **Display:** X Window System compatible displays
-- **Input:** Standard keyboard and mouse devices
+
+- **Display:** Supports standard Linux display servers (X11, Wayland)
+- **Input:** Standard keyboard and mouse input through GTK event system
+- **Graphics:** Utilizes system graphics capabilities through GTK/Cairo
 
 ### 4.3 Software Interfaces
-- **GTK 2.0+:** Primary UI toolkit interface
-- **X Window System:** Display server interface
-- **libglade:** For loading converted UI resource files
-- **Standard C Library:** For basic runtime operations
+
+**Required Libraries:**
+- GTK+ 3.0: Primary GUI toolkit
+- GLib 2.0: Core application support
+- Pango 1.0: Text rendering and internationalization
+- Cairo: Vector graphics rendering
+
+**System Interfaces:**
+- Linux system calls for process and memory management
+- X11/Wayland protocols for display management
 
 ### 4.4 Communications Interfaces
-- **Inter-process Communication:** Standard X Window System IPC mechanisms
-- **Signal Handling:** POSIX signal handling for application management
 
-## 5. Non-Functional Requirements
+No specific communication interfaces are required for the MVP. Future versions may require:
+
+- Inter-process communication for advanced features
+- Network connectivity for help system integration
+
+## 5 Non-Functional Requirements
 
 ### 5.1 Performance Requirements
-- **Responsiveness:** UI operations must complete within 100ms for standard operations
-- **Memory Usage:** Memory footprint should be comparable to Windows version ±15%
-- **Startup Time:** Application initialization within 2 seconds on standard hardware
 
-### 5.2 Safety Requirements
-- **Resource Management:** Proper cleanup of all GTK resources on application exit
-- **Error Handling:** Graceful degradation when encountering unsupported features
+**5.1.1 Requirement: Startup Performance**
+- **ID:** PERF-STARTUP-001
+- **Description:** Application startup time should not exceed native Windows performance by more than 50%
+- **Priority:** Medium
 
-### 5.3 Security Requirements
-- **No Elevated Privileges:** Library must not require special permissions
-- **Input Validation:** All user input must be properly validated
+**5.1.2 Requirement: UI Responsiveness**
+- **ID:** PERF-RESPONSE-001
+- **Description:** UI operations should respond within 100ms for typical use cases
+- **Priority:** High
 
-### 5.4 Software Quality Attributes
-- **Reliability:** 99% uptime during normal operation
-- **Maintainability:** Code must be well-documented and modular
-- **Portability:** Dependent only on specified GTK and X Window System APIs
+### 5.2 Reliability Requirements
 
-### 5.5 Compatibility Requirements
-- **API Compatibility:** 100% source-level compatibility with existing Open Watcom applications
-- **Visual Compatibility:** Identical appearance and behavior to Windows version
-- **Platform Support:** Linux distributions with GTK 2.0+ and X Window System
+**5.2.1 Requirement: Application Stability**
+- **ID:** RELI-STABLE-001
+- **Description:** The library should not cause application crashes for standard API usage
+- **Priority:** High
 
-## 6. System Limitations
+**5.2.2 Requirement: Memory Management**
+- **ID:** RELI-MEMORY-001
+- **Description:** The library must properly manage memory and avoid leaks
+- **Priority:** High
 
-### 6.1 Known Limitations
-- **MDI Support:** No Multiple Document Interface "windows in window" model
-- **Resource Files:** No direct support for Windows .rc resource files
-- **Help System:** Built-in help subsystem not implemented
-- **Advanced Controls:** Some specialized Windows controls may have limited functionality
+### 5.3 Portability Requirements
 
-### 6.2 Workarounds
-- **Resource Conversion:** Use libglade for converting non-string resources
-- **MDI Alternative:** Implement tabbed interface or separate windows
-- **Help System:** Rely on external help viewers or documentation systems
+**5.3.1 Requirement: Linux Distribution Support**
+- **ID:** PORT-DISTRO-001
+- **Description:** The library should work on major Linux distributions with GTK+ 3.0 available
+- **Priority:** High
 
-## 7. Acceptance Criteria
+### 5.4 Maintainability Requirements
 
-### 7.1 Testing Requirements
+**5.4.1 Requirement: Code Organization**
+- **ID:** MAINTAIN-CODE-001
+- **Description:** The code should be modular with clear separation between API translation and GTK implementation
+- **Priority:** Medium
 
-#### 7.1.1 Critical Path Testing
-- **Test Case:** GUI sample test (samp2.c)
-- **Requirement:** 100% pass rate for all critical functions
-- **Scope:** Window creation, dialog management, basic controls
+## 6 Other Requirements
 
-#### 7.1.2 High Priority Testing
-- **Test Case:** Menu and toolbar functionality
-- **Requirement:** 95% functional coverage
-- **Scope:** Menu creation, event handling, toolbar operations
+### 6.1 Development Constraints
 
-#### 7.1.3 Visual Verification
-- **Test Case:** Side-by-side comparison with Windows version
-- **Requirement:** Identical visual behavior and layout
-- **Scope:** All implemented UI components
+#### API Compatibility Constraints:
+- Must maintain binary compatibility where possible
+- API function signatures cannot be changed
+- Existing application code cannot be modified
 
-### 7.2 Performance Benchmarks
-- **Metric:** Operation completion times
-- **Standard:** Within 15% of Windows version performance
-- **Measurement:** Automated timing tests for key operations
+#### Technical Limitations:
+- GTK does not support Windows/OS2-style resource files natively
+- MDI (Multiple Document Interface) "Windows in Window" model not supported in GTK
+- Some Windows-specific visual behaviors may differ
 
-## 8. Appendix
+### 6.2 Open Issues and Risks
 
-### 8.1 Reference Materials
-- GTK 2.0 Reference Manual
-- Open Watcom Windows API Documentation
-- X Window System Protocol Reference
+#### High Priority Issues:
 
-### 8.2 Glossary
-- **Porting:** Adapting software to run in different environment
-- **Compatibility Layer:** Software that emulates one system's API on another
-- **Widget:** GUI component or control in GTK terminology
+**6.2.1 Resource File Handling**
+- **Issue:** Windows/OS2 resource files (.res) contain dialog templates, string tables, and menu definitions
+- **Risk:** Applications may fail to start or display incorrectly without resource support
+- **Mitigation:** Develop resource file parser or conversion tool
+
+**6.2.2 String Table Support**
+- **Issue:** String tables in resource files are commonly used for internationalization
+- **Risk:** Applications may display incorrect text or fail to load
+- **Mitigation:** Implement string table extraction and mapping
+
+#### Medium Priority Issues:
+
+**6.2.3 Help System Integration**
+- **Issue:** Windows help system (WinHelp) integration is not addressed
+- **Risk:** Help functionality in applications will be broken
+- **Mitigation:** Map to Linux help viewers or implement compatibility layer
+
+**6.2.4 Advanced Graphics Operations**
+- **Issue:** Complex GDI operations may not have direct GTK equivalents
+- **Risk:** Applications with custom drawing may display incorrectly
+- **Mitigation:** Implement using Cairo graphics where possible
 
 ---
 
-**Document Approval**
+## Appendix A: MVP Feature Checklist
 
-| Role | Name | Signature | Date |
-|------|------|-----------|------|
-| Project Manager | | | |
-| Lead Developer | | | |
-| Quality Assurance | | | |
+- [ ] GUI initialization and termination
+- [ ] Basic window creation and management
+- [ ] Standard window operations (resize, minimize, maximize)
+- [ ] Dialog box rendering
+- [ ] Basic controls: buttons, labels, text fields
+- [ ] List controls: list boxes, combo boxes
+- [ ] Text drawing with basic font support
+- [ ] Event handling for user input
+- [ ] Type conversion for window handles
+- [ ] Memory management and cleanup
+
+## Appendix B: Compatibility Risk Assessment
+
+| Risk Area | Impact | Probability | Mitigation Strategy |
+|-----------|--------|-------------|---------------------|
+| Resource Files | High | High | Develop parser or conversion tool |
+| MDI Support | Medium | Medium | Implement using GTK notebooks or separate windows |
+| Font Metrics | Medium | Medium | Font mapping and metric adjustment |
+| Help System | Low | High | Postpone to future release |
+| Advanced GDI | Medium | Low | Implement using Cairo graphics |
+
+---
+**Document Revision History**
+
+| Version | Date | Author | Changes |
+|---------|------|--------|---------|
+| 1.0 | 2023-10-26 | Initial Author | Initial draft creation |
+```
+This SRS document provides a comprehensive specification for the Open Watcom GUI library port to Linux/GTK. The document follows IEEE SRS standards and includes all necessary sections for development planning and implementation.
