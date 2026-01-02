@@ -11,15 +11,17 @@ import numpy as np
 from pathlib import Path
 from typing import List, Dict, Optional
 from datetime import datetime
+from concurrent.futures import ThreadPoolExecutor, as_completed
+import threading
 
 # 需要先启动服务
 # (AI-Based-SRS-Generator) root@4090-xdh:~/project/srs/AI-Based-SRS-Generator/src# uv run uvicorn backend.main:app --reload
 
 # 配置
 API_BASE_URL = "http://127.0.0.1:8000"
-INPUT_FOLDER = "resources/summary/ultra_short"  # 输入文件夹路径
+INPUT_FOLDER = "resources/summary/minimal"  # 输入文件夹路径
 COMPARE_FOLDER = None # 比较文件夹路径（可选）
-OUTPUT_JSON = "resources/baseline/generated_documents.json"  # 输出 JSON 文件路径
+OUTPUT_JSON = "resources/baseline/generated_documents_minimal_dsc.json"  # 输出 JSON 文件路径
 DOC_TYPE = "SRS"  # 文档类型
 STYLE = "professional"  # 风格
 
@@ -30,6 +32,10 @@ EVAL_API_BASE_URL = "http://localhost:8001"
 EMBEDDING_API_BASE_URL = "http://oneapi.wchat.cc/v1"
 EMBEDDING_API_KEY = "sk-ImpZxN2xEHkGKrfzqInaCtOBbwbzdXul1eECm1nEOyyk26R8"
 EMBEDDING_MODEL = "Qwen/Qwen3-Embedding-8B"
+
+# 并发配置
+MAX_WORKERS = 3  # 默认并发数
+print_lock = threading.Lock()  # 用于线程安全的打印
 
 
 def read_md_files(folder_path: str) -> List[Dict[str, str]]:
@@ -308,22 +314,20 @@ def generate_document_stream(api_url: str, doc_type: str, summary: str,
                     if chunk_type == "start":
                         # 记录文档 ID
                         doc_id = chunk_data.get("id")
-                        print("  开始接收流式内容...", end="", flush=True)
+                        # 流式输出时不打印，避免多线程混乱
                     elif chunk_type == "content":
                         # 累积内容
                         content_chunk = chunk_data.get("content", "")
                         document_content += content_chunk
-                        print(content_chunk, end="", flush=True)  # 显示进度
+                        # 流式输出时不打印，避免多线程混乱
                     elif chunk_type == "complete":
                         # 完成，获取标题
                         doc_id = chunk_data.get("id", doc_id)
                         doc_title = chunk_data.get("title", "")
-                        print(" ✓")  # 换行
                         break
                     elif chunk_type == "error":
                         # 错误
                         error_msg = chunk_data.get("message", "未知错误")
-                        print(f" ✗")  # 换行
                         raise Exception(f"流式生成错误: {error_msg}")
                         
                 except json.JSONDecodeError as e:
@@ -344,6 +348,127 @@ def generate_document_stream(api_url: str, doc_type: str, summary: str,
         raise Exception(f"API 调用失败: {e}")
 
 
+def process_single_file(file_info: Dict[str, str], index: int, total: int,
+                       api_url: str, doc_type: str, style: str,
+                       compare_folder: Optional[Path], eval_api_url: str) -> Dict:
+    """
+    处理单个文件的生成和评估
+    
+    Args:
+        file_info: 文件信息字典，包含 filename 和 content
+        index: 文件索引（从1开始）
+        total: 总文件数
+        api_url: API 基础 URL
+        doc_type: 文档类型
+        style: 风格
+        compare_folder: 比较文件夹路径（可选）
+        eval_api_url: 评估API基础URL
+        
+    Returns:
+        处理结果字典
+    """
+    filename = file_info["filename"]
+    content = file_info["content"]
+    
+    with print_lock:
+        print(f"[{index}/{total}] 处理文件: {filename}")
+        print(f"  文件大小: {len(content)} 字符")
+    
+    # 记录开始时间
+    start_time = time.time()
+    
+    try:
+        # 调用流式生成 API（使用相同内容作为 summary 和 requirements）
+        with print_lock:
+            print(f"  [{index}/{total}] 正在生成文档（流式）...")
+        
+        result = generate_document_stream(
+            api_url=api_url,
+            doc_type=doc_type,
+            summary=content,
+            requirements=content,
+            style=style
+        )
+        
+        # 计算耗时（秒）
+        time_cost = round(time.time() - start_time, 2)
+        
+        # 提取生成的文档内容
+        generated_document = result.get("content", "")
+        
+        with print_lock:
+            print(f"  [{index}/{total}] ✓ 生成成功 (耗时: {time_cost} 秒)")
+            print(f"  [{index}/{total}] 生成文档长度: {len(generated_document)} 字符")
+        
+        # 调用评估API比较文档（如果提供了比较文件夹）
+        evaluation_result = None
+        if compare_folder and generated_document:
+            comparison_file_path = find_comparison_file(filename, compare_folder)
+            
+            if comparison_file_path:
+                with print_lock:
+                    print(f"  [{index}/{total}] 找到比较文件: {Path(comparison_file_path).name}")
+                
+                comparison_content = read_comparison_file(comparison_file_path)
+                if comparison_content:
+                    evaluation_result = evaluate_documents(
+                        evaluated_srs=generated_document,
+                        standard_srs=comparison_content,
+                        eval_api_url=eval_api_url
+                    )
+                    if evaluation_result is not None:
+                        total_score = evaluation_result.get("Total_Score", 0)
+                        func_score = evaluation_result.get("Functional_Completeness", {}).get("score", 0)
+                        flow_score = evaluation_result.get("Interaction_Flow_Similarity", {}).get("score", 0)
+                        with print_lock:
+                            print(f"  [{index}/{total}] ✓ 评估完成:")
+                            print(f"    功能完整性得分: {func_score}/50")
+                            print(f"    交互流程接近性得分: {flow_score}/50")
+                            print(f"    总分: {total_score}/100")
+                    else:
+                        with print_lock:
+                            print(f"  [{index}/{total}] ⚠️  评估失败")
+                else:
+                    with print_lock:
+                        print(f"  [{index}/{total}] ⚠️  比较文件内容为空")
+            else:
+                with print_lock:
+                    print(f"  [{index}/{total}] ⚠️  未找到对应的比较文件")
+        
+        # 构建结果字典
+        result_item = {
+            "time_cost": time_cost,
+            "document": generated_document,
+            "filename": filename,
+            "doc_id": result.get("id", ""),
+            "title": result.get("title", "")
+        }
+        
+        # 如果有评估结果，添加到结果中
+        if evaluation_result is not None:
+            result_item["evaluation"] = evaluation_result
+            result_item["total_score"] = evaluation_result.get("Total_Score", 0)
+        
+        with print_lock:
+            print(f"  [{index}/{total}] 处理完成\n")
+        
+        return result_item
+        
+    except Exception as e:
+        time_cost = round(time.time() - start_time, 2)
+        with print_lock:
+            print(f"  [{index}/{total}] ✗ 生成失败: {e}")
+            print(f"  [{index}/{total}] 耗时: {time_cost} 秒\n")
+        
+        # 即使失败也记录
+        return {
+            "time_cost": time_cost,
+            "document": "",
+            "filename": filename,
+            "error": str(e)
+        }
+
+
 def batch_generate_documents(input_folder: str, output_json: str, 
                             api_url: str = API_BASE_URL,
                             doc_type: str = DOC_TYPE,
@@ -352,7 +477,8 @@ def batch_generate_documents(input_folder: str, output_json: str,
                             eval_api_url: str = EVAL_API_BASE_URL,
                             embedding_api_base_url: str = EMBEDDING_API_BASE_URL,
                             embedding_api_key: str = EMBEDDING_API_KEY,
-                            embedding_model: str = EMBEDDING_MODEL):
+                            embedding_model: str = EMBEDDING_MODEL,
+                            max_workers: int = MAX_WORKERS):
     """
     批量生成文档
     
@@ -367,6 +493,7 @@ def batch_generate_documents(input_folder: str, output_json: str,
     print(f"输入文件夹: {input_folder}")
     print(f"输出文件: {output_json}")
     print(f"API 地址: {api_url}")
+    print(f"并发数: {max_workers}")
     if compare_folder:
         print(f"比较文件夹: {compare_folder}")
         print(f"评估 API: {eval_api_url}")
@@ -391,100 +518,49 @@ def batch_generate_documents(input_folder: str, output_json: str,
         if response.lower() != 'y':
             return
     
-    # 批量处理
+    # 准备比较文件夹路径
+    compare_folder_path = Path(compare_folder) if compare_folder else None
+    
+    # 并发批量处理
     results = []
     total_start_time = time.time()
     
-    for i, file_info in enumerate(md_files, 1):
-        filename = file_info["filename"]
-        content = file_info["content"]
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        # 提交所有任务
+        future_to_file = {
+            executor.submit(
+                process_single_file,
+                file_info,
+                i + 1,
+                len(md_files),
+                api_url,
+                doc_type,
+                style,
+                compare_folder_path,
+                eval_api_url
+            ): file_info
+            for i, file_info in enumerate(md_files)
+        }
         
-        print(f"[{i}/{len(md_files)}] 处理文件: {filename}")
-        print(f"  文件大小: {len(content)} 字符")
-        
-        # 记录开始时间
-        start_time = time.time()
-        
-        try:
-            # 调用流式生成 API（使用相同内容作为 summary 和 requirements）
-            print(f"  正在生成文档（流式）...")
-            result = generate_document_stream(
-                api_url=api_url,
-                doc_type=doc_type,
-                summary=content,
-                requirements=content,
-                style=style
-            )
-            
-            # 计算耗时（秒）
-            time_cost = round(time.time() - start_time, 2)
-            
-            # 提取生成的文档内容
-            generated_document = result.get("content", "")
-            
-            print(f"  ✓ 生成成功 (耗时: {time_cost} 秒)")
-            print(f"  生成文档长度: {len(generated_document)} 字符")
-            
-            # 调用评估API比较文档（如果提供了比较文件夹）
-            evaluation_result = None
-            if compare_folder and generated_document:
-                compare_folder_path = Path(compare_folder)
-                comparison_file_path = find_comparison_file(filename, compare_folder_path)
-                
-                if comparison_file_path:
-                    print(f"  找到比较文件: {Path(comparison_file_path).name}")
-                    comparison_content = read_comparison_file(comparison_file_path)
-                    if comparison_content:
-                        evaluation_result = evaluate_documents(
-                            evaluated_srs=generated_document,
-                            standard_srs=comparison_content,
-                            eval_api_url=eval_api_url
-                        )
-                        if evaluation_result is not None:
-                            total_score = evaluation_result.get("Total_Score", 0)
-                            func_score = evaluation_result.get("Functional_Completeness", {}).get("score", 0)
-                            flow_score = evaluation_result.get("Interaction_Flow_Similarity", {}).get("score", 0)
-                            print(f"  ✓ 评估完成:")
-                            print(f"    功能完整性得分: {func_score}/50")
-                            print(f"    交互流程接近性得分: {flow_score}/50")
-                            print(f"    总分: {total_score}/100")
-                        else:
-                            print(f"  ⚠️  评估失败")
-                    else:
-                        print(f"  ⚠️  比较文件内容为空")
-                else:
-                    print(f"  ⚠️  未找到对应的比较文件")
-            
-            # 添加到结果列表
-            result_item = {
-                "time_cost": time_cost,
-                "document": generated_document,
-                "filename": filename,
-                "doc_id": result.get("id", ""),
-                "title": result.get("title", "")
-            }
-            
-            # 如果有评估结果，添加到结果中
-            if evaluation_result is not None:
-                result_item["evaluation"] = evaluation_result
-                result_item["total_score"] = evaluation_result.get("Total_Score", 0)
-            
-            results.append(result_item)
-            
-        except Exception as e:
-            time_cost = round(time.time() - start_time, 2)
-            print(f"  ✗ 生成失败: {e}")
-            print(f"  耗时: {time_cost} 秒")
-            
-            # 即使失败也记录
-            results.append({
-                "time_cost": time_cost,
-                "document": "",
-                "filename": filename,
-                "error": str(e)
-            })
-        
-        print()
+        # 收集结果（按完成顺序）
+        for future in as_completed(future_to_file):
+            try:
+                result = future.result()
+                results.append(result)
+            except Exception as e:
+                file_info = future_to_file[future]
+                with print_lock:
+                    print(f"处理文件 {file_info['filename']} 时发生异常: {e}\n")
+                results.append({
+                    "time_cost": 0,
+                    "document": "",
+                    "filename": file_info["filename"],
+                    "error": str(e)
+                })
+    
+    # 按原始顺序排序结果（保持与输入文件顺序一致）
+    filename_to_result = {r["filename"]: r for r in results}
+    results = [filename_to_result[file_info["filename"]] for file_info in md_files]
     
     # 计算总耗时
     total_time = round(time.time() - total_start_time, 2)
@@ -596,6 +672,12 @@ def main():
         default=EMBEDDING_MODEL,
         help=f"Embedding 模型名称（已废弃，默认: {EMBEDDING_MODEL}）"
     )
+    parser.add_argument(
+        "--max-workers",
+        type=int,
+        default=MAX_WORKERS,
+        help=f"并发线程数（默认: {MAX_WORKERS}）"
+    )
     
     args = parser.parse_args()
     
@@ -614,7 +696,8 @@ def main():
         eval_api_url=args.eval_api_url,
         embedding_api_base_url=args.embedding_api_url,
         embedding_api_key=args.embedding_api_key,
-        embedding_model=args.embedding_model
+        embedding_model=args.embedding_model,
+        max_workers=args.max_workers
     )
 
 

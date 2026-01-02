@@ -23,6 +23,12 @@ print_lock = threading.Lock()
 
 # 摘要级别配置
 SUMMARY_LEVELS = {
+    "minimal": {
+        "name": "Minimal Summary",
+        "folder": "minimal",
+        "info_range": "2%-5%",
+        "prompt_file": "minimal.md"
+    },
     "ultra_short": {
         "name": "Ultra Short Summary",
         "folder": "ultra_short",
@@ -231,6 +237,7 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 摘要级别选项：
+  minimal      - 极简摘要（2%-5%）
   ultra_short  - 超短摘要（5%-10%）
   short        - 简短摘要（10%-20%）
   balanced     - 平衡摘要（20%-30%）
@@ -241,7 +248,7 @@ def main():
     parser.add_argument(
         "--level",
         nargs="+",
-        choices=["ultra_short", "short", "balanced", "detailed", "all"],
+        choices=["minimal", "ultra_short", "short", "balanced", "detailed", "all"],
         default=["all"],
         help="选择要生成的摘要级别（默认：all）"
     )
