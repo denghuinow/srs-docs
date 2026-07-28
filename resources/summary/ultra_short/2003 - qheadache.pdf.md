@@ -1,20 +1,32 @@
-Purpose & Scope: Qheadache solves a specific puzzle-based headache through a computer game. It is a standalone application with no external system integration. The system does not handle network communication, multiplayer, or advanced analytics beyond basic scoring.
+**Purpose & Scope**
+The system is a computerized puzzle game called Qheadache. It provides an interface for solving a specific puzzle by moving blocks. It does not involve network play or multiple simultaneous users on one machine.
 
-Product Background / Positioning: The game is a simple standalone puzzle application targeting casual players. It requires Qt library support across compatible operating systems and runs independently without external dependencies.
+**Product Background / Positioning**
+It is a standalone desktop application. It relies on the Qt graphical library and must run on all operating systems supported by Qt.
 
-Core Functional Overview:  
-- Undo/Redo actions for last 1,000 moves  
-- Real-time tracking of play duration and move count  
-- Scoring system recording moves and time per player  
-- Win condition triggered by positioning the large square block  
-- Statistics window displaying top 10 player scores  
+**Core Functional Overview**
+*   Move blocks on a fixed-size board using mouse selection and drag.
+*   Undo and redo the last thousand player actions.
+*   Track and display game statistics: elapsed time and number of moves.
+*   Save the current game state to a file and load a previously saved game.
+*   Maintain a persistent top-ten score list, recording player name, moves, and time.
+*   Display the list of high scores.
+*   Erase all saved statistics.
 
-Key Users & Usage Scenarios: Casual players aged 8+ requiring no specialized training. Primary scenarios include playing a single game, reviewing statistics, and saving/loading progress. No permission tiers exist.
+**Key Users & Usage Scenarios**
+The sole user type is a single player. The player starts a new game or loads a saved one, moves blocks to solve the puzzle, and can save progress. Upon winning, if they achieve a top-ten score, they can enter their name to be recorded on the high-score list.
 
-Major External Interfaces: Input via keyboard/mouse (with alternative pointing device support). Output requires 800x600 minimum display resolution. Uses Qt library for all graphical operations.
+**Major External Interfaces**
+The user interface is graphical, using menus and a game board. It requires a keyboard, a mouse (or equivalent pointing device), and a display with a minimum resolution of 800x600 pixels. The software interfaces with the Qt library and the host operating system's file system.
 
-Key Non-functional Requirements: Must run on all Qt-supported operating systems. Single-user per machine. Statistics file stores exactly 10 player records.
+**Key Non-functional Requirements**
+*   The application must be portable to the Windows operating system (and others via Qt).
+*   It must support undoing and redoing the last thousand player actions.
+*   The display must support a minimum resolution of 800x600.
+*   Only one user interacts with the application per machine instance.
 
-Constraints, Assumptions & Dependencies: Requires 800x600 display resolution. Depends on Qt library for GUI. Statistics file management limits to 10 entries.
+**Constraints, Assumptions & Dependencies**
+The product is dependent on the Qt graphical library. It assumes the operating system provides a compatible graphical environment, a mouse, and a keyboard.
 
-Priorities & Acceptance Approach: Core game mechanics (movement, scoring, win condition) are critical. Acceptance requires successful game completion with valid statistics recorded. File management is secondary.
+**Priorities & Acceptance Approach**
+Core gameplay (block movement, puzzle goal, basic win condition) is fundamental. Features like undo/redo, statistics, and file persistence are important but secondary. The game will be accepted when it correctly implements the puzzle mechanics, maintains the defined statistics, and operates within the specified technical constraints (Qt, resolution).

@@ -1,0 +1,3 @@
+Purpose & Scope: A plug-and-play USB device providing a complete web store for new online retailers, managing accounts, inventory, shopping carts, and orders.
+Core Functions: Customer account creation and management. Product inventory management. Shopping cart and order processing.
+Key Constraints: Must operate on specified Intel/Linux hardware with Yoggie's USB system. Must use an SQL database. Must be compatible only with specified browser versions (IE 6/7, Netscape 4/5).

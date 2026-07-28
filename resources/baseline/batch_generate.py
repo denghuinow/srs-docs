@@ -31,7 +31,7 @@ EVAL_API_BASE_URL = "http://localhost:8001"
 # Embedding API 配置（已废弃，保留用于向后兼容）
 EMBEDDING_API_BASE_URL = "http://oneapi.wchat.cc/v1"
 EMBEDDING_API_KEY = "sk-ImpZxN2xEHkGKrfzqInaCtOBbwbzdXul1eECm1nEOyyk26R8"
-EMBEDDING_MODEL = "Qwen/Qwen3-Embedding-8B"
+EMBEDDING_MODEL = "Qwen/Qwen3-Embedding-0.6B"
 
 # 并发配置
 MAX_WORKERS = 3  # 默认并发数

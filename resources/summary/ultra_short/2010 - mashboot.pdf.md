@@ -1,35 +1,35 @@
-Purpose & Scope  
-Mashbot is a web service for managing company social media presence, enabling unified scheduling and monitoring of marketing campaigns across external platforms. It does not handle customer service interactions, traditional marketing channels (e.g., direct mail), or content creation beyond scheduling.  
+**Purpose & Scope**
+Mashbot is a web service for managing a company's presence on social networks. It unifies interfaces to multiple social networks and allows for the scheduling of marketing campaign content. The initial release focuses on scheduled marketing campaigns and does not include customer service functionality or management of traditional campaigns like direct mail.
 
-Product Background / Positioning  
-Mashbot positions as an open-source facade API to abstract social network operations (e.g., Facebook, Twitter), reducing vendor lock-in. It integrates with existing social platforms via standardized interfaces and targets small-to-medium businesses with limited marketing resources.  
+**Product Background / Positioning**
+The system is a campaign management tool for small to medium businesses. It is built upon a core, open-source platform that provides a plugin-based facade API for abstracting operations across various social networking services (e.g., Facebook, Twitter).
 
-Core Functional Overview  
-- Schedule content publication across multiple social networks.  
-- View historical campaign performance metrics (clickthrough, page views, comments).  
-- Create and manage campaign content (text, images, audio, video).  
-- Set keyword alerts for monitoring social media activity.  
-- Associate user accounts with external social network credentials.  
-- Apply role-based permissions (contributor, approver, publisher).  
-- Manage user accounts (create, deactivate, modify profile).  
+**Core Functional Overview**
+*   Schedule content for concurrent publishing to various social network services.
+*   View and compare historical metrics of campaigns.
+*   View and create replies to content.
+*   Maintain user accounts and assign roles (Contributor, Approver, Publisher).
+*   Associate Mashbot user accounts with external service accounts.
+*   Set up keyword alerts for monitored services.
+*   Allow users to modify their own account information.
 
-Key Users & Usage Scenarios  
-Primary users are small-to-medium business employees with basic social media knowledge. Contributors create content, approvers validate it, and publishers schedule distribution. Admins manage accounts and campaigns.  
+**Key Users & Usage Scenarios**
+Primary users are employees of small/medium businesses. Users have roles (Contributor, Approver, Publisher) dictating permissions for creating, approving, and publishing campaign content. A typical scenario involves a user creating campaign content, submitting it for approval, and scheduling it for automated publishing.
 
-Major External Interfaces  
-- External authentication systems (e.g., OAuth).  
-- Social networking APIs (e.g., Facebook, Twitter).  
-- Email systems for notifications (SMTP).  
+**Major External Interfaces**
+The system interfaces with external social networking services via a plugin API. It uses a web browser-based client interface and connects to a backend database. It also interfaces with an external email system (SMTP) for notifications.
 
-Key Non-functional Requirements  
-- Data encrypted via TLS during client-server communication.  
-- Server RAM ≤ 1 GB; client RAM ≤ 256 MB.  
-- Backup operations cause ≤ 10 minutes of user disruption.  
-- System logs out inactive users after configurable timeout.  
+**Key Non-functional Requirements**
+*   All data between the web client and server must be encrypted.
+*   The server requires no more than 1 GB of RAM.
+*   Full system backups must not interfere with user interaction for more than 10 minutes.
+*   The system must run on hardware capable of serving dynamic web pages with encryption.
 
-Constraints, Assumptions & Dependencies  
-- Requires external social network APIs to support scheduled publishing.  
-- Excludes customer service and non-social marketing channels.  
+**Constraints, Assumptions & Dependencies**
+*   The system depends on external social networking services' APIs.
+*   It assumes users have modern web browsers supporting HTTP 1.1 and HTML 4.0.
+*   An external database system is required.
+*   The system must be configurable to authenticate users via an external module or an internal mechanism.
 
-Priorities & Acceptance Approach  
-Priority 1: Mandatory for initial release (account management, scheduling, security). Priority 2: Implemented in next minor release (email notifications, backup configuration). Acceptance requires all Priority 1 items to be met.
+**Priorities & Acceptance Approach**
+Priority 1 requirements are mandatory for the initial release. These include core user account management, campaign creation/scheduling, external service authentication, and fundamental security. Priority 2 features, like email notifications and password resets, are desired but not required for release. Acceptance is based on fulfilling the Priority 1 criteria.

@@ -1,27 +1,35 @@
-**Purpose & Scope**  
-The system replaces and enhances Evergreen ILS management capabilities for PINES, a statewide Georgia library network serving 275+ libraries. It enables analysis of collections, demographics, inventory, patron records, transactions, and financials. It excludes acquisitions, cataloging, and OPAC functionality.  
+**Purpose & Scope**
+The system is the Management Processes module for an Integrated Library System (ILS). It provides reporting and analysis tools for managing library collections, patrons, transactions, and finances within a large, multi-branch consortium. It does not cover the core functions of the Online Public Access Catalog (OPAC), Acquisitions, or Cataloging modules, which are separate dependencies.
 
-**Product Background / Positioning**  
-PINES operates a centralized library consortium using Evergreen ILS. This management layer extends Evergreen’s core to support enterprise-level reporting and analytics across all 286 PINES locations. It integrates with existing Acquisitions and Cataloging modules.  
+**Product Background / Positioning**
+This module is an enhancement to the existing Evergreen ILS used by the Georgia PINES consortium, a network of over 275 libraries. It is intended to replace and extend the current reporting capabilities to support centralized management of the statewide shared collection and its operations.
 
-**Core Functional Overview**  
-- Report templates with configurable permissions and field restrictions.  
-- Query tool supporting Boolean operators, picklists, and field-level access control.  
-- Demographic analysis of patron behavior and geographic/age-based statistics.  
-- Inventory reports for material volume, shelf space allocation, and item status tracking.  
-- Financial reporting for item valuation, fines, and audit-compliant transactions.  
+**Core Functional Overview**
+*   Provide a user-friendly query tool for designing reports against all library data types.
+*   Allow system administrators to create and manage secure, templated reports with controlled customization.
+*   Generate pre-defined and ad-hoc reports for collection analysis (e.g., usage, capacity, weeding).
+*   Generate pre-defined and ad-hoc reports for patron demographic and activity analysis.
+*   Generate pre-defined and ad-hoc reports for all transaction types (check-ins, check-outs, holds).
+*   Generate pre-defined and ad-hoc financial reports (fines, payments, collection value) compliant with auditing standards.
+*   Provide utilities for batch inventory management, such as transferring items between branches.
+*   Archive transaction data in an anonymized form for longitudinal statistical analysis.
 
-**Key Users & Usage Scenarios**  
-Global System Administrators manage system-wide reports and configurations. Library Managers generate branch-level analytics for collection planning. Staff run ad hoc reports for circulation or inventory tracking. Permissions restrict report creation, template modification, and data access by user role.  
+**Key Users & Usage Scenarios**
+Primary users are library staff with tiered permissions: frontline Staff run templated reports; Local System Administrators and Library Managers create and manage reports for their branches; Global System Administrators configure system-wide reports and permissions. Typical scenarios include generating daily circulation stats, monthly financial summaries, collection weeding lists, and analyzing patron demographics for service planning.
 
-**Major External Interfaces**  
-Interfaces with OPAC for patron data, vendor APIs (USMARC21, EDIFACT) for external data, and Acquisitions/Cataloging modules for core library data. All interfaces use standardized data formats.  
+**Major External Interfaces**
+The module interfaces with the core ILS database for all library records. It must interface with vendor websites via APIs or standard data file transfers (e.g., MARC, EDIFACT). It is separate from but interacts with the patron-facing OPAC. It must be accessible via web browsers (Internet Explorer 6.0+, Firefox 2.0+) or a Windows client.
 
-**Key Non-functional Requirements**  
-Reports must process during open hours without disrupting system operations. System must support Linux/Solaris servers, web browsers (IE 6.0+, Firefox 2.0+), and accessibility tools. Output formats include HTML, Excel, and CSV.  
+**Key Non-functional Requirements**
+*   Must support a consortium of 286 locations with 17 million annual circulations without disrupting other system functions during operational hours.
+*   Must be accessible with screen-reading and screen-magnification software.
+*   Must operate on a Linux or Solaris server.
+*   Must use a fully relational database back-end and produce standards-compliant HTML.
+*   Must provide a distinct development/training environment with configuration migration to production.
+*   User rights and privileges must be controlled through configurable security groups or roles.
 
-**Constraints, Assumptions & Dependencies**  
-Requires relational database backend and standards-compliant HTML. Depends on existing Evergreen ILS data structures and Acquisitions/Cataloging modules. Excludes OPAC module functionality.  
+**Constraints, Assumptions & Dependencies**
+The module is an integral part of an enterprise-level ILS. It is centrally hosted and serves multiple locations. It is fundamentally dependent on the data structures and functionality of the core ILS, including its Acquisitions and Cataloging modules. It assumes the user has a general understanding of library services and terminology.
 
-**Priorities & Acceptance Approach**  
-All requirements are Priority 1. Acceptance requires validated report outputs matching predefined templates (e.g., demographic statistics, financial audits) and permission controls as specified in requirements.
+**Priorities & Acceptance Approach**
+All specified requirements are marked as Priority 1. Acceptance will involve the designated user group testing all new reports development. The system must demonstrably support the specific reporting examples and fine-grained requirements detailed in the appendices of the source document.

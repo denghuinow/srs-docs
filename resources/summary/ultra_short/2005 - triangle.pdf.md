@@ -1,32 +1,36 @@
-**Purpose & Scope**  
-The system enables playing combinatorial triangulation games (solitaire, against AI, or multiplayer) and serves as a platform for defining new games. It does not support networked play, personal data storage, or external database dependencies.  
+**Purpose & Scope**
+The system is a software application for playing and defining various combinatorial "triangulation games" based on a specific research article. It allows playing games as solitaire, against a computer AI, or with another human player. It does not function as a networked or online gaming platform.
 
-**Product Background / Positioning**  
-A standalone Java application based on academic research ("Games on Triangulations"), running on Windows/Linux/Mac via Java 1.4+. GPL-licensed, designed for researchers and game developers to explore theoretical game mechanics.  
+**Product Background / Positioning**
+This is a stand-alone application designed to realize the games described in the academic article "Games on Triangulations." It serves as both a playable implementation for researchers and a platform for defining new game types without modifying the core software code.
 
-**Core Functional Overview**  
-- Support multiple game types (default: 3; extensible without code changes).  
-- Customizable opening positions (including random selection).  
-- Switch player types between human and AI mid-game.  
-- Default random AI for all two-player games.  
-- External game definition via simple files (e.g., XML/text).  
-- Game termination on predefined conditions.  
-- Save/load game states.  
+**Core Functional Overview**
+*   Provide a graphical user interface operable with both mouse and keyboard.
+*   Support multiple, user-definable triangulation games (initially three types: constructing, transforming, marking).
+*   Allow selection of specific or random opening positions for a game.
+*   Support two-player, turn-based play with either human or AI players.
+*   Include a default AI that makes random legal moves.
+*   Enable changing a player (e.g., from human to AI) during an active game.
+*   Load new game definitions from external files at runtime.
+*   End a game based on a condition defined in its external game file.
 
-**Key Users & Usage Scenarios**  
-Primary: Players (academic users with varying technical skill; UI optimized for non-experts). Secondary: Game developers (define new games via files). Players interact via UI; developers modify external files.  
+**Key Users & Usage Scenarios**
+Primary users are **Players** (researchers or students from fields like mathematics or computer science) who play the games. A secondary user class is **Game Developers** who define new games using external files. A typical scenario involves a player starting a new game, selecting a game type and opening position, choosing opponents (human/AI), and playing until a win condition is met.
 
-**Major External Interfaces**  
-Java 1.4+ runtime with Swing GUI library. Input via mouse/keyboard; output via graphical display. No external databases or network interfaces.  
+**Major External Interfaces**
+The user interface consists of a main game window and dialog windows. The system requires a Java Runtime Environment (version 1.4 or later) and a graphical environment supported by Java Swing. It interacts with the local file system to load/save games and AI modules.
 
-**Key Non-functional Requirements**  
-- AI move calculation ≤10 seconds.  
-- Cross-platform (Linux/Windows) via Java.  
-- Runs on 450 MHz+ hardware.  
-- All UIs support keyboard/mouse.  
+**Key Non-functional Requirements**
+*   **Performance:** The default AI must calculate its next move within 10 seconds.
+*   **Portability:** The system must run on both Linux and Windows operating systems.
+*   **Usability:** The system must be fully operable using only a keyboard or only a mouse.
+*   **Safety:** The system must request user confirmation before overwriting an existing file.
 
-**Constraints, Assumptions & Dependencies**  
-Mandated Java platform (no platform-specific libraries). GPL license. Requires Java 1.4+ runtime. No network security or data storage needs.  
+**Constraints, Assumptions & Dependencies**
+*   The software must be implemented in Java and cannot depend on platform-specific libraries.
+*   It assumes a Java Runtime Environment (JRE 1.4+) is installed on the target machine.
+*   It is dependent on the Java Swing library for its graphical interface.
+*   The software will be released under the GPL license.
 
-**Priorities & Acceptance Approach**  
-High priority: Core games, AI, end conditions, external game definition. Low priority: Save/load, in-game help. Stable requirements (high/medium priority) will not change; low-priority features may be deferred.
+**Priorities & Acceptance Approach**
+High-priority features include the core GUI, multiple game support, opening position selection, the default random AI, external game definitions, and game end conditions. Medium-priority features include changing player types during a game and an in-game help function. Low-priority features include saving/loading games and loading new AI from files. Acceptance is based on the system fulfilling the specified functional requirements and meeting the defined non-functional metrics (e.g., AI response time).

@@ -1,25 +1,29 @@
-Purpose & Scope:  
-Provides real-time text messaging via TV for Platform-i users, demonstrating MHP capabilities. Excludes file transfers, webcam support, and new Passport account creation. Operates independently within the TV environment without external system integration.
+**Purpose & Scope**
+The system is an MHP (Multimedia Home Platform) application for TV, providing instant messaging via the MSN Messenger service. It allows users to see online contacts, chat, and see which TV programs contacts are watching. It explicitly does not support file transfers or webcam functionality.
 
-Product Background / Positioning:  
-Independent MHP application for Platform-i, distinct from PC-based MSN Messenger. Designed to showcase Platform-i's multimedia potential within the TV ecosystem, with no dependencies on other projects.
+**Product Background / Positioning**
+This is an MHP version of the MSN Messenger PC application, intended to demonstrate the capabilities of the MHP and Platform-i environment. It is an independent application, not part of a larger system or product line.
 
-Core Functional Overview:  
-- Presence management (status updates, buddy visibility)  
-- Real-time text messaging (with emoticons and session history)  
-- Buddy list operations (add, delete, block)  
-- Buddy status and nickname display  
-- TV program sharing (viewing buddies' current channel)  
-- Hotmail inbox integration (notifications and message display)  
+**Core Functional Overview**
+*   Log in using an existing .NET Passport account.
+*   View and change own online status.
+*   View the online status and nicknames of contacts.
+*   Add, delete, and block contacts.
+*   Send and receive instant text messages, including emoticons.
+*   See a notification of new Hotmail email.
+*   See which TV program an online contact is watching.
 
-Key Users & Usage Scenarios:  
-Single user type: end-users interacting via TV remote. Permissions limited to standard IM functions. Typical scenarios: chatting with buddies, checking their TV programs, and viewing Hotmail notifications on-screen.
+**Key Users & Usage Scenarios**
+The only identified users are end-users (TV viewers). They use the application for social communication, checking email notifications, and seeing what friends are watching on TV.
 
-Major External Interfaces:  
-Uses .NET Messenger Protocol (MSNPv8) for messaging. Interfaces with TV screen (output) and remote control (input).
+**Major External Interfaces**
+The primary interface is communication with the external .NET Messenger Service using the MSNPv8 protocol. User input is via remote control (and potentially a wireless keyboard). Output is displayed on a TV screen.
 
-Constraints, Assumptions & Dependencies:  
-Requires MSNPv8 protocol availability; system design must change if protocol becomes unavailable.
+**Key Non-functional Requirements**
+*(No explicit, measurable non-functional requirements are stated in the provided text.)*
 
-Priorities & Acceptance Approach:  
-Not specified in source document; excluded per content selection rules.
+**Constraints, Assumptions & Dependencies**
+A critical dependency is the use of the .NET Messenger Service protocol (MSNPv8). The requirements specification must be adjusted if this protocol cannot be used.
+
+**Priorities & Acceptance Approach**
+*(No explicit prioritization or acceptance criteria are provided in the text.)*

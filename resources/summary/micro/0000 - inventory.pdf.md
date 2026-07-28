@@ -1,0 +1,3 @@
+Purpose & Scope: A web-based system to integrate and manage inventory assets across three university faculties, providing secure access during working hours.
+Core Functions: Manage asset transfers across organizational levels. Process and approve requests to borrow assets or reserve spaces. Generate inventory and request reports.
+Key Constraints: System must be available during working hours. New users must learn the system within 4 hours. Database queries must terminate within 1 minute.

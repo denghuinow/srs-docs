@@ -1,0 +1,3 @@
+Purpose & Scope: A platform for playing and defining combinatorial triangulation games, based on a specific theoretical article, as a standalone Java application.
+Core Functions: Provide a graphical interface for playing multiple predefined triangulation games. Allow definition and loading of new games without modifying source code. Support human vs. human, human vs. AI, and AI vs. AI play.
+Key Constraints: Must be implemented in Java for cross-platform operation. Must include a default random-move AI. The AI must calculate its next move within 10 seconds.

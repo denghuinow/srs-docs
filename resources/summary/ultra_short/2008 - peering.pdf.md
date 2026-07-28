@@ -1,21 +1,34 @@
-Purpose & Scope: Enables CDNs to share resources during traffic spikes via automated peering, solving flash crowd handling without over-provisioning. Excludes single-CDN operations, content creation, and non-traffic-based scaling. Boundaries: Limited to resource sharing between cooperating CDNs; excludes end-user content delivery management.
+**Purpose & Scope**
+The system enables distinct Content Delivery Networks (CDNs) to peer and share resources to handle sudden load spikes (e.g., flash crowds) and scale capacity. It coordinates content delivery across multiple autonomous CDN providers. It does not replace or manage the internal proprietary operations of individual CDNs.
 
-Product Background / Positioning: Research prototype for global CDN resource virtualization, deployed on PlanetLab. Builds on existing CDN research (e.g., MotusNet) but does not integrate with commercial CDN systems directly.
+**Product Background / Positioning**
+This is a software infrastructure layer that sits atop existing, autonomous CDNs to virtualize them into a cooperative federation. It interacts with CDN components (Web Servers, mediators, registries) to form peering arrangements, but does not control the CDNs' internal infrastructure.
 
-Core Functional Overview:  
-- Service registration of CDN resources and policies to local registries.  
-- Automated initiation of peering during unanticipated traffic surges.  
-- Negotiation of resource-sharing terms between CDNs.  
-- Discovery of external resources via peer-to-peer policy exchange.  
-- Operational management of content delivery and billing during active peering.  
-- Disbanding or re-arranging peering based on termination conditions.
+**Core Functional Overview**
+*   Detect overload conditions in a CDN and automatically trigger a peering process.
+*   Generate and negotiate service requirements and policies between CDNs to form a peering arrangement.
+*   Discover available resources (e.g., storage, bandwidth) from potential peer CDNs.
+*   Establish and configure peering protocols to enable request redirection and content replication between peered CDNs.
+*   Operationally manage an active peering arrangement, including redirecting user requests and exchanging accounting data.
+*   Disband or re-arrange peering based on termination conditions like expired need or SLA violations.
 
-Key Users & Usage Scenarios: Primary CDNs initiate peering; peer CDNs respond to resource requests. Short-term peering requires fully automated negotiation (no human input); long-term peering involves human-directed policy alignment. Content providers and end-users benefit passively.
+**Key Users & Usage Scenarios**
+Primary users are the CDN providers themselves, acting as initiators (primary CDN) or resource contributors (peering CDNs). Usage scenarios are automated, short-term peering to react to flash crowds, and human-directed, long-term strategic peering arrangements. End-users and content providers are implicit beneficiaries but do not directly interact with the system.
 
-Major External Interfaces: Web service APIs for component communication (mediator, PA, SR, PR). DNS-based request redirection to optimal CDN peers during operational management.
+**Major External Interfaces**
+Interfaces are between the system's components (Mediator, Peering Agent, Service Registry) and the existing components of each participating CDN (their Web Servers, policy stores). Communication between peered CDNs occurs via their respective Peering Agents over an IP network.
 
-Key Non-functional Requirements: Must handle flash crowds with automated short-term peering (no human intervention). Cryptographic security for policy exchange. Agile adaptation to changing load conditions during active peering.
+**Key Non-functional Requirements**
+*   The system must enable peering negotiations and request redirection to complete quickly enough to handle sudden flash crowds.
+*   It must operate with limited, non-proprietary information shared between autonomous CDN providers.
+*   It must ensure individual CDN providers can meet their own SLAs while participating in the peering group.
+*   The prototype must be deployable and testable on a global real-world test bed like PlanetLab.
 
-Constraints, Assumptions & Dependencies: No centralized geographic data repository. Limited resource visibility between CDNs. Requires existing CDN infrastructure (e.g., Web servers, SLAs) as-is. Depends on PlanetLab for prototype testing.
+**Constraints, Assumptions & Dependencies**
+*   Constraint: Cannot rely on full visibility or control over the internal load, cost, or performance data of participating CDNs.
+*   Constraint: Implementation models for attributes like geographic location or network delay will likely be heuristic-based.
+*   Assumption: Existing web services technologies and protocols (e.g., HTTP, TCP/IP) can be leveraged for the implementation.
+*   Dependency: Design inspiration will be taken from related systems like CoDeeN, Coral, and MotusNet.
 
-Priorities & Acceptance Approach: Short-term peering automation is critical; long-term negotiation is secondary. Acceptance: Successful peering initiation within 5 minutes of traffic surge detection, with SLA-compliant resource allocation.
+**Priorities & Acceptance Approach**
+The highest priority is the core peering lifecycle: automatic trigger, negotiation, resource discovery, and operational management for short-term load spikes. Acceptance will be based on the prototype's ability to form a peering arrangement between distinct CDNs in a test bed and successfully redirect user requests to share load.

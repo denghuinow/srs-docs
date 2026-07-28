@@ -1,32 +1,37 @@
-Purpose & Scope  
-PeaZip is a cross-platform file and archive manager providing a unified GUI for Open Source compression utilities. It handles creating, updating, extracting, and managing archives across supported formats (e.g., 7z, ZIP, RAR), and includes file management tools. It does not support web-based operations, requires no external installations, and excludes system-level integration beyond its standalone portable mode.
+**Purpose & Scope**
+PeaZip is a cross-platform file and archive manager application. It provides a graphical frontend for numerous open-source archiving and compression utilities, enabling users to create, update, and extract archives, and offering additional file management tools. It does not function as a web application and does not inherently require network communication for its core operations.
 
-Product Background / Positioning  
-PeaZip evolved from a frontend for the Pea archiving utility into a consolidated GUI aggregator for multiple Open Source compression tools. It positions itself as a free, open-source alternative to commercial tools like WinRAR, offering broader format support and additional features like two-factor authentication without requiring system modifications.
+**Product Background / Positioning**
+The application was initially created as a frontend for the Pea archiving utility but evolved into a single, consistent GUI aggregating functionality from many underlying open-source utilities. It operates similarly to commercial tools like WinRAR and WinZip but supports a wider range of archive formats and is fully open-source. It is designed to be self-contained, not requiring the installation of other software packages to function.
 
-Core Functional Overview  
-- Archive creation and update in supported formats (7z, ZIP, etc.)  
-- Extraction of contents from compressed archives  
-- Two-factor authentication (password + keyfile) for archive security  
-- Secure deletion of files (multiple-pass overwrite)  
-- Byte-to-byte file comparison and checksum verification  
-- Drag-and-drop object transfer between system and application  
-- Timestamp appending to archive names for backup purposes  
+**Core Functional Overview**
+*   Create compressed archives in multiple formats.
+*   Update existing archives by adding new files.
+*   Extract contents from archives in a wide range of supported formats.
+*   Securely delete files to prevent data recovery.
+*   Split files into volumes and merge them back.
+*   Calculate checksums and hashes for file integrity checking.
+*   Encrypt archives using two-factor authentication (password and optional keyfile).
+*   Configure all application features through a centralized settings interface.
 
-Key Users & Usage Scenarios  
-Primary users include general computer users managing files/archives and experienced users leveraging CLI features. All users access core functions via GUI (file manager, archive creator, extraction interfaces). Experienced users utilize command-line execution and advanced settings; general users rely on intuitive GUI workflows without prior OS expertise.
+**Key Users & Usage Scenarios**
+Primary users are any computer system users needing to manage files and archives. There are no distinct permission levels. A typical scenario involves a user compressing a collection of documents into a single encrypted archive for backup, or extracting downloaded software from a compressed archive.
 
-Major External Interfaces  
-Graphical user interfaces (file manager, archive creator, extraction, settings, PeaLauncher). Keyboard shortcuts for all core functions. Hardware interface requires x86-compatible CPU. No external communication protocols or web dependencies.
+**Major External Interfaces**
+The system provides a graphical user interface (GUI) with several main windows: a file manager, archive creation, archive extraction, and settings. It interfaces with the host operating system's file system and supports drag-and-drop operations between the application and the system. It requires an x86-compatible CPU.
 
-Key Non-functional Requirements  
-- Security: Extraction of encrypted archives requires correct password/keyfile; secure deletion leaves no residual data.  
-- Usability: No prior OS knowledge required; functions accessible via GUI without training.  
-- Reliability: Functions operate correctly with invalid inputs, providing clear error messages.  
-- Portability: Supports Windows (32/64-bit), Linux, BSD, and UNIX-like systems.  
+**Key Non-functional Requirements**
+*   **Performance:** CPU and RAM requirements are dictated by the chosen compression algorithm and level, ranging from minimal to over 1 GB for complex algorithms.
+*   **Security:** Extraction from encrypted archives must not be allowed without the correct password and keyfile. Passwords and keyfiles must not be recoverable by other users via the application or system. Secure deletion must leave no recoverable data.
+*   **Reliability:** The application must function and provide appropriate error messages even with incorrect user input or settings.
+*   **Portability:** Must be compatible with 32-bit and 64-bit Microsoft Windows, and all POSIX-compliant operating systems (Linux, BSD, UNIX-like).
 
-Constraints, Assumptions & Dependencies  
-LGPL license mandates open-source distribution and compatibility with proprietary software. Development requires Delphi/Object Pascal. Hardware dependency: x86 CPU for ASM performance-critical sections. No external software dependencies beyond standard libraries (e.g., GTK/gdk).
+**Constraints, Assumptions & Dependencies**
+*   Must be developed using Delphi/Kylix, Object Pascal, or Pascal.
+*   Must be licensed under the LGPL.
+*   Development is done within the Lazarus IDE.
+*   Depends on the inclusion of underlying open-source archiving utilities within its distribution packages.
+*   For full drag-and-drop functionality from the application to the system, the host OS must be Microsoft Windows.
 
-Priorities & Acceptance Approach  
-Highest priority: Core archive functions (creation, extraction, security). Secondary: Usability and cross-platform support. Acceptance requires verified functionality of all core features against supported formats and error handling per security requirements. No performance metrics specified.
+**Priorities & Acceptance Approach**
+Core archiving functions (create, update, extract) are fundamental. Security features for encryption and secure deletion are critical. Acceptance is based on the system correctly performing all specified functions across the required operating environments, adhering to the stated security constraints, and operating within the described performance parameters for chosen algorithms.

@@ -1,32 +1,33 @@
-Purpose & Scope  
-The Model Manager automates configuration, scheduling, and monitoring of weather/climate model jobs (e.g., GMOD, ClimoFDDA) and post-processing tasks. It extends the existing model back end system but does not handle custom cluster-specific job setup without user input or provide full CAM job support.  
+**Purpose & Scope**
+The Model Manager (MM) is a tool for configuring, scheduling, running, monitoring, and stopping weather and climate model jobs. It automates the setup and management of these jobs across one or more computing clusters. It does not include the development of the underlying scientific models or data sources.
 
-Product Background / Positioning  
-The Model Manager is a standalone tool integrated into the 4DWX OTM system, accessible via web GUI or command line. It interfaces optionally with MetVault for data storage but operates independently if MetVault is unavailable.  
+**Product Background / Positioning**
+The MM extends and enhances the existing model back-end system to meet increased operational demands. It is a standalone tool but will also be integrated into the broader 4DWX OTM system. It can operate with or without a connection to the MetVault data archive.
 
-Core Functional Overview  
-1. Submit model jobs (real-time/off-line FDDA, ClimoFDDA) via configuration setup.  
-2. Submit "by-hand" jobs requiring manual cluster setup and registration.  
-3. Load and submit jobs from saved configuration files.  
-4. Retrieve and re-run previously saved job configurations.  
-5. Monitor scheduled, running, and completed jobs.  
-6. Execute post-processing on model output files.  
+**Core Functional Overview**
+*   Set up and submit new model jobs (e.g., real-time forecasts, re-runs, climate studies).
+*   Set up and submit standalone post-processing jobs on model output.
+*   Submit pre-configured 'by-hand' jobs that exist outside the MM.
+*   Submit a job by loading a pre-defined job configuration file.
+*   Retrieve, modify, and re-run a previously saved job configuration.
+*   View and monitor scheduled, running, and completed jobs.
+*   Stop, restart, or resume jobs.
 
-Key Users & Usage Scenarios  
-Three user groups:  
-- Operational scientists (full access: submit, monitor, manage jobs).  
-- Research scientists (submit custom jobs, view operational status).  
-- Basic users (view job status, stop/restart standard jobs).  
-Super users manage all jobs; others manage only their own.  
+**Key Users & Usage Scenarios**
+Primary users are scientists and engineers familiar with model setups, who configure and run operational or research jobs. A secondary group includes less experienced users who monitor status or run standard jobs. A "super user" has permissions to manage any job, while regular users can only manage their own.
 
-Major External Interfaces  
-Web-based GUI and command-line tool for user interaction. Optional integration with MetVault for data storage. No protocol or field-level details specified.  
+**Major External Interfaces**
+The system provides a web-based GUI and a command-line tool for user access. It interfaces with one or more high-performance computing clusters for job execution. It has an optional interface to the MetVault data archive for input and output.
 
-Key Non-functional Requirements  
-Jobs must support email notifications for start/end/termination. Jobs must be resumable after interruption.  
+**Key Non-functional Requirements**
+*   The system must manage jobs across multiple clusters, making allocation decisions transparently to the user.
+*   Users must have the option to specify a particular cluster for their job.
+*   The system must support the concurrent operation of real-time forecast ensembles across several clusters.
 
-Constraints, Assumptions & Dependencies  
-MM manages cluster allocation automatically but allows user-specified clusters for custom jobs. "By-hand" jobs require manual registration with mandatory job metadata. MetVault is optional.  
+**Constraints, Assumptions & Dependencies**
+*   For custom jobs, the user is responsible for ensuring required scripts and executables reside on the target cluster.
+*   The system assumes the existence of standard model configurations, data sources, and processing scripts.
+*   Integration with the GCAT tool's functionality for climate jobs is required.
 
-Priorities & Acceptance Approach  
-Primary priority: Core job submission (model, post-processing) and monitoring. Acceptance requires successful execution of all core functional capabilities without dependency on unresolved TBD items.
+**Priorities & Acceptance Approach**
+Core priority is automating the setup and management of standard real-time and off-line forecast jobs. Support for custom jobs and post-processing is also required. Acceptance will be based on the system's ability to correctly configure, schedule, run, and monitor the defined job types without user intervention in cluster management.

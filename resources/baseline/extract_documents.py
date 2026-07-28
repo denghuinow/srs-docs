@@ -11,8 +11,8 @@ from pathlib import Path
 
 def extract_documents():
     # 定义路径
-    json_file = Path(__file__).parent / "generated_documents_minimal_dsc.json"
-    output_dir = Path(__file__).parent / "docs_minimal_dsc"
+    json_file = Path(__file__).parent / "generated_documents_detailed_dsc.json"
+    output_dir = Path(__file__).parent / "docs_detailed_dsc"
     
     # 创建输出目录（如果不存在）
     output_dir.mkdir(exist_ok=True)

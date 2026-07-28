@@ -1,0 +1,3 @@
+Purpose & Scope: The system searches multiple websites for streaming videos and torrents to reduce user search time.
+Core Functions: Search for torrents across a database of websites. Search for streaming videos across a database of hosting and link sites.
+Key Constraints: Must work across multiple operating systems and web browsers. Torrent results with zero seeds are not displayed. The system does not host any video content.

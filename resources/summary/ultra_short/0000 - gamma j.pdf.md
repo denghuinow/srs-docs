@@ -1,37 +1,40 @@
-**Purpose & Scope**  
-Solves online store setup for new e-commerce users via a plug-and-play USB device. Manages customer accounts, inventory, shopping carts, and order confirmation. Excludes customer order analysis, advanced inventory beyond 20,000 items, and telephonic order processing.  
+**Purpose & Scope**
+The system is a "plug and play" web store application for new online store owners, enabling core e-commerce sales. It manages customer accounts, inventory, shopping carts, and order confirmations. It does not handle telephonic order integration, customer order analysis, or its own shipping/tracking number generation.
 
-**Product Background / Positioning**  
-New standalone e-commerce system designed for non-technical users. Operates as a self-contained USB appliance with no software installation. Not integrated with existing enterprise systems; relies on Yoggie Corporation’s hardware and OS.  
+**Product Background / Positioning**
+This is a new, self-contained system designed for users new to e-commerce. It runs on a dedicated USB key appliance with its own CPU and OS (Yoggie/Slackware Linux/Apache). It interfaces with an external payment system (WebOrder) for billing and inventory updates.
 
-**Core Functional Overview**  
-- Customer account management (creation, login, profile updates).  
-- Product inventory management (add, delete, update categories/products).  
-- Shopping cart functionality (add/remove items, view totals).  
-- Order processing (checkout, payment, confirmation email).  
-- System administration (user management, plug-in installation).  
-- Plug-in API for future feature extensions.  
+**Core Functional Overview**
+*   Customer account management (registration, login, profile/payment info storage).
+*   Product inventory management within multi-tiered categories.
+*   Product search and browsing.
+*   Shopping cart management (add/remove items, view totals).
+*   Checkout and order confirmation with email notification.
+*   System administration for user and privilege management.
+*   A plug-in API for future functional extensions.
 
-**Key Users & Usage Scenarios**  
-- **System Admin**: Manages users, products, and plug-ins; requires login.  
-- **Sales Personnel**: Updates inventory, product details, and pricing; requires login.  
-- **Customers**: Browses products, adds to cart, checks out, and views order status; requires login.  
+**Key Users & Usage Scenarios**
+*   **Customer**: Browses/search for products, manages account, adds items to cart, checks out.
+*   **Sales Personnel**: Manages product inventory (add, update, delete product details).
+*   **System Administrator**: Manages user accounts and privileges, installs system patches and plug-ins.
 
-**Major External Interfaces**  
-Web browser interface (limited to legacy browsers: IE 6/7, Netscape 4/5). USB hardware interface (Yoggie-provided). Email communications (order confirmations, admin alerts). Plug-in API for third-party extensions.  
+**Major External Interfaces**
+*   User Interface: Web browser (IE 6/7, Netscape 4/5).
+*   Hardware Interface: Specific USB key appliance from Yoggie.
+*   Software Interface: Programmatic interface to external "WebOrder" system for billing and inventory updates.
+*   Communications Interface: Outbound email to customers (order confirmations) and administrators (queries).
 
-**Key Non-functional Requirements**  
-- Availability: 99.99%.  
-- Performance: 1,000 concurrent users; <2ms shopping cart updates; <1s product search.  
-- Security: SSL encryption, credit card fraud validation, IP attack blocking.  
-- Reliability: 20,000-item inventory minimum; automatic backups.  
+**Key Non-functional Requirements**
+*   **Performance**: Handle 1000 concurrent users; product search in <1 second; add to cart in <2ms.
+*   **Security**: Encrypt all sensitive data via HTTPS and in the database; auto-detect and block IP DOS attacks.
+*   **Availability**: 99.99% availability.
+*   **Deployment**: System must be operational within 1 minute of plugging in the USB key.
 
-**Constraints, Assumptions & Dependencies**  
-- Must deploy via USB key; no software installation.  
-- Browser compatibility limited to IE 6/7 and Netscape 4/5.  
-- Relies on Yoggie Corporation’s USB hardware and OS baseline.  
-- No support for telephonic orders or order analysis.  
+**Constraints, Assumptions & Dependencies**
+*   Must use a SQL database (MySQL specified).
+*   Browser compatibility is only guaranteed for IE 6/7 and Netscape 4/5.
+*   Dependent on Yoggie for the USB hardware, OS, drivers, and their stable baseline.
+*   Assumes delivery of Yoggie development/test samples.
 
-**Priorities & Acceptance Approach**  
-High priority: Account management, product management, payment processing, plug-in API.  
-Acceptance: Meets all performance metrics (e.g., 99.99% availability), security requirements, and core functional capabilities (e.g., order confirmation flow).
+**Priorities & Acceptance Approach**
+High-priority features are customer accounts, product management, purchasing/payment, and the plug-in API. Acceptance will involve verifying core e-commerce workflows (browse, cart, checkout), meeting the stated performance/availability metrics, and confirming operation within the defined constraints (browser, hardware).

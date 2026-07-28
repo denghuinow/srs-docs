@@ -1,32 +1,39 @@
-Purpose & Scope
-The system provides a web-based supply chain management solution for Ejada, handling customer requests, item tracking, resource locations, and supplier coordination. It is limited to Ejada's internal operations and does not support integration with external enterprise systems like Oracle or SAP.
+**Purpose & Scope**
+The system is a web-based Supply Chain Management (SCM) application for Ejada company. It manages the flow of customer requests, items, and supplier interactions to deliver products and services. The system's scope is limited to Ejada's operations and does not include integration with external systems like CRM or HR, though such integration is noted as a future possibility.
 
-Product Background / Positioning
-Designed as a tailored solution for Ejada's IT product delivery and business consultation services, it focuses on cost efficiency and speed. Unlike enterprise SCM systems, it operates within Ejada's framework with no requirement for external system integration.
+**Product Background / Positioning**
+This SCM system is a custom solution for Ejada, positioned as an alternative to large-scale systems from Oracle or SAP. It is part of Ejada's internal framework and will later be integrated with two other modules within that framework.
 
-Core Functional Overview
-- Request management (add, view, edit, delete for customers/suppliers)
-- Item management (add, view, edit, delete items)
-- Resource location management (add, view, edit, delete locations)
-- Customer management (add, view, edit, delete customers)
-- Supplier management (add, view, edit, delete suppliers)
-- Profile editing (for customers, suppliers, coordinators)
+**Core Functional Overview**
+*   Manage customer and supplier requests (add, view, edit, delete).
+*   Manage item catalog (add, view, edit, delete).
+*   Manage supplier information (add, view, edit, delete).
+*   Manage customer information (add, view, edit, delete).
+*   Manage resource/storage locations (add, view, edit, delete).
+*   Allow suppliers to view supply requests and submit feedback.
+*   Allow customers to create and manage their own requests.
 
-Key Users & Usage Scenarios
-Users include Ejada coordinators (full system management), customers (submit requests, edit profiles), and suppliers (respond to requests, edit profiles). Coordinators handle all data management; customers and suppliers interact with specific request and profile functions.
+**Key Users & Usage Scenarios**
+*   **Coordinator:** An Ejada employee with full administrative control. They manage all customers, suppliers, items, locations, and requests. They act as the intermediary between customers and suppliers.
+*   **Customer:** External users who log in to create new requests for products/services, view their request status, and edit their profile.
+*   **Supplier:** External users who log in to view pending supply requests from the coordinator, see request details, and submit feedback on their ability to fulfill requests.
 
-Major External Interfaces
-Uses SQL Server for database, requires Internet Explorer 6/7 or Firefox 2/3, and communicates via TCP/IP. Future integration with CRM/HR systems is possible but not in current scope.
+**Major External Interfaces**
+*   **User Interface:** A web-based interface accessed via browser.
+*   **Software Interfaces:** Must interface with Microsoft SQL Server database. Client browsers are specified as Internet Explorer (v6/7) and Mozilla Firefox (v2/3).
+*   **Communication Interfaces:** Uses TCP/IP over the internet/network. Future communication with external systems (e.g., CRM) is anticipated but out of scope.
 
-Key Non-functional Requirements
-- Performance: Support 100+ concurrent users with 90% transactions under 1 second.
-- Reliability: Daily automatic backups; database transactions roll back on failure.
-- Availability: 100% uptime (with user feedback for fatal errors).
-- Security: Role-based access (coordinator, customer, supplier).
-- Maintainability: Modular design for easy updates.
+**Key Non-functional Requirements**
+*   **Performance:** Must support at least 100 concurrent users. 90% of transactions must complete in less than 1 second.
+*   **Availability:** Must be available 100% of the time.
+*   **Reliability:** All data must be backed up automatically daily. The system must detect errors and roll back incomplete database transactions.
+*   **Security:** Access is controlled via login with three distinct roles (coordinator, customer, supplier).
+*   **Maintainability:** The system is designed in modules to facilitate error detection and updates.
 
-Constraints, Assumptions & Dependencies
-Must use .NET technologies (ASP.NET, C#, MS SQL) and Ejada's framework. Assumes server has Microsoft OS and internet. Requires integration with two Ejada framework modules.
+**Constraints, Assumptions & Dependencies**
+*   **Constraints:** Must be a web-based system built using ASP.NET and C# on the .NET Framework. Must use MS SQL Server as the DBMS. Must comply with Ejada's programming standards and framework.
+*   **Assumptions:** The server runs a suitable Microsoft OS with an internet connection.
+*   **Dependencies:** Success depends on the Ejada .Net framework and future integration with two other Ejada modules.
 
-Priorities & Acceptance Approach
-Top priority: Core management functions and profile editing. Acceptance verified by meeting performance metrics (100 concurrent users, 90% transactions <1 second) and successful execution of critical use cases.
+**Priorities & Acceptance Approach**
+All specified functional requirements are required prior to the first delivery (Release 1.0). Performance, availability, and security requirements are critical acceptance criteria. The system will be developed following a Waterfall process model.

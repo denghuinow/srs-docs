@@ -1,28 +1,32 @@
-Purpose & Scope  
-The system searches torrents and streaming video sources across multiple websites to reduce manual searching. It does not host video content, store user data, or provide video playback.  
+**Purpose & Scope**
+The system is a video search engine that aggregates search results for streaming videos and torrents from multiple websites. It aims to reduce user search time by querying multiple sites with a single input. It does not host any video content itself.
 
-Product Background / Positioning  
-Developed from ethnography studies identifying user pain points in manually searching video sites. Positioned as a standalone tool complementing existing platforms like YouTube and Facebook without integrating with them.  
+**Product Background / Positioning**
+This is a new, self-contained product developed in response to identified user demand from ethnography studies. It operates independently, querying external websites, and does not integrate with or replace any existing specific system.
 
-Core Functional Overview  
-- Search torrents across a developer-maintained site database.  
-- Search streaming video hosts and link sites (e.g., YouTube, surfthechannel.com).  
-- Filter results by site, content type, or age restrictions.  
-- Sort results by name, size, date, or length.  
-- Display results in tabbed views (torrents, streaming hosts, streaming links).  
-- Store favorite video links for later access.  
+**Core Functional Overview**
+*   Search for torrent files across a configurable database of websites.
+*   Search for streaming videos across a configurable database of hosting sites (e.g., YouTube).
+*   Search for streaming video links across a configurable database of link aggregation sites.
+*   Filter search results by content type (torrent, stream host, stream link).
+*   Sort search results by criteria like name, size, or date.
+*   Filter out specific websites from search results.
+*   Store and retrieve user favorites (video links).
 
-Key Users & Usage Scenarios  
-General users: Search, filter, sort, and save results. Developers: Update site databases for safety, compatibility, and relevance.  
+**Key Users & Usage Scenarios**
+There are two user classes: the general end-user, who performs searches and views results, and the system developer, who can update the database of websites to be searched. A typical scenario involves a user entering a search term, selecting content types, reviewing sorted results, and opening a selected link in their web browser.
 
-Major External Interfaces  
-Single-screen user interface. Uses hyperlinks to open sites in default browsers. Communicates with external sites via PHP-based queries.  
+**Major External Interfaces**
+The primary external interface is with various third-party video and torrent websites via internet queries. The system interfaces with the user's default web browser to open hyperlinks. It must be portable across major operating systems (Windows XP/Vista, Mac OS X, Linux) and web browsers.
 
-Key Non-functional Requirements  
-Query response within 5 seconds; program load under 10 seconds; results sorted in <0.1 seconds; 100 results per page; no 0-seed torrents displayed.  
+**Key Non-functional Requirements**
+*   Performance: No single website query shall take longer than 5 seconds. Sorting results shall take less than 0.1 seconds.
+*   Reliability/Safety: Torrent results with 0 seeds or a rating below 1 must not be displayed. The development team must investigate sites in the database monthly for illegal/harmful content.
+*   Portability: The software must run on specified Windows, Mac OS, and Linux platforms.
+*   Legal: The software must not host content and must undergo a full legal review before public release.
 
-Constraints, Assumptions & Dependencies  
-Monthly safety checks of all database sites; no user data storage; relies on external sites’ availability for search results.  
+**Constraints, Assumptions & Dependencies**
+The system requires an active internet connection and a reasonably up-to-date computer. It is dependent on the structure and availability of external websites it queries. The legality of the service is contingent on it only listing links and not hosting content.
 
-Priorities & Acceptance Approach  
-High priority for torrent and streaming search features. Acceptance requires all search results to display within specified performance metrics.
+**Priorities & Acceptance Approach**
+The torrent search and video stream search capabilities are the main features and have the highest development priority. Acceptance will involve verifying search functionality across all specified content types, meeting the defined performance metrics, and ensuring the system operates within the stated legal and safety constraints.

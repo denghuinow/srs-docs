@@ -1,28 +1,28 @@
-**Purpose & Scope**  
-The system provides a regional traffic data repository and communication infrastructure connecting existing Traffic Management Centers (TMCs) across the Dallas/Fort Worth Metroplex. It enables standardized exchange of traffic data and device control between agencies using ITS standards, without building new physical traffic infrastructure. Excludes direct traffic signal control or real-time vehicle navigation.
+**Purpose & Scope**
+The system is the Dallas/Ft. Worth Regional Center-to-Center Communications Network. It creates a common repository for regional traffic information and enables the exchange of device control commands between different Traffic Management Centers. It does not directly interface with field devices; it connects existing, dissimilar traffic management systems.
 
-**Product Background / Positioning**  
-Serves as a regional extension of the Texas Department of Transportation’s (TxDOT) Center-to-Center (C2C) project. Integrates with existing TMCs and ITS field devices (e.g., DMS, CCTV, ramp meters) via standardized interfaces, creating a reusable foundation for statewide traffic management systems.
+**Product Background / Positioning**
+The system extends a Texas Department of Transportation C2C project to interconnect multiple agency Traffic Management Centers in the DFW metroplex. It sits between these existing centers, acting as a standardized data hub and command router.
 
-**Core Functional Overview**  
-- Centralized traffic data repository for roadway, incident, and device status.  
-- Web-based map visualization of traffic conditions and incidents.  
-- Incident reporting and lane closure management via GUI.  
-- Remote control of ITS devices (DMS, LCS, CCTV, ramp meters, HAR).  
-- Real-time network device status monitoring (e.g., DMS, CCTV, traffic signals).  
-- Support for multi-agency data sharing and interoperability.
+**Core Functional Overview**
+1.  Collect and store standardized traffic data (roadway networks, conditions, incidents) from multiple centers.
+2.  Transmit device status data (for DMS, LCS, CCTV, ramp meters, traffic signals, etc.) between centers.
+3.  Allow remote command/control of field devices (DMS, LCS, CCTV, ramp meters, etc.) across center boundaries.
+4.  Provide a web-based graphical map displaying traffic conditions, incidents, and device locations.
+5.  Provide a standalone GUI for agencies to input and manage incident and lane closure data.
+6.  Provide a remote control GUI for authorized users to issue device commands over a public network.
 
-**Key Users & Usage Scenarios**  
-Primary users: Traffic agencies without formal TMCs (using web GUI) and regional TMC operators (using remote control GUI). Agencies report incidents via GUI; TMCs remotely control devices across networks. Permission levels differentiate data access and control capabilities.
+**Key Users & Usage Scenarios**
+Primary users are traffic operators and managers at various Traffic Management Centers (e.g., TxDOT, city agencies). They use the system to view a consolidated regional traffic picture, coordinate incident response, and request control of devices owned by other agencies (e.g., changing a message sign on a different jurisdiction's highway).
 
-**Major External Interfaces**  
-Interfaces with existing ITS systems via ITS standards (TMDD, DATEX/ASN) over TCP/IP. Includes device-specific protocols for traffic signals, DMS, CCTV, and sensor data. No custom protocols for new ITS-compliant systems.
+**Major External Interfaces**
+The system interfaces with the backend systems of multiple Traffic Management Centers. It also provides a web interface for the public map and client GUI applications for incident entry and remote device control.
 
-**Key Non-functional Requirements**  
-Operates in two modes: normal (data aggregation) and test (data logging). Must support 24/7 availability for traffic operations. Relies on standardized data formats (TMDD) for interoperability.
+**Key Non-functional Requirements**
+The system shall utilize the ITS Traffic Management Data Dictionary (TMDD) standard and DATEX/ASN over TCP/IP for all data transmission. The server components shall execute in a Microsoft Windows NT environment.
 
-**Constraints, Assumptions & Dependencies**  
-Depends on all connected TMCs adopting ITS standards (TMDD) for data exchange. Requires existing TMCs to provide standardized data feeds. Assumes network infrastructure supports TCP/IP communications.
+**Constraints, Assumptions & Dependencies**
+The system is constrained to using specific commercial software: ESRI's ARC Internet Map Server and Map Objects. It depends on each connected center providing data in a project-defined protocol or being based on ITS standards.
 
-**Priorities & Acceptance Approach**  
-Top priority: Data repository functionality and web map visualization. Secondary: Incident reporting and remote device control. Acceptance requires successful operation in normal mode with all specified interfaces exchanging data per TMDD standards.
+**Priorities & Acceptance Approach**
+Core priorities are establishing the standardized data repository and enabling basic device status sharing and control. Acceptance will involve verifying data flows correctly between centers, the web map displays integrated data, and remote device commands are properly routed and executed.

@@ -1,29 +1,35 @@
-Purpose & Scope  
-This system extends agentMom to enable secure broadcasting, multicasting, and unicast communication in multi-agent systems. It handles message delivery within local networks (broadcast), predefined agent groups (multicast), and direct agent pairs (unicast). It does not guarantee message delivery, provide advanced security beyond encryption, or support non-local network broadcasting.  
+**Purpose & Scope**
+The system extends the agentMom multi-agent framework to support broadcast, multicast, and secured unicast communication. It provides a reusable Java framework for building agents and their conversations. It does not guarantee reliable delivery for multicast/broadcast, provide unbreakable encryption, or function in network environments lacking multicast protocol support.
 
-Product Background / Positioning  
-The system integrates as a Java-based communication framework within multi-agent applications, building on agentMom 1.2. It replaces unicast-only communication with enhanced modes while maintaining compatibility with existing agentMom 1.2 implementations.  
+**Product Background / Positioning**
+This is an enhancement to the existing agentMom 1.2 framework. It operates within a multi-agent system context, providing the foundational communication building blocks upon which specific agent applications are built.
 
-Core Functional Overview  
-- Broadcast messages to all agents in the local network.  
-- Multicast messages to agents subscribed to a specific group address.  
-- Unicast messages to individual agents within an organization.  
-- Agent choice between broadcast, multicast, or unicast communication modes.  
-- Join/leave multicast groups dynamically.  
-- Toggle encryption for all message types.  
-- Set multicast TTL and group addresses.  
+**Core Functional Overview**
+*   Enable agents to send and receive unicast messages within an organization.
+*   Enable agents to send and receive broadcast messages within a local network.
+*   Enable agents to send and receive multicast messages within a subscribed group.
+*   Allow agents to join and leave multicast groups.
+*   Provide message encryption and decryption for unicast and multicast communication.
+*   Allow an agent to choose whether to encrypt a given message.
+*   Maintain compatibility with the existing agentMom 1.2 framework.
 
-Key Users & Usage Scenarios  
-Users are Java developers with multi-agent systems experience. Agents must know destination addresses (unicast), multicast group addresses, or local network context to send messages. Scenarios include task completion notifications (multicast), new agent announcements (broadcast), and direct agent coordination (unicast).  
+**Key Users & Usage Scenarios**
+The primary users are developers implementing multi-agent systems, requiring knowledge of Java and agent concepts. Agents communicate directly (unicast), announce themselves to a local network (broadcast), or efficiently communicate with a defined subgroup (multicast), with optional message encryption.
 
-Major External Interfaces  
-Requires TCP/IP for unicast, multicast protocol for group messaging, and UDP for broadcast. Interfaces with network infrastructure (routers, OS) supporting multicast and broadcast.  
+**Major External Interfaces**
+The system interfaces via standard network protocols: TCP/IP for unicast, UDP for broadcast, and IP Multicast protocol for multicast. It requires a Java 1.4.0 runtime environment.
 
-Key Non-functional Requirements  
-Multicast/broadcast packets delivered best-effort (no guarantee of delivery). Broadcast messages restricted to system administrators. Multicast requires network support (routers, OS, NIC).  
+**Key Non-functional Requirements**
+*   Unicast messages must arrive at the specified address and in order.
+*   Multicast/broadcast message delivery is on a best-effort basis (no reliability guarantee).
+*   The system must be compatible with agentMom 1.2.
+*   Network routers, cards, and OS must support the multicast protocol for that feature to work.
+*   System administrator privileges may be required to send broadcast messages on many networks.
 
-Constraints, Assumptions & Dependencies  
-Multicast delivery depends on network infrastructure support. Broadcast restricted to administrators. Agents must know destination addresses for unicast and multicast groups. Security relies on basic encryption with no guarantee against decryption.  
+**Constraints, Assumptions & Dependencies**
+*   Each agent must know destination addresses for unicast and multicast addresses for group communication.
+*   For secured multicast, a trusted key management agent must exist to distribute encryption keys.
+*   The framework assumes agents have the knowledge to choose the appropriate communication method.
 
-Priorities & Acceptance Approach  
-Must-haves: Core communication modes (broadcast/multicast/unicast), encryption toggle, group join/leave, and agent compatibility. Acceptance requires demonstration of all "driving requirements" (asterisked in SRS).
+**Priorities & Acceptance Approach**
+Driving requirements (marked in the SRS) must be demonstrated by the end of phase II. These include core send/receive functions for all communication types, join/leave group operations, basic encryption/decryption, and architectural support. Acceptance will involve demonstrating these capabilities.

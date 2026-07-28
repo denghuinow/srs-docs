@@ -1,0 +1,3 @@
+Purpose & Scope: Enhance the Moodle courseware system to address missing core functionality for University of Puget Sound's instructional needs, utilizing existing Moodle APIs.
+Core Functions: Enable multiple file uploads configurable per page. Provide audio recording and portfolio management for voice clips. Implement a search function for course pages.
+Key Constraints: The system must support at least 1000 concurrent users. The system must be backed up on a configurable schedule. Enhancements must utilize the existing Moodle APIs.

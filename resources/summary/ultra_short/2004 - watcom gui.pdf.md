@@ -1,23 +1,30 @@
-Purpose & Scope  
-Ports Open Watcom's Windows GUI library to Linux using GTK toolkit. Solves cross-platform GUI compatibility for Open Watcom IDE. Does not support Windows-style resource files, MDI "windows in window" model, or built-in help subsystem.  
+**Purpose & Scope**
+The system is a port of the low-level Open Watcom GUI library to the Linux platform using the GTK+ toolkit. It enables existing Open Watcom applications to run on Linux with a native graphical interface. The port does not include support for Windows/OS2-style resource files, an MDI "windows-in-window" model, or a built-in help subsystem.
 
-Product Background / Positioning  
-Serves as the foundation for Open Watcom IDE's Linux port. Integrates with GTK 2.0+ as the primary UI toolkit, replacing Windows/OS/2 API dependencies. Requires no changes to existing Open Watcom application logic.  
+**Product Background / Positioning**
+This port is part of the Open Watcom project, allowing its development tools and applications to be used on Linux. It replaces the original Windows/OS2 Presentation Manager dependencies with the GTK+ library, integrating the applications into the standard Linux desktop environment (X Window System).
 
-Core Functional Overview  
-Window initialization and management. Dialog creation and control handling. Menu and toolbar management. Text and font rendering. Status bar and scrolling functionality.  
+**Core Functional Overview**
+*   GUI library initialization and main event loop.
+*   Creation and management of windows and dialogs.
+*   Creation and management of standard UI controls (buttons, lists, edit fields).
+*   Drawing of text, lines, and rectangles.
+*   Menu, toolbar, and status bar management.
 
-Key Users & Usage Scenarios  
-Open Watcom developers porting IDE to Linux. Permissions: Full access to porting tools. Scenarios: Initializing windows, creating dialogs, handling menus, and rendering text in Linux environment.  
+**Key Users & Usage Scenarios**
+The primary user is a developer running Open Watcom tools (like the IDE) on Linux. The system runs as a library; the user interacts with the ported application, not the porting layer itself. There are no distinct user roles or permissions within the library.
 
-Major External Interfaces  
-GTK 2.0+ toolkit as primary UI interface. X Window System. No interfaces to Windows API or resource files.  
+**Major External Interfaces**
+The system interfaces with the GTK+ library, the X Window System, and supporting libraries (GLib, Pango, GDK). Applications use the existing Open Watcom GUI API, which remains unchanged.
 
-Key Non-functional Requirements  
-Must run on GTK 2.0+ with X Window System. No support for MDI window model. Resource file conversion required (partial solution via libglade). Must maintain identical visual behavior across platforms.  
+**Key Non-functional Requirements**
+*   The ported library must compile and link on a target system with a standard C compiler, X11, and the required GTK+ libraries (GTK+, GLib, Pango, ATK, etc.).
+*   The library can be linked statically if the target system lacks compatible GTK+ versions, accepting an increase in binary size.
 
-Constraints, Assumptions & Dependencies  
-Hard constraint: No MDI "windows in window" support in GTK. Dependency: GTK 2.0+ and X Window System. Assumption: Resource file conversion via libglade acceptable for non-string resources.  
+**Constraints, Assumptions & Dependencies**
+*   The port depends on the GTK+ 2.x toolkit and the X Window System.
+*   It cannot support Windows/OS2 resource files, the MDI model, or modifying the window system menu due to GTK+ limitations.
+*   The library assumes the use of the Open Watcom Programming Interface (WPI) and Memory Tracker (TrMem) libraries.
 
-Priorities & Acceptance Approach  
-Critical: Core window/dialog functionality (100% coverage). High: Menu/toolbar handling (95% coverage). Acceptance: All critical functions must pass GUI sample test (samp2.c). Non-critical: Help subsystem (not implemented).
+**Priorities & Acceptance Approach**
+The priority is functional equivalence for the core GUI operations used by Open Watcom applications. Acceptance is achieved when the standard Open Watcom GUI sample programs compile, link, and run correctly on the Linux target, displaying and managing windows, dialogs, and controls.

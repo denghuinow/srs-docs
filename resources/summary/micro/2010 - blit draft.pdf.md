@@ -1,0 +1,3 @@
+Purpose & Scope: Rewrite the core Laboratory Information System to improve performance, automate decisions, and streamline workflows while maintaining existing functionality.
+Core Functions: Administer user accounts and roles. Provide context-sensitive online help.
+Key Constraints: Must comply with HIPAA standards. Must use the existing SQL Server 2008 database. Production updates are restricted to scheduled Tuesday maintenance windows.

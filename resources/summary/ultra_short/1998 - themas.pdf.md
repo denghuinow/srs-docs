@@ -1,27 +1,35 @@
-Purpose & Scope: The system manages temperature monitoring and HVAC control in office buildings, specifically for software controlling thermostat interactions and HVAC unit activation. It excludes hardware design, HVAC unit feedback mechanisms, and external system integration beyond thermostat data.  
+**Purpose & Scope**
+The system is an Energy Management System (THEMAS) that autonomously controls heating and cooling units in a building based on thermostat readings. Its purpose is to maintain desired temperatures while limiting the number of concurrently active units. It does not receive feedback from the heating/cooling units to confirm command execution.
 
-Product Background / Positioning: Operates as a standalone software layer between thermostats and HVAC hardware, requiring no external system dependencies. Interfaces solely with thermostats for temperature data and HVAC units for control signals, with all hardware assumptions documented.  
+**Product Background / Positioning**
+THEMAS is a standalone system comprising separate hardware and software components. This specification covers only the software portion. It interfaces with thermostats and heating/cooling unit hardware but operates independently of other building systems.
 
-Core Functional Overview:  
-- Monitor temperature against valid range and overtemp limits (±3°F from setting).  
-- Manage HVAC unit utilization (max concurrent units, request queuing).  
-- Initialize system state (turn off units, load parameters, set triggers).  
-- Generate audible alarms for invalid temperatures or overtemp conditions.  
-- Produce operational reports (historical logs, monthly utilization stats).  
-- Enable supervisor to adjust thermostat temperature settings.  
+**Core Functional Overview**
+*   Monitor temperature from thermostats and validate readings against a defined range.
+*   Determine when a heating or cooling unit must be activated or deactivated based on temperature deviations.
+*   Manage a limited pool of available heating/cooling units, queuing requests when the maximum concurrent usage is reached.
+*   Generate audible alarms for invalid temperature readings or critically exceeded temperature limits.
+*   Log all system events (e.g., unit activations, denied requests, alarms) to a database.
+*   Allow a supervisor to manually change individual thermostat settings.
+*   Generate operational history and statistical summary reports from the event log.
 
-Key Users & Usage Scenarios: Only building supervisors interact with the system. They view real-time status, adjust thermostat settings via interface, and review reports. No external user intervention required beyond supervisor actions.  
+**Key Users & Usage Scenarios**
+The primary user is a building supervisor responsible for system maintenance. The supervisor monitors the system, responds to alarms, manually adjusts thermostat settings, and generates reports. The system otherwise operates automatically without user intervention.
 
-Major External Interfaces: Thermostats (provide temperature/setting data), HVAC units (receive on/off control signals), supervisor interface (for settings/reports). All interfaces operate via software-defined protocols on Windows NT.  
+**Major External Interfaces**
+The system interfaces with thermostats (for temperature data and settings), heating/cooling unit hardware (for control signals), a supervisor's computer (for the user interface and alarms), and a Microsoft Access database (for event logging).
 
-Key Non-functional Requirements:  
-- Temperature validation: Reject values outside ±3°F of valid range.  
-- System must run exclusively on Microsoft Windows NT.  
-- No feedback from HVAC units to the system (units cannot confirm signal receipt).  
+**Key Non-functional Requirements**
+*   The software must run on the Microsoft Windows NT operating system.
+*   The system must ensure a reported temperature does not deviate from its setting by more than 3 degrees Fahrenheit before triggering a critical alarm.
+*   Alarms must be audible tones with specified frequencies and durations until manually acknowledged.
+*   All event data must be stored persistently in the specified database.
 
-Constraints, Assumptions & Dependencies:  
-- Thermostats must provide real-time temperature/setting data without delay.  
-- HVAC units cannot report their own on/off status.  
-- System assumes all initialization data (unit definitions, triggers) is pre-configured.  
+**Constraints, Assumptions & Dependencies**
+*   Thermostats provide temperature data and settings in the correct format with no delay.
+*   Heating/Cooling units cannot report their status back to THEMAS.
+*   The control signal interface to the heating/cooling units is to be determined (TBD).
+*   The system is designed for a specific building layout (four quadrants per floor, three floors).
 
-Priorities & Acceptance Approach: Critical path: Temperature monitoring, alarm generation, and HVAC control. Acceptance requires validated temperature range compliance, successful alarm triggering, and correct report generation per specified formats.
+**Priorities & Acceptance Approach**
+Core priorities are reliable temperature monitoring, enforcement of the unit utilization limit, and correct alarm generation. Acceptance will involve verifying system behavior against the defined temperature trigger/overtemperature logic and validating report generation from the event database. A simulated thermostat will be used for reliability testing.

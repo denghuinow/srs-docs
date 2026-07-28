@@ -1,42 +1,41 @@
-**Purpose & Scope**  
-Virtual-ED is a secure distance learning platform for NJIT, enabling real-time communication and collaboration between students and faculty. It provides audio/video streaming, instant messaging, file sharing, customizable profiles, and online exams. It does not replace existing email systems or handle non-educational content.  
+**Purpose & Scope**
+The system is a distance learning platform for NJIT to enable more effective communication between professors and students. It provides a secure application platform with features for collaboration, communication, and testing. It does not replace existing university databases or systems for core student administration.
 
-**Product Background / Positioning**  
-Virtual-ED integrates with NJIT’s existing infrastructure as a dedicated learning environment, supplementing but not replacing current systems like Moodle or Blackboard. It relies on NJIT’s user database (limited to 250 concurrent users) and requires modifications to support new features.  
+**Product Background / Positioning**
+This is a new online website intended to create a classroom-like environment. It will integrate with and modify the existing NJIT user database. It is positioned as an enhancement to current distance learning capabilities, not a replacement for all existing systems like email.
 
-**Core Functional Overview**  
-- Real-time instant messaging (text-based, group/one-to-one)  
-- Live and on-demand audio/video streaming for lectures and meetings  
-- Customizable user profiles (contact info, background, fonts, video intro)  
-- Virtual-Space file management (upload, share, organize files)  
-- Online exam system with timed submissions via file upload  
-- Lecture podcasting (downloadable audio/video recordings)  
-- Collaborative whiteboard for real-time document sharing/editing  
+**Core Functional Overview**
+*   Real-time instant messaging (text chat) between users.
+*   Live and on-demand audio/video streaming and conferencing.
+*   Online exam administration, submission, and grading.
+*   Personal file storage and management with quota enforcement.
+*   User profile creation and customization.
+*   Document collaboration and file sharing between users.
+*   Recording and distribution of class lectures as podcasts.
+*   Application and whiteboard sharing for live collaboration.
 
-**Key Users & Usage Scenarios**  
-- **Administrators**: Full system control, class setup, user management.  
-- **Faculty**: Create classes, host lectures, administer exams, manage files.  
-- **Students**: Access materials, participate in chats/lectures, submit assignments, view profiles.  
-*Permissions*: Students have limited profile edits; faculty manage class-specific resources; admins control system-wide settings.  
+**Key Users & Usage Scenarios**
+*   **System Administrators:** Full system control, manage enrollment, create classes.
+*   **Administrative End Users (Professors):** Manage their classes and enrolled users, grade exams, host lectures.
+*   **Limited End Users (Students):** Participate in classes, communicate, submit assignments and exams, customize own profile.
+*   Typical scenarios include attending a live video lecture, collaborating on a document with a team, taking a timed online exam, and downloading a podcast of a past lecture.
 
-**Major External Interfaces**  
-- Web browser interfaces (IE, Firefox, Safari only).  
-- FTP for file storage and sharing (quota-managed).  
-- External services: Microsoft Office (for exams), Real Player (for podcasts).  
+**Major External Interfaces**
+*   **User Interface:** A web-based portal with compartmentalized sections for different features (welcome, class selection, application launch).
+*   **Software Interfaces:** Must interface with the local operating system and require Microsoft Excel/PDF readers for reporting. Relies on a web browser as the primary client.
+*   **Communications Interfaces:** Uses standard web protocols; requires SSH, FTP, and VPN clients for certain connections. Specific browsers (Internet Explorer, Firefox, Safari) are mandated.
 
-**Key Non-functional Requirements**  
-- **Availability**: 99% uptime; scheduled maintenance with 24-hour notice.  
-- **Performance**: Minimum 1.5 Mbps download speed for streaming.  
-- **Security**: Passwords 8–12 characters (letters/numbers), mandatory 3-month change; antivirus required for file transfers.  
-- **Reliability**: Data loss possible during outages; content responsibility lies with users.  
+**Key Non-functional Requirements**
+*   **Performance:** The server must support at least 250 concurrent users. Client workstations require a minimum 500 MHz CPU, 512 MB RAM, and a broadband internet connection for conferencing.
+*   **Security:** User passwords must be 8-12 characters (letters and numbers), changed every three months. All user content must comply with NJIT conduct policies.
+*   **Reliability/Availability:** System has an estimated 99% uptime. Scheduled maintenance will be announced with at least 24 hours notice.
+*   **Maintainability:** System rollouts and validation must be scheduled during periods of low usage to minimize downtime.
 
-**Constraints, Assumptions & Dependencies**  
-- **Hard constraint**: Max 250 concurrent users due to legacy NJIT database.  
-- **Dependency**: Requires existing NJIT user database (may need maintenance).  
-- **Assumption**: Users have broadband internet, webcam, and microphone.  
-- **Exclusion**: No support for non-English documentation or unsupported browsers.  
+**Constraints, Assumptions & Dependencies**
+*   **Constraints:** Development occurs while the university is in session. Only specific browsers (Internet Explorer, Firefox, Safari) and operating systems (Windows XP/Vista, Mac OS) are supported. Pop-up windows and JavaScript must be enabled by users.
+*   **Assumptions:** The existing NJIT database will be available and modifiable. Users have adequate computers, network connections, and peripherals (webcam, microphone). Staff and students are willing to learn and use the new system.
+*   **Dependencies:** Modification of the existing NJIT user database to meet new requirements. Availability of funding for required hardware, software, and personnel.
 
-**Priorities & Acceptance Approach**  
-- **High priority**: Real-time messaging, online exams, lecture podcasting.  
-- **Medium priority**: File management, profiles, whiteboard.  
-- **Acceptance**: All features validated against explicit functional requirements (e.g., 99% uptime, browser compatibility, exam submission workflows).
+**Priorities & Acceptance Approach**
+*   High-priority features include instant messaging and core communication tools. Medium-priority features include audio/video streaming, user profiles, and basic file hosting. Lower-priority items are enhanced GUI and file management features.
+*   Acceptance is based on the implementation of all specified features within the allotted timeframe and budget, adhering to the defined constraints and performance thresholds (e.g., concurrent user support).

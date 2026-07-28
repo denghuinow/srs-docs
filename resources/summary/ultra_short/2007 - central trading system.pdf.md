@@ -1,28 +1,30 @@
-**Purpose & Scope**  
-The Central Trading System (CTS) is a subsystem within the Stock Trading System, handling stock instruction matching and processing. It processes buy, sell, and cancel orders, validates instructions, and interfaces with other subsystems. It does not manage user accounts, handle fund transfers directly, or provide end-user UIs.  
+**Purpose & Scope**
+The Central Trading System (CTS) is a subsystem that completes stock trades by matching buy and sell instructions according to specific rules. It processes instructions from clients and interfaces with other subsystems to save and release trading data. It does not handle user account management, client UI presentation, or final trade settlement.
 
-**Product Background / Positioning**  
-CTS operates as a core component within the Stock Trading System, interacting with six subsystems including Trade Client Serve, Security Account Management, and Trading Information Release. It processes instructions from Trade Client Serve and sends results to Information Release and Trading Management modules.  
+**Product Background / Positioning**
+The CTS is one of six core subsystems within the larger Stock Trading System (STS). It receives trading instructions from the Trade Client Serve subsystem and sends results to the Network Message Promulgating and Trading Information Release subsystems. The Trading System Management subsystem also interfaces with it for oversight.
 
-**Core Functional Overview**  
-- Match buy/sell instructions using price and time priority.  
-- Cancel valid trading instructions.  
-- Save successful trade records to Security Account Management.  
-- Query trade data for statistical analysis and release.  
-- Reject instructions violating price limits.  
-- Remove outdated instructions after one day.  
+**Core Functional Overview**
+*   Receive and validate buy, sell, and cancel instructions.
+*   Match buy and sell instructions for the same stock based on price-time priority rules.
+*   Execute trades when a match is found.
+*   Cancel pending trading instructions upon request.
+*   Save successful trade information to the Security Account Management subsystem.
+*   Provide trading data to the Trading Information Release subsystem for queries.
+*   Enforce daily price rising/falling limits on instructions.
+*   Remove outdated instructions that are not matched within the trading day.
 
-**Key Users & Usage Scenarios**  
-End-users (via Trade Client Serve) submit buy/sell/cancel orders. System maintainers (Java/socket experts) manage crashes and updates. Primary scenarios include matching orders during trading hours, canceling pending orders, and retrieving trade history for reporting.  
+**Key Users & Usage Scenarios**
+Primary users are external subsystems: Trade Client Serve (submitting instructions), Security Account Management (recording trades), and Trading Information Release (querying data). A system maintainer/administrator role exists for troubleshooting and modifications. Typical scenarios include a client submitting a buy order, the system matching it with a sell order, recording the trade, and providing the result.
 
-**Major External Interfaces**  
-Interfaces with Trade Client Serve (for instruction input), Security Account Management (for trade data storage), and Trading Information Release (for query responses). All via defined system interfaces; no protocol or UI details specified.  
+**Major External Interfaces**
+The system interfaces with four external entities: Trade Client Serve (for instruction input and result output), Security Account Management (for saving trade data), Trading Information Release (for querying data), and Trading System Management (for administrative access). All communication occurs via defined programmatic interfaces.
 
-**Key Non-functional Requirements**  
-Must process frequent instructions without crash during peak load. Outdated instructions automatically removed within 24 hours. System maintainers must recover from crashes when overhead exceeds capacity.  
+**Key Non-functional Requirements**
+The system must handle frequent instruction operations (fetch, deal, repeal) and be designed for heavy transaction loads. Maintainers must be able to diagnose and fix crashes, especially when system overhead exceeds capacity. The system must log instructions and trade results.
 
-**Constraints, Assumptions & Dependencies**  
-CTS is strictly a subsystem of the Stock Trading System; no standalone operation. Requires integration with Trade Client Serve and Trading Management subsystems. No external dependencies beyond the Stock Trading System ecosystem.  
+**Constraints, Assumptions & Dependencies**
+The system is a subsystem dependent on the broader Stock Trading System architecture. It assumes correct input from the Trade Client Serve subsystem. A key constraint is that maintainers require specific skills in Java programming and socket communication for support.
 
-**Priorities & Acceptance Approach**  
-Essential functions (matching, canceling, saving, querying, limit checks) must be implemented in first increment. Acceptance based on successful instruction matching per price/time priority, correct data persistence, and timely removal of outdated instructions.
+**Priorities & Acceptance Approach**
+Core functions (buy, sell, save trade info, query info) are essential for the first release. The cancel instruction function is a moderate priority for a second increment. Acceptance requires correct matching per defined principles, enforcement of trading limits, and proper interface communication with all connected subsystems.

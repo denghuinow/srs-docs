@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 需求文档摘要生成工具
-支持4种详细程度：超短摘要、简短摘要、平衡摘要、详尽摘要
+支持多种详细程度：微摘要(1%-2%)、极简、超短、简短、平衡、详尽摘要
 """
 
 import os
@@ -23,6 +23,12 @@ print_lock = threading.Lock()
 
 # 摘要级别配置
 SUMMARY_LEVELS = {
+    "micro": {
+        "name": "Micro Summary",
+        "folder": "micro",
+        "info_range": "1%-2%",
+        "prompt_file": "micro.md"
+    },
     "minimal": {
         "name": "Minimal Summary",
         "folder": "minimal",
@@ -237,6 +243,7 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 摘要级别选项：
+  micro        - 微摘要（1%-2%）
   minimal      - 极简摘要（2%-5%）
   ultra_short  - 超短摘要（5%-10%）
   short        - 简短摘要（10%-20%）
@@ -248,7 +255,7 @@ def main():
     parser.add_argument(
         "--level",
         nargs="+",
-        choices=["minimal", "ultra_short", "short", "balanced", "detailed", "all"],
+        choices=["micro", "minimal", "ultra_short", "short", "balanced", "detailed", "all"],
         default=["all"],
         help="选择要生成的摘要级别（默认：all）"
     )

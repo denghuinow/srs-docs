@@ -1,0 +1,3 @@
+Purpose & Scope: Define an Enterprise Information Management (EIM) strategy and architecture to address information management challenges for Smart Grid and non-Smart Grid data.
+Core Functions: Enable sharing of information models with external entities. Manage data throughout its lifecycle with a common semantic model.
+Key Constraints: The architecture must incorporate the IEC Common Information Model (CIM). Information security must be addressed for all data artifacts and processes.

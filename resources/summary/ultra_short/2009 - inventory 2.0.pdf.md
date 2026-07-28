@@ -1,23 +1,42 @@
-**Purpose & Scope**: The system manages categorized inventory for Construction Junction, enabling tracking of donated items from donation through sale. It handles unique and stock items but does not track Under $5 items (only for donation receipt purposes). It integrates with QuickBooks POS and the organization's website but does not handle shipping or physical item movement.
+**Purpose & Scope**
+The system is an inventory management application for Construction Junction (CJ) to create, maintain, and view its categorized inventory. It facilitates receiving donated items and traces them from donation through sale. It does not replace the existing POS or CRM systems but integrates with them.
 
-**Product Background / Positioning**: This system replaces manual inventory tracking with a digital solution integrated into Construction Junction's existing retail and donation management ecosystem. It connects with QuickBooks POS for sales processing and Salesforce CRM for donor acquisition data, supporting the organization's mission of receiving and reselling donated items.
+**Product Background / Positioning**
+The system is a new application for CJ staff. It integrates with the existing QuickBooks Point of Sale (POS) system for sales processing and the Salesforce CRM system for donor and acquisition data. It also interfaces with CJ's public website.
 
-**Core Functional Overview**: 
-- View inventory in hierarchical department-category-item structure
-- Manage inventory structure (departments, categories, attributes)
-- Add items to inventory during donation processing or routine maintenance
-- Receive acquisitions (process donated items via drop-off, pick-up, deconstruction)
-- Sell items through QuickBooks POS with automatic inventory updates
-- Suggest item pricing based on historical data
-- Generate reports on inventory, acquisitions, and donor activity
-- Track item history and pricing adjustments
+**Core Functional Overview**
+1.  View and navigate a categorized inventory hierarchy (departments, categories, items).
+2.  Manage the inventory structure (add/edit/delete/move departments and categories).
+3.  Receive donated items into inventory via acquisitions (Drop-Off, Pickup, Deconstruction).
+4.  Add, modify, split, and adjust the quantity of inventory items.
+5.  Generate and print donation receipts and item tags.
+6.  Synchronize item data and sales with QuickBooks POS.
+7.  Generate reports on inventory status, changes, and acquisitions.
 
-**Key Users & Usage Scenarios**: Administrators, Directors, and Managers have full inventory access. Receiving Associates process donations and print receipts. Pickup/Decon Associates initiate receiving but cannot complete inventory additions. Sales Associates process sales via POS. Customer Service Representatives handle donor inquiries and wish lists. Donors and Buyers interact with the system indirectly through staff.
+**Key Users & Usage Scenarios**
+*   **Administrator/Director:** Full system access, including user management and inventory structure configuration.
+*   **Manager:** Can change item properties and prices.
+*   **Receiving Associate:** Receives donations at the dock, enters items, prints receipts and tags.
+*   **Pickup/Decon Associate:** Can initiate receiving processes off-site but cannot finalize them.
+*   **Sales Associate:** Processes sales via QuickBooks POS, triggering inventory updates.
+*   **Customer Service Representative:** Manages constituents and can create drop-off acquisitions.
+*   **Donor/Buyer:** External actors who donate or purchase items.
 
-**Major External Interfaces**: QuickBooks POS (for inventory synchronization and sales), Salesforce CRM (for donor acquisition data), Construction Junction website (for online inventory browsing and e-commerce), and Vertical Response/ExactTarget (for email marketing). Hardware interfaces include touch screens, barcode readers, and Zebra printers.
+**Major External Interfaces**
+*   **Software:** Integration with QuickBooks POS (bi-directional sync of items and sales) and Salesforce CRM (acquisition and donor data).
+*   **Hardware:** Support for touch screens, barcode scanners, and label printers.
+*   **Website:** Provides inventory data for online viewing and potential e-commerce.
 
-**Key Non-functional Requirements**: Must support touch screen interface with intuitive navigation. Available during normal business hours for operations, and beyond hours for website use. Requires low response times for critical operations. Uses role-based access control with audit trails for sensitive operations. Maintains inventory data integrity through synchronization with QuickBooks POS.
+**Key Non-functional Requirements**
+*   **Availability:** Must be available during all CJ operating hours for sales and donation processing; extended hours for inventory management and website.
+*   **Security:** Role-based access control. System must record the user and time for sensitive operations (e.g., price changes, deletions).
+*   **Performance:** Must perform with consistently low response times to avoid impacting business operations.
+*   **Usability:** Interface must be optimized for touch screen workstations to minimize keyboard use and errors during acquisition processing.
 
-**Constraints, Assumptions & Dependencies**: Must integrate with existing QuickBooks POS and Salesforce CRM systems. Uses matrix-based inventory navigation with minimum 30 slots per level. Under $5 items are not tracked in inventory (only for donation receipt purposes). Requires QuickBooks POS to handle item pricing and sales data.
+**Constraints, Assumptions & Dependencies**
+*   **Dependencies:** Successful operation is dependent on integration with QuickBooks POS and Salesforce CRM.
+*   **Constraints:** The system must use CJ-approved technologies and be supportable by planned staffing levels.
+*   **Assumption:** All acquisitions are created in the CRM system first.
 
-**Priorities & Acceptance Approach**: Medium-priority features include website integration, e-blast flagging, e-commerce, and membership program. Low-priority features include mobile handheld units and inventory item story/history. Acceptance requires successful integration with QuickBooks POS, accurate inventory tracking, and functional reporting capabilities.
+**Priorities & Acceptance Approach**
+Core functions for inventory management, donation receiving, and POS integration are the highest priority. Medium-priority features include website integration, e-blast flagging, and a membership program. Acceptance will be based on the system correctly performing the defined functional flows, meeting the stated non-functional metrics (e.g., availability), and successfully interfacing with the specified external systems.

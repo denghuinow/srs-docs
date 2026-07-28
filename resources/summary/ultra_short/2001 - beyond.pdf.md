@@ -1,33 +1,40 @@
-Purpose & Scope  
-The system delivers adaptive, multimodal user interfaces for four application domains: public information kiosks, home entertainment systems, vehicle electronics (Vetronics), and aircraft flight decks. It focuses on context-aware adaptation and multimodal interaction within each domain’s operational constraints. It excludes real-time industrial control systems, embedded hardware manufacturing, and long-term maintenance beyond project milestones.
+**Purpose & Scope**
+The BEYOND project develops adaptive, multimodal user interfaces for four distinct application domains: Public Information Kiosks, Home Entertainment Systems, Vetronics (Vehicle Electronics), and Avionics Flight Decks. The system aims to increase usability, safety, and efficiency by making interfaces context-aware and adaptable. It does not cover the underlying business logic or content of the domain-specific applications themselves.
 
-Product Background / Positioning  
-The BEYOND project develops domain-specific UI solutions within a shared consortium framework. Public terminals serve general public access; home systems target consumer electronics; Vetronics supports ruggedized vehicle displays; and Avionics provides cockpit interfaces. All leverage common workpackages (adaptivity, multimodality, simulation, usability) but operate independently within their domains.
+**Product Background / Positioning**
+This is a research project creating demonstrators and prototypes within a consortium. The work builds upon earlier project deliverables (D1, D2) and a common adaptivity reference framework (D3). The outputs are intended to validate concepts for intelligent, adaptive UIs in their respective high-constraint environments, not as commercially ready products.
 
-Core Functional Overview  
-- Context-aware multimodal interaction (voice, touch, visual) with seamless mode switching  
-- Off-line UI authoring for consumer devices with target-platform code generation  
-- Ruggedized display configuration and behavior definition for vehicle systems  
-- Adaptive cockpit interfaces that prioritize critical information during hazardous situations  
-- Real-time simulation of UI behavior for validation before deployment  
+**Core Functional Overview**
+1.  Provide multimodal interaction (e.g., combined speech, touch, graphical input) in public kiosks.
+2.  Allow off-line authoring, simulation, and code generation for consumer product UIs (e.g., DVD player menus).
+3.  Enable off-line, user-definable UI creation and download for ruggedized vehicle display systems.
+4.  Implement an intelligent, adaptive flight deck that integrates warning systems and assists pilot decision-making.
+5.  Adapt UI presentation (information, format, timing) based on context, user state, and system goals.
+6.  Detect and help correct user errors by comparing intentions to system state.
+7.  Support context switching and natural interaction in public terminal dialogs.
 
-Key Users & Usage Scenarios  
-Public terminals: Untrained general public in public spaces; requires intuitive guidance without prior training. Home systems: Consumers configuring entertainment devices; limited technical expertise. Vetronics: Vehicle technicians configuring displays; requires robustness in harsh environments. Avionics: Pilots and flight crews; demands real-time hazard response during critical operations.
+**Key Users & Usage Scenarios**
+*   **General Public:** Interacts with multimodal kiosks for information retrieval.
+*   **UI Developers:** Uses authoring tools to design and simulate interfaces for consumer electronics and vetronics systems.
+*   **Vehicle Operators:** Uses customized, ruggedized displays in vehicles (ships, trains, construction).
+*   **Pilots:** Operates aircraft using an adaptive flight deck that manages alerts and presents integrated situational information.
+*   **Experts:** Conducts usability reviews and testing on prototypes.
 
-Major External Interfaces  
-Public terminals interface with public network services and terminal hardware. Home UI editor integrates with consumer device development tools. Vetronics UI editor connects to vehicle hardware via serial/USB/CAN. Avionics interfaces with aircraft sensors and warning systems (GPWS/TCAS).
+**Major External Interfaces**
+Interfaces include multimodal terminals (speech, touch, display), authoring tools on Windows PCs, target embedded systems (DVD players, vetronics units), and vehicle peripherals (CAN bus, touchscreens). The systems communicate via various ports (serial, USB, network).
 
-Key Non-functional Requirements  
-- Public terminals: Speaker-independent voice recognition; zero dead ends in dialog flows.  
-- Avionics: Real-time alerting within 500ms of hazard detection; 99.9% system availability during critical phases.  
-- Vetronics: Hardware compliance with environmental specifications (vibration, temperature, humidity).  
-- All domains: UI adaptation must be off-line (no runtime modification).
+**Key Non-functional Requirements**
+*   **Public Kiosks:** System must be stable and avoid dead-end dialogs. Requires speaker-independent voice recognition.
+*   **Consumer/Vetronics:** Generated code must operate within target platform resource constraints (limited RAM, no hard disk).
+*   **Vetronics:** Hardware must meet ruggedness specifications (vibration, temperature, humidity).
+*   **Avionics:** Adaptation must be non-intrusive, allow pilot overrule, and support visual momentum.
+*   **General:** Architectures must be extensible, often via component/plug-in models.
 
-Constraints, Assumptions & Dependencies  
-- All UI editors require Windows-based development environments.  
-- Avionics prototype excludes touch-screen integration due to timeline constraints.  
-- Reliance on Common Adaptivity Reference Framework (D3) for adaptivity specifications.  
-- No external funding dependencies beyond consortium commitments.
+**Constraints, Assumptions & Dependencies**
+*   Project lacked dedicated usability workpackage resources, shifting this burden to other partners.
+*   Public kiosk and avionics prototypes rely on Windows-based platforms.
+*   Vetronics and home authoring tools assume off-line adaptivity; UI changes are made on a PC and then downloaded.
+*   Avionics prototype development uses specific agent-oriented software (JACK) and OpenGL.
 
-Priorities & Acceptance Approach  
-Critical priorities: Domain-specific functional completeness (public > home > Vetronics > Avionics), followed by adaptivity and multimodality implementation. Acceptance requires validation against D2 requirements, usability testing via expert questionnaires, and successful simulation of key scenarios (e.g., hazard response in Avionics). Second-prototype delivery meets milestone 2 deadlines.
+**Priorities & Acceptance Approach**
+Priority is on evolving functional prototypes from milestone 1 to milestone 2 to validate adaptive UI concepts in each domain. Acceptance is based on expert reviews, usability questionnaires, and demonstrating extended functionality (e.g., integrated warning systems, code generation, plug-in architectures) over the first prototype.

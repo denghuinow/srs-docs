@@ -1,25 +1,36 @@
-Purpose & Scope: The system addresses gaps in crime investigation and criminal detection for Indian police forces. It enables complaint registration, case investigation, court prosecution, and search capabilities for police personnel. Excludes citizen case tracking, forensic analysis, and external law enforcement agency integration.
+**Purpose & Scope**
+The system is a national crime and criminal tracking network to improve police investigation and criminal detection outcomes. It focuses on core police workflows from complaint registration through prosecution. It does not cover broader law enforcement functions outside this core crime tracking scope.
 
-Product Background / Positioning: Part of India's e-Governance Mission Mode Project, it replaces fragmented state-level police systems. Integrates with existing police infrastructure at state level, supporting centralized deployment with state-specific configuration.
+**Product Background / Positioning**
+This is a centralized, state-level E-Governance application for Indian police forces. It is designed to integrate and standardize crime record management across states, replacing or augmenting disparate local systems.
 
-Core Functional Overview:  
-- Complaint registration and digital evidence intake  
-- Case investigation workflow automation  
-- Court prosecution record management  
-- Advanced case/person/property search  
-- Role-based citizen complaint interface  
-- Configurable state-specific data elements  
+**Core Functional Overview**
+*   Register and manage crime complaints from citizens.
+*   Manage the end-to-end investigation process for registered cases.
+*   Record and track court interactions and prosecution activities.
+*   Execute basic and advanced searches across cases, persons, and property.
+*   Provide an interface for citizens to submit complaints and receive information/acknowledgements.
+*   Deliver role-based navigation and dashboards showing assigned tasks and alerts.
+*   Configure state-specific data elements, rules, and reference information.
 
-Key Users & Usage Scenarios: Police investigation officers (full access), records staff (limited access), and citizens (complaint submission only). Officers use case search during investigations; citizens submit complaints via mobile/web; records staff manage configuration data.
+**Key Users & Usage Scenarios**
+Primary users are police personnel: Investigating Officers (IOs) for case work, records room staff for data management, and designated constables for court interfacing. Citizens use the system to file complaints and check status. Access is role-based, with administrative users managing profiles and security.
 
-Major External Interfaces: State-level deployment with browser-based access (all major browsers). Supports mobile access via PDAs/terminals. Integrates with state-specific police systems for data exchange.
+**Major External Interfaces**
+Interfaces exist for citizens (web portal) and for integration with court systems. The system must also support access via PDAs/mobile data terminals.
 
-Key Non-functional Requirements:  
-- Search response: ≤15 seconds (simple: ≤8s, advanced: ≤15s)  
-- Case retrieval: ≤20 seconds for infrequently accessed cases  
-- System availability: 24/7 operation with ≤2 hours unplanned downtime/quarter  
-- Audit trail: Unalterable, retained for case lifecycle  
+**Key Non-functional Requirements**
+*   **Performance:** Simple search within 5-8 seconds; advanced search within 10-15 seconds. Retrieve a recently accessed case record within 5-8 seconds.
+*   **Security:** Full, unalterable audit trail for all critical data actions. Role-based access control. Support for SSL/VPN/HTTPS and multi-tier authentication.
+*   **Availability:** Specific allowable thresholds for planned and unplanned downtime are required but not quantified in this draft.
+*   **Usability:** User interfaces must comply with ISO 9241 standards for usability and accessibility.
+*   **Reliability:** Must operate in offline mode with critical functionality and prevent data loss during network/equipment failure.
 
-Constraints, Assumptions & Dependencies: Centralized deployment required. Must function offline for critical complaint registration. State-specific configuration mandatory. Relies on existing state police network infrastructure.
+**Constraints, Assumptions & Dependencies**
+*   Must be deployable centrally at the state level and be customizable per state.
+*   Must be built on Open Standards and a Service-Oriented Architecture (SOA).
+*   Must function satisfactorily in low-bandwidth conditions typical of some police stations.
+*   Must be browser-based, imposing minimal client requirements.
 
-Priorities & Acceptance Approach: Highest priority on investigation/criminal tracking capabilities. Acceptance based on verified performance metrics (search/response times), audit trail compliance, and offline functionality for complaint registration.
+**Priorities & Acceptance Approach**
+Core police workflows (Registration, Investigation, Search) are the highest priority for delivering value. Acceptance will be based on meeting the specified performance metrics, security audit requirements, and functional coverage of the seven core modules.

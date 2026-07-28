@@ -1,0 +1,3 @@
+Purpose & Scope: The document specifies requirements for an MHP-based MSN Messenger application for TV, enabling text communication and presence features between users.
+Core Functions: User login via existing .NET Passport account; display and management of user and buddy presence status; sending and receiving text messages with emoticons.
+Key Constraints: The application must use the MSNPv8 protocol for communication; it cannot create new Passport accounts; it cannot transfer files or support webcams.

@@ -1,30 +1,42 @@
-Purpose & Scope  
-The system enables scientists to run bio-geochemical modeling via Daymet weather interpolation and BiomeBGC simulations. It manages input data, project workflows, and output results through a web portal. Excludes direct data publication, visualization, and analysis tools (marked low priority).  
+**Purpose & Scope**
+The system is a grid-based software infrastructure for bio-geochemical modeling. It provides a graphical interface to run Daymet and Biome-BGC simulations, manage input/output data, and visualize results. It does not handle user password management or enforce spatial data validation during merge operations.
 
-Product Background / Positioning  
-Built on NCAR’s grid infrastructure to integrate with existing NCAR Mass Storage System (MSS) and Gatekeeper authentication. Serves as the primary platform for scientific modeling workflows within NCAR’s research ecosystem.  
+**Product Background / Positioning**
+The application is a web portal integrated into the NCAR Dataportal Web Server. It utilizes the Globus toolkit and remote compute resources (Hemisphere Linux cluster) to execute modeling jobs, with all file storage on the NCAR Mass Storage System (MSS).
 
-Core Functional Overview  
-- Daymet and BiomeBGC modeling runs with input data management  
-- Project-based organization linking inputs to simulation outputs  
-- Data download of model results in native formats  
-- User account management via NCAR Gatekeeper integration  
-- Portal administration for system monitoring and resource control  
+**Core Functional Overview**
+*   User account management tied to NCAR Gatekeeper authentication.
+*   Creation and management of data objects (List, Grid, Parameterization types) and simulation projects.
+*   Execution, monitoring, and control of Daymet and BiomeBGC model runs on remote compute resources.
+*   Sharing of data objects and use of expert templates.
+*   Download of model output data in native formats.
+*   Administrative functions for user, job, and system resource management.
 
-Key Users & Usage Scenarios  
-Primary: Scientists (run models, manage projects). Secondary: Portal Administrators (manage users, system resources). Data Users (lowest priority; only download pre-generated outputs).  
+**Key Users & Usage Scenarios**
+*   **Scientists (Primary):** Manage data, configure and run simulations, visualize results, and share data.
+*   **Portal Administrators:** Manage user accounts, monitor/terminate jobs, and oversee system operations.
+*   **Data Users (Low Priority):** Access and download shared simulation output.
+Typical scenarios include setting up and running a Daymet or BiomeBGC modeling run, visualizing outputs, and downloading data for further analysis.
 
-Major External Interfaces  
-Web portal accessible via IE 6.0 and Netscape 7.1. Integrates with NCAR Mass Storage System (MSS) for data storage. Requires browser cookies.  
+**Major External Interfaces**
+*   **User Interface:** A web-based portal compatible with specified browsers (IE 6.0, Netscape 7.1, Safari 1.2.1), requiring cookies.
+*   **Hardware Interface:** Integration with the NCAR Mass Storage System for all file storage.
+*   **Software Interface:** Dependence on the NCAR Gatekeeper system for user authentication.
+*   **Communication Interface:** Use of the Globus toolkit for grid communications.
 
-Key Non-functional Requirements  
-- Must use Globus toolkit for grid communications  
-- Must comply with NCAR Security policies  
-- Must store all files via NCAR Mass Storage System  
-- Browser compatibility: IE 6.0, Netscape 7.1  
+**Key Non-functional Requirements**
+*   **Security:** Must comply with NCAR security policies. User accounts lock after 3 failed login attempts. All login actions use secure data channels.
+*   **Reliability/Data Integrity:** The system must prevent changes to objects/projects used in a model run to preserve input/output consistency, enforcing locked/invalidated states.
+*   **Maintainability:** The portal admin must be able to validate file reference consistency and manage compute node resources (add, lock, unlock).
 
-Constraints, Assumptions & Dependencies  
-Mandatory Globus toolkit usage. NCAR Security policies govern all implementations. NCAR Mass Storage System (MSS) required for all file storage.  
+**Constraints, Assumptions & Dependencies**
+*   Must use the Globus toolkit.
+*   Must use the NCAR Mass Storage System for all file storage.
+*   All users must have a valid NCAR Gatekeeper account.
+*   Depends on the NCAR Gatekeeper system for user authentication and information.
+*   Assumes integration with the specified Dataportal Web Server and Hemisphere Linux cluster.
 
-Priorities & Acceptance Approach  
-Scientists’ modeling needs are highest priority. Portal administrators’ system management is mid-priority. Data Users’ access is lowest priority. Acceptance requires functional modeling runs, data download, and account management per specified constraints.
+**Priorities & Acceptance Approach**
+*   Scientists are the favored user class; Data Users are the lowest priority.
+*   Visualization for several object types is marked as low priority.
+*   Acceptance is implicitly based on fulfilling the specified functional flows (e.g., successful model run execution, data sharing, administrative controls) and adhering to the stated constraints (e.g., using MSS, Globus).

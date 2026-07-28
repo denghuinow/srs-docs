@@ -1,28 +1,35 @@
-Purpose & Scope  
-Enables seamless transition to ABC Paint’s new paint numbering scheme by converting old product numbers to new ones. System integrates into ABC Paint’s existing website and is accessible to customers and distributors. Does not handle physical paint inventory or support legacy monochrome displays.  
+**Purpose & Scope**
+The system enables a smooth transition for ABC Paint customers from an old paint numbering scheme to a new one by providing conversion tools. It is a standalone web application to be integrated into the ABC Paint website. It does not include display calibration for consumer clients.
 
-Product Background / Positioning  
-First-of-type web application replacing manual paint palette systems. Integrates directly into ABC Paint’s website as a standalone module with theme customization. Replaces mechanical in-store selection tools and supports long-term use during and after the 2004 migration.  
+**Product Background / Positioning**
+This is a first-of-type, version 1.0 solution for ABC Paint, replacing old mechanical palette systems. It is a standalone web application with a theming mechanism for integration into the existing ABC Paint website.
 
-Core Functional Overview  
-- Graphical color chooser (requires pointing device)  
-- Paint number translator (old scheme → new scheme)  
-- Closest color search (within target collections)  
-- Color search engine (by name, number, or color value)  
-- User color palette (session-persistent, 30-day retention)  
-- Administrative interface (3-tier permission management)  
+**Core Functional Overview**
+*   Translate old paint numbers to new scheme numbers.
+*   Graphically select colors using a pointing device.
+*   Search for paints by name, number, or color value across collections.
+*   Find a specified number of colors closest to a given paint.
+*   Maintain a session-persistent palette of a user's recent searches and uploaded images.
+*   Provide an administrative interface to update, add, or delete paint information and users.
+*   Match colors from an uploaded image (low priority/optional).
 
-Key Users & Usage Scenarios  
-Default users: Customers/distributors with full feature access except admin functions. Admin users: 3 permission levels (Level 1: add users; Level 2: add/delete users; Level 3: full control). Typical scenario: Customer converts old paint number to new scheme via translator; Admin updates paint collections via admin interface.  
+**Key Users & Usage Scenarios**
+There are two main user classes. Default users have access to all conversion and search tools, with session-persistent, non-secure data. Administrative users have three permission levels (1-3) for adding, updating, and deleting paint data and managing other admin users.
 
-Major External Interfaces  
-Web-based client requiring HTTP 1.0/1.1. Interfaces with third-party databases for paint data and color search. Server-side database connections only; no client-side database dependencies.  
+**Major External Interfaces**
+The client is a web-based interface requiring a browser. The server interfaces with databases for paint information and color search/matching. Communication between client and server uses HTTP.
 
-Key Non-functional Requirements  
-Color searches processed in sub-second server time. Admin data secured; user data private (not encrypted), retained 30 days. Paint updates in real-time (server processing only). Performance verification shows server processing time only (excludes network transit).  
+**Key Non-functional Requirements**
+*   Color searches on the server must process in sub-second time.
+*   Administrative changes to paint data occur in real-time (processing time varies with data volume).
+*   User palette data is private but not secure; administrative access permissions must be secure, implementing industry-standard security.
+*   The client requires a display capable of 16.7 million colors and a pointing device for core color selection functions.
 
-Constraints, Assumptions & Dependencies  
-Must be web-based; keyboard-only usability required. Relies on third-party databases for color search (sub-second response). Assumes client displays ≥16.7 million colors and is properly calibrated.  
+**Constraints, Assumptions & Dependencies**
+*   The application must be web-based.
+*   It assumes client hardware meets specified minimums (e.g., browser, display).
+*   It depends on third-party databases for paint information and color search, which must provide sub-second query responses.
+*   It assumes calculating closest colors in RGB color space yields acceptable results.
 
-Priorities & Acceptance Approach  
-All core features (color chooser, translator, search, palette, admin) are high priority. Acceptance requires sub-second color search response and real-time paint updates. Color matcher is excluded from requirements (low priority).
+**Priorities & Acceptance Approach**
+All defined system features are high priority except the Color Sample Matcher, which is low priority/optional. Server-side search performance will be verified by measured processing time, excluding network transit time.
